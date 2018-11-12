@@ -44,6 +44,8 @@ body > .content {
   align-items: center;
   background: #fcfbfd;
   transform-origin: 0 0;
+  padding: 2px 5px;
+  box-sizing: border-box;
 }
 .content div {
   display: flex;
@@ -115,6 +117,27 @@ body > .content {
   width: calc(1242px / 3);
   height: calc(2688px / 3);
 }
+
+.ipad {
+  padding: 5px 8px;
+}
+.base {
+  width: calc(1536px / 3);
+  height: calc(2048px / 3);
+}
+.pro10 {
+  width: calc(1668px / 3);
+  height: calc(2224px / 3);
+}
+.pro11 {
+  width: calc(1668px / 3);
+  height: calc(2388px / 3);
+}
+.pro12 {
+  width: calc(2048px / 3);
+  height: calc(2732px / 3);
+}
+
 .x2 {
   transform: scale(2);
 }
@@ -134,6 +157,10 @@ body > .content {
 .se div:nth-last-child(2),
 .se div:nth-last-child(3),
 .se div:nth-last-child(4),
+.ipad div:nth-last-child(2),
+.ipad div:nth-last-child(3),
+.ipad div:nth-last-child(4),
+.ipad div:nth-last-child(5),
 .normal div:nth-last-child(2),
 .fhd div:nth-last-child(2) {
   display: none;
@@ -170,6 +197,15 @@ body > .content {
       <option value="xs">iPhone X/XS</option>
       <option value="xr@2">iPhone XR</option>
       <option value="xsmax">iPhone XS Max</option>
+    </optgroup>
+    <optgroup label="iPad">
+      <option value="ipad base">iPad mini</option>
+      <option value="ipad base">iPad Air</option>
+      <option value="ipad base">iPad (2017, 2018)</option>
+      <option value="ipad base">iPad Pro 9.7-inch</option>
+      <option value="ipad pro10">iPad Pro 10.5-inch</option>
+      <option value="ipad pro11">iPad Pro 11-inch</option>
+      <option value="ipad pro12">iPad Pro 12.9-inch</option>
     </optgroup>
     <optgroup label="Android">
       <option value="fhdp">Pixel 3</option>
