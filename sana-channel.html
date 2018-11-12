@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>さなちゃんねるっぽい何か</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+body {
+  margin: 0;
+  background: #0e0e0e;
+}
+.control {
+  margin: 1em 0;
+  text-align: center;
+}
+body > .content {
+  display: none;
+}
+.preview img {
+  display: block;
+  max-width: 100%;
+  margin: 0 auto;
+}
+</style>
+<style id="style">
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  background: #fcfbfd;
+  transform-origin: 0 0;
+}
+.content div {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+}
+.content span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 25px;
+}
+.content img {
+  display: block;
+  image-rendering: pixelated;
+}
+.content .extend {
+  display: none;
+}
+
+.fhd {
+  width: calc(1080px / 3);
+  height: calc(1920px / 3);
+}
+.fhdp {
+  width: calc(1080px / 3);
+  height: calc(2160px / 3);
+}
+.fhdpp {
+  width: calc(1080px / 3);
+  height: calc(2240px / 3);
+}
+.qhd {
+  width: calc(1440px / 3);
+  height: calc(2560px / 3);
+}
+.qhdp {
+  width: calc(1440px / 3);
+  height: calc(2880px / 3);
+}
+.qhdpp {
+  width: calc(1440px / 3);
+  height: calc(2960px / 3);
+}
+.r4k {
+  width: calc(2160px / 4);
+  height: calc(3840px / 4);
+}
+
+.se {
+  width: calc(640px / 2);
+  height: calc(1136px / 2);
+}
+.normal {
+  width: calc(750px / 2);
+  height: calc(1334px / 2);
+}
+.xr {
+  width: calc(828px / 2);
+  height: calc(1792px / 2);
+}
+.xs {
+  width: calc(1125px / 3);
+  height: calc(2436px / 3);
+}
+.xsmax {
+  width: calc(1242px / 3);
+  height: calc(2688px / 3);
+}
+.x2 {
+  transform: scale(2);
+}
+.x3 {
+  transform: scale(3);
+}
+.x4 {
+  transform: scale(4);
+}
+.content.qhdp .extend,
+.content.qhdpp .extend {
+  display: flex;
+}
+.se div span:last-child {
+  display: none;
+}
+.se div:nth-last-child(2),
+.se div:nth-last-child(3),
+.se div:nth-last-child(4),
+.normal div:nth-last-child(2),
+.fhd div:nth-last-child(2) {
+  display: none;
+}
+.xr div:first-child span:nth-child(3),
+.xr div:first-child span:nth-child(4),
+.xr div:first-child span:nth-child(5),
+.xr div:first-child span:nth-child(6),
+.xs div:first-child span:nth-child(3),
+.xs div:first-child span:nth-child(4),
+.xs div:first-child span:nth-child(5),
+.xs div:first-child span:nth-child(6),
+.xsmax div:first-child span:nth-child(3),
+.xsmax div:first-child span:nth-child(4),
+.xsmax div:first-child span:nth-child(5),
+.xsmax div:first-child span:nth-child(6),
+.pixelxl div:first-child span:nth-child(3),
+.pixelxl div:first-child span:nth-child(4),
+.pixelxl div:first-child span:nth-child(5),
+.pixelxl div:first-child span:nth-child(6),
+.p20 div:first-child span:nth-child(4),
+.p20 div:first-child span:nth-child(5) {
+  visibility: hidden;
+}
+.button {
+  display: inline-block;
+  padding: 1px 6px;
+  color: #333;
+  background-color: #eee;
+  border: 1px solid #aaa;
+  border-radius: 2px;
+  font-size: 13.3333px;
+  text-decoration: none;
+  cursor: pointer;
+}
+#canvas {
+  display: none;
+}
+</style>
+<body>
+<div class="control">
+  <select id="device">
+    <optgroup label="iPhone">
+      <option value="se@2">iPhone SE</option>
+      <option value="normal@2">iPhone 6/7/8</option>
+      <option value="fhd">iPhone 6/7/8 Plus</option>
+      <option value="xs" selected>iPhone X/XS</option>
+      <option value="xr@2">iPhone XR</option>
+      <option value="xsmax">iPhone XS Max</option>
+    </optgroup>
+    <optgroup label="Android">
+      <option value="fhdp">Pixel 3</option>
+      <option value="qhdpp pixelxl">Pixel 3 XL</option>
+      <option value="fhd">Xperia XZ</option>
+      <option value="r4k@4">Xperia XZ Premium</option>
+      <option value="fhdp">Xperia XZ2</option>
+      <option value="r4k@4">Xperia XZ2 Premium</option>
+      <option value="qhdp">Xperia XZ3</option>
+      <option value="qhdpp">Galaxy S9/S9+</option>
+      <option value="fhdp">HUAWEI Mate 10 Series</option>
+      <option value="fhdpp p20">HUAWEI P20 Series</option>
+    </optgroup>
+    <optgroup label="Other">
+      <option value="fhd">FHD (1920x1080, 16:9)</option>
+      <option value="fhdp">FHD+ (2160x1080, 2:1)</option>
+      <option value="fhdpp">FHD++ (2240x1080)</option>
+      <option value="qhd">QHD (2560x1440, 16:9)</option>
+      <option value="qhdp">QHD+ (2880x1440, 2:1)</option>
+      <option value="qhdpp">QHD++ (2960x1440)</option>
+      <option value="r4k">4K (3840x2160, 16:9)</option>
+    </optgroup>
+  </select>
+  <a id="download" class="button" download>Download</a>
+</div>
+<div id="output" class="preview"></div>
+<div id="view" class="content xs">
+  <div>
+    <span><img class="no01"></span>
+    <span><img class="no02"></span>
+    <span><img class="no03"></span>
+    <span><img class="no04"></span>
+    <span><img class="no05"></span>
+    <span><img class="no06"></span>
+    <span><img class="no07"></span>
+    <span><img class="no08"></span>
+  </div>
+  <div>
+    <span><img class="no04"></span>
+    <span><img class="no05"></span>
+    <span><img class="no06"></span>
+    <span><img class="no07"></span>
+    <span><img class="no08"></span>
+    <span><img class="no01"></span>
+    <span><img class="no02"></span>
+    <span><img class="no03"></span>
+  </div>
+  <div>
+    <span><img class="no07"></span>
+    <span><img class="no08"></span>
+    <span><img class="no01"></span>
+    <span><img class="no02"></span>
+    <span><img class="no03"></span>
+    <span><img class="no04"></span>
+    <span><img class="no05"></span>
+    <span><img class="no06"></span>
+  </div>
+  <div>
+    <span><img class="no02"></span>
+    <span><img class="no03"></span>
+    <span><img class="no04"></span>
+    <span><img class="no05"></span>
+    <span><img class="no06"></span>
+    <span><img class="no07"></span>
+    <span><img class="no08"></span>
+    <span><img class="no01"></span>
+  </div>
+  <div>
+    <span><img class="no05"></span>
+    <span><img class="no06"></span>
+    <span><img class="no07"></span>
+    <span><img class="no08"></span>
+    <span><img class="no01"></span>
+    <span><img class="no02"></span>
+    <span><img class="no03"></span>
+    <span><img class="no04"></span>
+  </div>
+  <div>
+    <span><img class="no08"></span>
+    <span><img class="no01"></span>
+    <span><img class="no02"></span>
+    <span><img class="no03"></span>
+    <span><img class="no04"></span>
+    <span><img class="no05"></span>
+    <span><img class="no06"></span>
+    <span><img class="no07"></span>
+  </div>
+  <div>
+    <span><img class="no03"></span>
+    <span><img class="no04"></span>
+    <span><img class="no05"></span>
+    <span><img class="no06"></span>
+    <span><img class="no07"></span>
+    <span><img class="no08"></span>
+    <span><img class="no01"></span>
+    <span><img class="no02"></span>
+  </div>
+  <div>
+    <span><img class="no06"></span>
+    <span><img class="no07"></span>
+    <span><img class="no08"></span>
+    <span><img class="no01"></span>
+    <span><img class="no02"></span>
+    <span><img class="no03"></span>
+    <span><img class="no04"></span>
+    <span><img class="no05"></span>
+  </div>
+  <div>
+    <span><img class="no01"></span>
+    <span><img class="no02"></span>
+    <span><img class="no03"></span>
+    <span><img class="no04"></span>
+    <span><img class="no05"></span>
+    <span><img class="no06"></span>
+    <span><img class="no07"></span>
+    <span><img class="no08"></span>
+  </div>
+  <div>
+    <span><img class="no04"></span>
+    <span><img class="no05"></span>
+    <span><img class="no06"></span>
+    <span><img class="no07"></span>
+    <span><img class="no08"></span>
+    <span><img class="no01"></span>
+    <span><img class="no02"></span>
+    <span><img class="no03"></span>
+  </div>
+  <div>
+    <span><img class="no07"></span>
+    <span><img class="no08"></span>
+    <span><img class="no01"></span>
+    <span><img class="no02"></span>
+    <span><img class="no03"></span>
+    <span><img class="no04"></span>
+    <span><img class="no05"></span>
+    <span><img class="no06"></span>
+  </div>
+  <div>
+    <span><img class="no02"></span>
+    <span><img class="no03"></span>
+    <span><img class="no04"></span>
+    <span><img class="no05"></span>
+    <span><img class="no06"></span>
+    <span><img class="no07"></span>
+    <span><img class="no08"></span>
+    <span><img class="no01"></span>
+  </div>
+  <div>
+    <span><img class="no05"></span>
+    <span><img class="no06"></span>
+    <span><img class="no07"></span>
+    <span><img class="no08"></span>
+    <span><img class="no01"></span>
+    <span><img class="no02"></span>
+    <span><img class="no03"></span>
+    <span><img class="no04"></span>
+  </div>
+  <div>
+    <span><img class="no08"></span>
+    <span><img class="no01"></span>
+    <span><img class="no02"></span>
+    <span><img class="no03"></span>
+    <span><img class="no04"></span>
+    <span><img class="no05"></span>
+    <span><img class="no06"></span>
+    <span><img class="no07"></span>
+  </div>
+  <div>
+    <span><img class="no03"></span>
+    <span><img class="no04"></span>
+    <span><img class="no05"></span>
+    <span><img class="no06"></span>
+    <span><img class="no07"></span>
+    <span><img class="no08"></span>
+    <span><img class="no01"></span>
+    <span><img class="no02"></span>
+  </div>
+  <div class="extend">
+    <span><img class="no06"></span>
+    <span><img class="no07"></span>
+    <span><img class="no08"></span>
+    <span><img class="no01"></span>
+    <span><img class="no02"></span>
+    <span><img class="no03"></span>
+    <span><img class="no04"></span>
+    <span><img class="no05"></span>
+  </div>
+</div>
+<script>
+{
+  const uris = [
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAVCAYAAACt4nWrAAAAyklEQVRIS2NkwAF+n3v0/9/hi7ik4eJMtvoMrEZyjNgUYhUEKfw5cfN/giZDFbDn+5JnOHOWF047/k7bBpYbhoYTG3HEhj9MHSiiGUmJOFItoK3hf37/JTrJkexyUJiTqolY9YwDajhL2QSwQ3/5OjKAUgCoSGDbvB8s9qerAK8n8LocZjDMBJAFMINhYvgsIMlwbM4cnIaDXIoeNMiupyjMYQZhs4CQwSC9RCdFZAuIMZgkw2FBRKzBJBtObM6EqQNXT7TIpaB6FQBoVX555T6KBQAAAABJRU5ErkJggg==',
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAZCAYAAAA4/K6pAAAAuklEQVQ4y7WTQRaDIAxEczhP5E08S+/RQ3Tlyr3tIjVofEAzAaEu5j3A4TNBQu954c/zFSTjTbSNoXI/6SRadAG53wJASHw6BBRS3ACwYlllIB8dxpoUpqcfgOKV6tcyFUANAEoAIAWD6CnAKcMFyD73kgqQBMCNokvRzYcUL/AwBq3T48csa/rd7YXYKON8XtVMFgj5/pug6Q66/wLqxtrHpH3QAkl74eKLPPcQM+8axiDvTrSJ1Cv7vv0SRTFVcpu7AAAAAElFTkSuQmCC',
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAHCAYAAAD9NeaIAAAASklEQVQoz2P4fe7R/58TN9MMg8xngHH+/P6LlQYpArFxYZgjcekHYQZCLgEp/u9ShBMjG4YLM6AbiO4KUizBpp/+PqFpnNAjdQEAmrRIJ7PNKNcAAAAASUVORK5CYII=',
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAWCAYAAAAvg9c4AAAAoUlEQVQ4y+3UUQ5AMBAE0DmcE7mJs7iHQ7iF+FjdslRDdtrUH8lE0oynaAH/0fwQkZhlGEW6/hYdCzk7bHcvZoU86zRroGevG4LHu77BTE89MEUrs10aZWf6HaqPdXyIJonvlJ1BSU9RagUwqK1VQ9EIjZbtEBcmUNzQY1dZatD0+kcUhShYFCSKUhQOiloULyg41IETFK1Q287XWPbjTrMBA0rfkHsiMakAAAAASUVORK5CYII=',
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAANCAYAAADISGwcAAAArklEQVQ4T2NkwAF+n3v0HyTFaiTHiEsNNcTBhmOz7OfEzf+ZbPXp4wBsloHEKPEhsY4HhwC6ZcxZXgx/p21jABnCqCsNdgeIDxInhv3/8lOGf4cvMrDn+xKMPrgDkC2DWUKuA5D1E0pDNHUAyCGEooJoB4CCFRYdxLBBUUYIgEMYlgYIRQEhw9DlYQ6gWgiQ4wBCloPMJDoXkOIAsnMBcoqlazkw4CUhtuClV10AAGtvo7htSMhVAAAAAElFTkSuQmCC',
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAATCAYAAABLN4eXAAAAb0lEQVQoz2P4//8/AxgX9P8nhH+1LwOrZaBI05/ff/8TgSGafp979P/nxM1EY5B6BlI0wDB5moj0Cwpm+O9S9J9UjKEJ5gR0Nk5NsNBBx+gaKdeETSNB56FrxKYBpyaYRqJDj6ggJyty6Zf2yMkaADtkDdRvC3bZAAAAAElFTkSuQmCC',
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAHCAYAAAAF1R1/AAAATklEQVQY02P4//8/w+9zj/7/nLiZLAzSC8QMKIZABTEU//n9FyuGqQXRDMiG4LIVl0HIhjEQ43x8Bv168Y46BsFdRExAExVGoBCnRqwBAP/MtEJJUNnVAAAAAElFTkSuQmCC',
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAATCAYAAABLN4eXAAAAnUlEQVQoz53SuQ2AMAwFUC9FxwqUzEVDS8cANIyAxAZIjMASJo7iyDmJKb7E4aefKAFEBJn1XNAE4u8yCejnDr8gmCE/HKeELcoBAX+hBBaXVmsLWvbpwvidQK4J6KcMA/ec7mnchgTJ3MdDoRkbf0415KAeUdycDjFUI4YW0WZbEc0yUrV5pGnjPTW3+eWJtqYzC64HH2BuqXwzKC8JlLJ3jtTW2QAAAABJRU5ErkJggg==',
+  ];
+
+  uris.forEach((uri, index) => {
+    const
+      num = ('0' + (index + 1)).slice(-2),
+      images = document.getElementsByClassName('no' + num);
+    for (const elem of images) {
+      elem.src = uri;
+      elem.alt = num;
+    }
+  });
+}
+{
+  const
+    view = document.getElementById('view'),
+    output = document.getElementById('output'),
+    device = document.getElementById('device'),
+    css = document.getElementById('style'),
+    download = document.getElementById('download');
+
+  let url, image;
+
+  const setDownload = async () => {
+    const
+      ratio = parseFloat(device.value.split('@')[1] || 3),
+      style = window.getComputedStyle(view),
+      width = parseFloat(style.width) * ratio,
+      height = parseFloat(style.height) * ratio,
+      clone = view.cloneNode(true);
+
+    clone.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
+    clone.classList.add('x' + ratio);
+
+    const
+      xhtml = clone.outerHTML.replace(/<img ([^>]+)>/g, '<img $1 />'),
+      svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}">
+  ${css.outerHTML}
+  <g>
+    <foreignObject x="0" y="0" width="100%" height="100%">
+      ${xhtml}
+    </foreignObject>
+  </g>
+</svg>`;
+
+    const
+      blob = new Blob([svg], {type: 'image/svg+xml'}),
+      img = document.createElement('img');
+
+    img.onload = () => createImage(img, width, height);
+    img.crossOrigin = 'Anonymous';
+    img.src = await new Promise(resolve => {
+      const reader = new FileReader;
+      reader.onload = () => resolve(reader.result);
+      reader.readAsDataURL(blob);
+    });
+  };
+
+  const createImage = (img, width, height) => {
+    const
+      canvas = document.createElement('canvas'),
+      ctx = canvas.getContext('2d');
+
+    canvas.width = width;
+    canvas.height = height;
+
+    ctx.drawImage(img, 0, 0, width, height);
+
+    image && output.removeChild(image);
+    url && URL.revokeObjectURL(url);
+
+    canvas.toBlob(blob => {
+      image = output.appendChild(document.createElement('img'));
+      url = URL.createObjectURL(blob);
+      image.src = download.href = url;
+    }, 'image/png');
+  };
+
+  device.addEventListener('change', () => {
+    view.className = 'content ' + device.value.split('@')[0];
+    setDownload();
+  });
+
+  setDownload();
+}
+</script>
+</body>
+</head>
+</html>
