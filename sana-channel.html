@@ -162,11 +162,12 @@ body > .content {
 <body>
 <div class="control">
   <select id="device">
+    <option value="-1">Select Device</option>
     <optgroup label="iPhone">
       <option value="se@2">iPhone SE</option>
       <option value="normal@2">iPhone 6/7/8</option>
       <option value="fhd">iPhone 6/7/8 Plus</option>
-      <option value="xs" selected>iPhone X/XS</option>
+      <option value="xs">iPhone X/XS</option>
       <option value="xr@2">iPhone XR</option>
       <option value="xsmax">iPhone XS Max</option>
     </optgroup>
@@ -446,11 +447,10 @@ body > .content {
   };
 
   device.addEventListener('change', () => {
+    if (device.selectedIndex === 0) { return; }
     view.className = 'content ' + device.value.split('@')[0];
     setDownload();
   });
-
-  setDownload();
 }
 </script>
 </body>
