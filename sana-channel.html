@@ -21,7 +21,6 @@ body > .content {
 }
 .preview img {
   display: block;
-  max-width: 100%;
   margin: 0 auto;
 }
 .button {
@@ -62,6 +61,8 @@ body > .content {
 }
 .content img {
   display: block;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: -moz-crisp-edges;
   image-rendering: pixelated;
 }
 .content .extend {
@@ -464,6 +465,7 @@ body > .content {
 
   const createImage = (img, width, height) => {
     const
+      ratio = window.devicePixelRatio || 1,
       canvas = document.createElement('canvas'),
       ctx = canvas.getContext('2d');
 
@@ -478,6 +480,8 @@ body > .content {
     canvas.toBlob(blob => {
       image = output.appendChild(document.createElement('img'));
       url = URL.createObjectURL(blob);
+      image.style.width = (width / ratio) + 'px';
+      image.style.height = (height / ratio) + 'px';
       image.src = download.href = url;
     }, 'image/png');
   };
