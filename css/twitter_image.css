@@ -2,7 +2,7 @@
 /* base */
 html { font-size: 62.5%; /* 1em = 10px */ }
 
-body { font: 1.6em / 1.4 "-apple-system", BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Hiragino Kaku Gothic ProN", "メイリオ" , Meiryo, sans-serif; color: #333; background: #eee; margin: 2em 1em 5em; }
+body { font: 1.6em / 1.4 "-apple-system", BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Hiragino Kaku Gothic ProN", "メイリオ" , Meiryo, sans-serif; color: #333; background: #eee; margin: 1.5em 1em 3em; }
 
 main { overflow: hidden; display: block; max-width: 1280px; margin: 0 auto; padding: 0 40px 10px; background: #fff; border-radius: 15px; box-sizing: border-box; box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.15); animation: slideIn .4s ease-out, fadeIn .4s ease-in-out; }
 
@@ -65,19 +65,19 @@ section { margin: 1.5em 0; }
   h3 { font-size: 1.8rem; } }
 
 /* twitter_image */
+main { max-width: 960px; }
+
 .control .scale select, .control .button button { -webkit-appearance: none; -moz-appearance: none; appearance: none; height: 32px; padding: 0 .5em; background: #fff; box-shadow: none; border: 2px #655c98 solid; border-radius: 4px; outline: none; font-size: 1.6rem; font-weight: bold; box-sizing: border-box; cursor: pointer; }
 
-.control { display: flex; justify-content: space-between; align-items: center; max-width: 960px; margin: 0 auto 15px; }
+.control { display: flex; justify-content: space-between; align-items: center; margin: 0 0 15px; }
 
 .control .scale select { padding: 0 .8em; }
 
-.control .scale small { margin-left: .6em; }
+.control .scale small { margin-left: .4em; }
 
-.control .button button { padding: 0 1.5em; transition: all .2s; }
+.control .button button { padding: 0 1.2em; transition: all .2s; }
 
 .control .button button:hover { background: #e7e6ef; }
-
-.dropContent { max-width: 960px; margin: 0 auto; }
 
 .dropContent input[type="file"] { display: none; }
 
@@ -95,7 +95,7 @@ section { margin: 1.5em 0; }
 
 .outputContent { overflow-x: auto; overflow-y: hidden; height: 0; margin-top: 30px; background: #eee; border-radius: 4px; text-align: center; transition: height .3s; box-shadow: inset 0 2px 6px 0 rgba(0, 0, 0, 0.15); }
 
-.outputContent.reset { transition: none; }
+.outputContent.reset { margin: 0; transition: none; }
 
 .outputContent .innerBody { padding: 20px; }
 
@@ -111,7 +111,7 @@ section { margin: 1.5em 0; }
 
 .outputContent .outputImage img { display: block; margin: 0 auto; }
 
-.bottomContent { max-width: 960px; margin: 1.5em auto; }
+.bottomContent { margin: 1.5em 0; }
 
 @media screen and (max-width: 1280px) { .dropContent figure img { width: 20vw; max-width: 80px; }
   .dropContent label::after { display: block; margin-top: 1.2em; font-size: 1.4rem; content: "ここをタップして画像を選択してください"; }

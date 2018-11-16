@@ -1,4 +1,4 @@
-/*! twitter_image.js | v1.0.1 | MIT License */
+/*! twitter_image.js | v1.0.2 | MIT License */
 {
   const
     maxSize = 3145728,  // 3MB
@@ -54,7 +54,7 @@
     output = new Vue({
       el: '#output',
       data: {
-        isReset: false,
+        isReset: true,
         height: 0,
         message: '',
         image: '',
@@ -72,13 +72,11 @@
   const viewError = text => {
     output.message = text;
     output.$emit('slideDown');
-    dropArea.isOver = false;
     dropArea.isWait = false;
     enabled = true;
   };
 
   const readFile = file => {
-    dropArea.isOver = false;
     dropArea.isWait = true;
     enabled = false;
 
