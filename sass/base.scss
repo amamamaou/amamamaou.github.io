@@ -1,0 +1,170 @@
+// compileOnSave: false
+@charset "utf-8";
+
+$themeColor: #655c98;
+$pointColor: #e7e6ef;
+
+/* base */
+
+html {
+  font-size: 62.5%; /* 1em = 10px */
+}
+body {
+  font: 1.6em / 1.4 "-apple-system", BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Hiragino Kaku Gothic ProN", "メイリオ" , Meiryo, sans-serif;
+  color: #333;
+  background: #eee;
+  margin: 2em 1em 5em;
+}
+main {
+  overflow: hidden;
+  display: block;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 40px 10px;
+  background: #fff;
+  border-radius: 15px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 6px 0 rgba(#000, .15);
+  animation: slideIn .4s ease-out, fadeIn .4s ease-in-out;
+}
+
+::selection {
+  background: $pointColor;
+}
+::-moz-selection {
+  background: $pointColor;
+}
+
+h1 {
+  font-size: 2.8rem;
+}
+
+h2 {
+  font-size: 2.4rem;
+  margin-bottom: .7em;
+  padding: 0 0 .1em;
+  border-bottom: 1px solid #ccc;
+
+  &:first-of-type ~ h2 {
+    margin-top: 1.5em;
+  }
+}
+
+h3 {
+  font-size: 2rem;
+  margin: 1.2em 0 .8em;
+}
+
+a {
+  text-decoration: none;
+
+  &:link, &:visited {
+    color: $themeColor;
+  }
+  &:hover {
+    text-decoration: underline;
+  }
+  &[href^="#"]:not([href="#"])::before {
+    margin-left: .1em;
+    content: "#";
+  }
+}
+
+/* list */
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+li {
+  padding: 0;
+}
+dt {
+  font-weight: bold;
+}
+dd + dt {
+  margin-top: .5em;
+}
+
+.squareList {
+  list-style-type: square;
+  margin-left: 1.5em;
+
+  li:first-child ~ li {
+    margin-top: .25em;
+  }
+}
+
+.snsButton {
+  display: flex;
+  align-items: center;
+  margin: 18px 0 12px;
+  padding: 0;
+  font-size: 1.3rem;
+  line-height: 1;
+
+  li {
+    overflow: hidden;
+    display: block;
+    height: 20px;
+    margin: 0 10px 6px 0;
+  }
+
+  iframe {
+    height: 20px;
+    vertical-align: bottom;
+  }
+}
+
+/* contents */
+
+section {
+  margin: 1.5em 0;
+}
+
+.description {
+  margin: 1em 0;
+}
+
+/* keyframes */
+
+@keyframes slideIn {
+  0% {
+    transform: translate3d(0, -15px, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* for sp */
+
+@media screen and (max-width: 1280px) {
+  body {
+    margin: .6em;
+    font-size: 1.4rem;
+  }
+
+  main {
+    padding: 0 20px 10px;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+  }
+  h2 {
+    font-size: 2rem;
+  }
+  h3 {
+    font-size: 1.8rem;
+  }
+}

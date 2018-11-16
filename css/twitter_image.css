@@ -1,0 +1,123 @@
+@charset "UTF-8";
+/* base */
+html { font-size: 62.5%; /* 1em = 10px */ }
+
+body { font: 1.6em / 1.4 "-apple-system", BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Hiragino Kaku Gothic ProN", "メイリオ" , Meiryo, sans-serif; color: #333; background: #eee; margin: 2em 1em 5em; }
+
+main { overflow: hidden; display: block; max-width: 1280px; margin: 0 auto; padding: 0 40px 10px; background: #fff; border-radius: 15px; box-sizing: border-box; box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.15); animation: slideIn .4s ease-out, fadeIn .4s ease-in-out; }
+
+::selection { background: #e7e6ef; }
+
+::-moz-selection { background: #e7e6ef; }
+
+h1 { font-size: 2.8rem; }
+
+h2 { font-size: 2.4rem; margin-bottom: .7em; padding: 0 0 .1em; border-bottom: 1px solid #ccc; }
+
+h2:first-of-type ~ h2 { margin-top: 1.5em; }
+
+h3 { font-size: 2rem; margin: 1.2em 0 .8em; }
+
+a { text-decoration: none; }
+
+a:link, a:visited { color: #655c98; }
+
+a:hover { text-decoration: underline; }
+
+a[href^="#"]:not([href="#"])::before { margin-left: .1em; content: "#"; }
+
+/* list */
+ul { margin: 0; padding: 0; list-style: none; }
+
+li { padding: 0; }
+
+dt { font-weight: bold; }
+
+dd + dt { margin-top: .5em; }
+
+.squareList { list-style-type: square; margin-left: 1.5em; }
+
+.squareList li:first-child ~ li { margin-top: .25em; }
+
+.snsButton { display: flex; align-items: center; margin: 18px 0 12px; padding: 0; font-size: 1.3rem; line-height: 1; }
+
+.snsButton li { overflow: hidden; display: block; height: 20px; margin: 0 10px 6px 0; }
+
+.snsButton iframe { height: 20px; vertical-align: bottom; }
+
+/* contents */
+section { margin: 1.5em 0; }
+
+.description { margin: 1em 0; }
+
+/* keyframes */
+@keyframes slideIn { 0% { transform: translate3d(0, -15px, 0); }
+  100% { transform: translate3d(0, 0, 0); } }
+
+@keyframes fadeIn { 0% { opacity: 0; }
+  100% { opacity: 1; } }
+
+/* for sp */
+@media screen and (max-width: 1280px) { body { margin: .6em; font-size: 1.4rem; }
+  main { padding: 0 20px 10px; }
+  h1 { font-size: 2.2rem; }
+  h2 { font-size: 2rem; }
+  h3 { font-size: 1.8rem; } }
+
+/* twitter_image */
+.control .scale select, .control .button button { height: 32px; padding: 0 .5em; background: #fff; box-shadow: none; border: 2px #655c98 solid; border-radius: 4px; outline: none; font-size: 1.6rem; font-weight: bold; box-sizing: border-box; cursor: pointer; }
+
+.control { display: flex; justify-content: space-between; align-items: center; max-width: 960px; margin: 0 auto 15px; }
+
+.control .scale small { margin-left: 1em; }
+
+.control .button button { width: 90px; transition: all .2s; }
+
+.control .button button:hover { background: #e7e6ef; }
+
+.dropContent { max-width: 960px; margin: 0 auto; }
+
+.dropContent input[type="file"] { display: none; }
+
+.dropContent label { display: block; padding: 20px; background: #e7e6ef; border-radius: 4px; border: 4px #655c98 dashed; text-align: center; cursor: pointer; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; transition: opacity .2s, filter .2s; }
+
+.dropContent label:active, .dropContent label.dragover { filter: brightness(0.85); }
+
+.dropContent label.wait { pointer-events: none; opacity: .5; }
+
+.dropContent figure { margin: 0; pointer-events: none; }
+
+.dropContent figure img { width: 80px; vertical-align: bottom; }
+
+.dropContent p { margin: 15px 0 0; font-size: 1.4rem; pointer-events: none; }
+
+.outputContent { overflow-x: auto; overflow-y: hidden; height: 0; margin-top: 30px; background: #eee; border-radius: 4px; text-align: center; transition: height .3s; box-shadow: inset 0 2px 6px 0 rgba(0, 0, 0, 0.15); }
+
+.outputContent.reset { transition: none; }
+
+.outputContent .innerBody { padding: 20px; }
+
+.outputContent .message { margin: 0; color: #f33; font-weight: bold; }
+
+.outputContent .message + .imgContent { margin-top: 20px; }
+
+.outputContent .dlBtn { margin-bottom: 12px; }
+
+.outputContent .dlBtn a { display: inline-block; height: 28px; padding: 0 12px; line-height: 28px; color: #333; font-weight: bold; text-align: center; text-decoration: none; background: #fff; border: 2px #655c98 solid; border-radius: 4px; transition: all .2s; }
+
+.outputContent .dlBtn a:hover { background: #e7e6ef; }
+
+.outputContent .outputImage img { display: block; margin: 0 auto; }
+
+.bottomContent { max-width: 960px; margin: 1.5em auto; }
+
+@media screen and (max-width: 1280px) { .dropContent figure img { width: 20vw; max-width: 80px; }
+  .dropContent label::after { display: block; margin-top: 15px; font-size: 1.4rem; content: "ここをタップして画像を選択してください"; }
+  .dropContent p { display: none; }
+  .outputContent { overflow: hidden; }
+  .outputContent.reset { transition: none; }
+  .outputContent .message { font-size: 1.4rem; }
+  .outputContent .dlBtn { margin-bottom: 12px; }
+  .outputContent .dlBtn a { transition: none; }
+  .outputContent .dlBtn a:hover { background: #fff; }
+  .outputContent .outputImage img { max-width: 100%; } }
