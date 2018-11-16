@@ -1,4 +1,4 @@
-/*! twitter_image.js | v1.0.3 | MIT License */
+/*! twitter_image.js | v1.0.4 | MIT License */
 {
   const
     maxSize = 3145728,  // 3MB
@@ -47,6 +47,7 @@
         },
         change(ev) {
           const file = ev.target.files[0];
+          ev.target.value = '';
           file && readFile(file);
         },
       },
