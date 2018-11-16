@@ -1,4 +1,4 @@
-/*! twitter_image.js | v1.0.2 | MIT License */
+/*! twitter_image.js | v1.0.3 | MIT License */
 {
   const
     maxSize = 3145728,  // 3MB
@@ -41,12 +41,12 @@
           }
         },
         readFile(ev) {
-          const [file = null] = ev.dataTransfer.files;
+          const file = ev.dataTransfer.files[0];
           file && readFile(file);
           this.isOver = false;
         },
         change(ev) {
-          const [file = null] = ev.target.files;
+          const file = ev.target.files[0];
           file && readFile(file);
         },
       },
@@ -177,7 +177,7 @@
     if (enabled && ev.clipboardData) {
       const {items} = ev.clipboardData;
       if (items) {
-        for (const item of items) {
+        for (const item of Array.from(items)) {
           if (item.type.includes('image/')) {
             readFile(item.getAsFile());
             break;
