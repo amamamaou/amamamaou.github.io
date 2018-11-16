@@ -1,6 +1,7 @@
-// compileOnSave: false
+// compileCompact: ../css/$1.css
 @charset "utf-8";
 
+$fontColor: #333;
 $themeColor: #655c98;
 $pointColor: #e7e6ef;
 
@@ -11,7 +12,7 @@ html {
 }
 body {
   font: 1.6em / 1.4 "-apple-system", BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Hiragino Kaku Gothic ProN", "メイリオ" , Meiryo, sans-serif;
-  color: #333;
+  color: $fontColor;
   background: #eee;
   margin: 1.5em 1em 3em;
 }
@@ -64,6 +65,17 @@ a {
   &:hover {
     text-decoration: underline;
   }
+  &[target="_blank"]::after {
+    display: inline-block;
+    position: relative;
+    top: .1em;
+    z-index: 0;
+    height: .9em;
+    width: 1em;
+    margin-left: .2em;
+    background: url("../images/icon_blank.svg") no-repeat 50% 50% / contain;
+    content: "";
+  }
   &[href^="#"]:not([href="#"])::before {
     margin-left: .1em;
     content: "#";
@@ -91,8 +103,12 @@ dd + dt {
   list-style-type: square;
   margin-left: 1.5em;
 
-  li:first-child ~ li {
-    margin-top: .25em;
+  li {
+    font-size: 1.5rem;
+
+    &:first-child ~ li {
+      margin-top: .25em;
+    }
   }
 }
 
@@ -107,12 +123,12 @@ dd + dt {
   li {
     overflow: hidden;
     display: block;
-    height: 20px;
-    margin: 0 10px 6px 0;
+    height: 21px;
+    margin: 0 10px 0 0;
   }
 
   iframe {
-    height: 20px;
+    height: 21px;
     vertical-align: bottom;
   }
 }
@@ -127,7 +143,56 @@ section {
   margin: 1em 0;
 }
 
+.flexList {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin: 1em 0;
+
+  li {
+    width: calc(50% - .5em);
+    margin-top: 1em;
+
+    &:first-child,
+    &:nth-child(2) {
+      margin: 0;
+    }
+  }
+
+  h3 {
+    font-size: 1.8rem;
+    margin: 0 0 .4em;
+  }
+
+  a {
+    display: block;
+    position: relative;
+    height: 100%;
+    padding: 1em 1.4em;
+    background: rgba(#000, .03);
+    border: 1px solid rgba(#000, .06);
+    box-sizing: border-box;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background .2s;
+
+    &:hover {
+      background: rgba($themeColor, .12);
+    }
+  }
+
+  p {
+    margin: 0;
+    color: $fontColor;
+    font-size: 1.5rem;
+  }
+}
+
 /* keyframes */
+
+.rotate {
+  animation: rotateBody 2s cubic-bezier(.23, 1, .32, 1);
+}
 
 @keyframes slideIn {
   0% {
@@ -145,6 +210,18 @@ section {
     opacity: 1;
   }
 }
+@keyframes rotateBody {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(2190deg);
+  }
+  100% {
+    transform: rotate(2160deg);
+  }
+}
+
 
 /* for sp */
 
