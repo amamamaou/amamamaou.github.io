@@ -1,5 +1,4 @@
 // compileCompact: ../css/$1.css
-
 @charset "utf-8";
 
 @import "base";
@@ -28,6 +27,7 @@ main {
   border: 2px $themeColor solid;
   border-radius: 4px;
   outline: none;
+  color: $fontColor;
   font-size: 1.6rem;
   font-weight: bold;
   box-sizing: border-box;
@@ -94,7 +94,7 @@ main {
     pointer-events: none;
 
     img {
-      width: 80px;
+      max-width: 60px;
       vertical-align: bottom;
     }
   }
@@ -167,15 +167,10 @@ main {
   }
 }
 
-.bottomContent {
-  margin: 1.5em 0;
-}
-
 @media screen and (max-width: 1280px) {
   .dropContent {
     figure img {
       width: 20vw;
-      max-width: 80px;
     }
 
     label::after {
