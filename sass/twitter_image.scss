@@ -16,6 +16,9 @@ $innerWidth: 960px;
 }
 
 %formElem {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
   height: 32px;
   padding: 0 .5em;
   background: #fff;
@@ -38,16 +41,17 @@ $innerWidth: 960px;
 
   .scale {
     select {
+      padding: 0 .8em;
       @extend %formElem;
     }
 
     small {
-      margin-left: 1em;
+      margin-left: .6em;
     }
   }
 
   .button button {
-    width: 90px;
+    padding: 0 1.5em;
     @extend %formElem;
     transition: all .2s;
 
@@ -178,7 +182,7 @@ $innerWidth: 960px;
 
     label::after {
       display: block;
-      margin-top: 15px;
+      margin-top: 1.2em;
       font-size: 1.4rem;
       content: "ここをタップして画像を選択してください";
     }
@@ -195,12 +199,16 @@ $innerWidth: 960px;
       transition: none;
     }
 
+    .innerBody {
+      padding: 1.2em;
+    }
+
     .message {
       font-size: 1.4rem;
     }
 
     .dlBtn {
-      margin-bottom: 12px;
+      margin-bottom: 1em;
 
       a {
         transition: none;

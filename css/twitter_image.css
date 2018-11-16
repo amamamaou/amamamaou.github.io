@@ -58,20 +58,22 @@ section { margin: 1.5em 0; }
   100% { opacity: 1; } }
 
 /* for sp */
-@media screen and (max-width: 1280px) { body { margin: .6em; font-size: 1.4rem; }
-  main { padding: 0 20px 10px; }
+@media screen and (max-width: 1280px) { body { margin: .8em .8em 2em; font-size: 1.4rem; }
+  main { padding: 0 1.2em .6em; }
   h1 { font-size: 2.2rem; }
   h2 { font-size: 2rem; }
   h3 { font-size: 1.8rem; } }
 
 /* twitter_image */
-.control .scale select, .control .button button { height: 32px; padding: 0 .5em; background: #fff; box-shadow: none; border: 2px #655c98 solid; border-radius: 4px; outline: none; font-size: 1.6rem; font-weight: bold; box-sizing: border-box; cursor: pointer; }
+.control .scale select, .control .button button { -webkit-appearance: none; -moz-appearance: none; appearance: none; height: 32px; padding: 0 .5em; background: #fff; box-shadow: none; border: 2px #655c98 solid; border-radius: 4px; outline: none; font-size: 1.6rem; font-weight: bold; box-sizing: border-box; cursor: pointer; }
 
 .control { display: flex; justify-content: space-between; align-items: center; max-width: 960px; margin: 0 auto 15px; }
 
-.control .scale small { margin-left: 1em; }
+.control .scale select { padding: 0 .8em; }
 
-.control .button button { width: 90px; transition: all .2s; }
+.control .scale small { margin-left: .6em; }
+
+.control .button button { padding: 0 1.5em; transition: all .2s; }
 
 .control .button button:hover { background: #e7e6ef; }
 
@@ -112,12 +114,13 @@ section { margin: 1.5em 0; }
 .bottomContent { max-width: 960px; margin: 1.5em auto; }
 
 @media screen and (max-width: 1280px) { .dropContent figure img { width: 20vw; max-width: 80px; }
-  .dropContent label::after { display: block; margin-top: 15px; font-size: 1.4rem; content: "ここをタップして画像を選択してください"; }
+  .dropContent label::after { display: block; margin-top: 1.2em; font-size: 1.4rem; content: "ここをタップして画像を選択してください"; }
   .dropContent p { display: none; }
   .outputContent { overflow: hidden; }
   .outputContent.reset { transition: none; }
+  .outputContent .innerBody { padding: 1.2em; }
   .outputContent .message { font-size: 1.4rem; }
-  .outputContent .dlBtn { margin-bottom: 12px; }
+  .outputContent .dlBtn { margin-bottom: 1em; }
   .outputContent .dlBtn a { transition: none; }
   .outputContent .dlBtn a:hover { background: #fff; }
   .outputContent .outputImage img { max-width: 100%; } }
