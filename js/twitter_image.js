@@ -1,3 +1,4 @@
+/*! twitter_image.js | v1.0.1 | MIT License */
 {
   const
     maxSize = 3145728,  // 3MB
@@ -77,8 +78,8 @@
   };
 
   const readFile = file => {
-    this.isOver = false;
-    this.isWait = true;
+    dropArea.isOver = false;
+    dropArea.isWait = true;
     enabled = false;
 
     dropReset();
