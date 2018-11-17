@@ -1,37 +1,14 @@
 // compileCompact: ../css/$1.css
 @charset "utf-8";
 
-@import "base";
+@import "module";
 
 /* twitter_image */
 
-main {
-  max-width: 960px;
-}
-
-@mixin userSelect {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
 %formElem {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
   height: 32px;
-  padding: 0 .5em;
-  background: #fff;
-  box-shadow: none;
-  border: 2px $themeColor solid;
-  border-radius: 4px;
-  outline: none;
-  color: $fontColor;
   font-size: 1.6rem;
   font-weight: bold;
-  box-sizing: border-box;
-  cursor: pointer;
 }
 
 .control {
@@ -42,8 +19,9 @@ main {
 
   .scale {
     select {
-      padding: 0 .8em;
+      @include formStyleReset;
       @extend %formElem;
+      padding: 0 .8em;
     }
 
     small {
@@ -54,55 +32,6 @@ main {
   .button button {
     padding: 0 1.2em;
     @extend %formElem;
-    transition: all .2s;
-
-    &:hover {
-      background: $pointColor;
-    }
-  }
-}
-
-.dropContent {
-  input[type="file"] {
-    display: none;
-  }
-
-  label {
-    display: block;
-    padding: 20px;
-    background: $pointColor;
-    border-radius: 4px;
-    border: 4px $themeColor dashed;
-    text-align: center;
-    cursor: pointer;
-    @include userSelect;
-    transition: opacity .2s, filter .2s;
-
-    &:active,
-    &.dragover {
-      filter: brightness(.85);
-    }
-
-    &.wait {
-      pointer-events: none;
-      opacity: .5;
-    }
-  }
-
-  figure {
-    margin: 0;
-    pointer-events: none;
-
-    img {
-      max-width: 60px;
-      vertical-align: bottom;
-    }
-  }
-
-  p {
-    margin: 15px 0 0;
-    font-size: 1.3rem;
-    pointer-events: none;
   }
 }
 

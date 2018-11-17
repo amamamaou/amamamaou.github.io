@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>SVG to PNG</title>
+<meta name="description" content="SVG形式をPNG形式に変換します">
+<meta name="author" content="幸乃ととめ">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="./css/main.css" rel="stylesheet">
+<link href="./css/svg2png.css" rel="stylesheet">
+</head>
+<body>
+<main>
+  <aside class="topicPath">
+    <ol>
+      <li><a href="./index.html">ものおき</a></li>
+      <li>SVG to PNG</li>
+    </ol>
+  </aside>
+
+  <h1>SVG to PNG</h1>
+  <p class="description">SVG形式をPNG形式に変換します。</p>
+
+  <section class="flexSection">
+    <div class="dropContent flexContent">
+      <label for="fileInput"
+        :class="{dragover: isOver, wait: isWait}"
+        @dragover.prevent="dragover"
+        @dragleave="isOver = false"
+        @drop.prevent="readFile">
+        <figure><img src="./images/icon_svg.svg" alt="SVGファイル"></figure>
+        <p>
+          SVGファイルをここにドラッグ＆ドロップしてください<br>
+          クリックしてSVGファイルを選択することもできます
+        </p>
+      </label>
+      <input type="file" accept=".svg,.svgz" id="fileInput" @change="change">
+    </div>
+
+    <div class="flexContent">
+      <fieldset class="scaleBlock">
+        <legend>サイズ指定</legend>
+
+        <div class="radioBlock">
+          <input type="radio" name="size" value="relative" id="sizeRange" v-model="type">
+          <label for="sizeRange">倍率で指定する</label>
+
+          <div class="radioContent">
+            倍率：<output for="scaleRange">{{ scale }}</output>
+            <input type="range"
+              min="0.1" max="5" step="0.1" value="1"
+              id="scaleRange"
+              v-model="scale">
+          </div>
+        </div>
+
+        <div class="radioBlock">
+          <input type="radio" name="size" value="absolute" id="inputSize" v-model="type">
+          <label for="inputSize">手入力で指定する</label>
+
+          <div class="radioContent">
+            width: <input type="number" placeholder="auto" v-model="width">
+            height: <input type="number" placeholder="auto" v-model="height">
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+    <div id="output" class="flexContent full outputContent" :class="{reset: isReset}" :style="{height: height + 'px'}">
+      <div class="innerBody">
+        <p class="message" v-if="message">{{ message }}</p>
+        <div class="imgContent" v-if="image">
+          <div class="dlBtn"><a :href="image" :download="fileName">Download</a></div>
+          <div class="outputImage"><img alt="output image" :src="image"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="./js/svg2png.js?v1.0.4"></script>
+</body>
+</html>

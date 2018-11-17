@@ -1,0 +1,50 @@
+// compileCompact: ../css/$1.css
+@charset "utf-8";
+
+@import "module";
+
+/* data-uri */
+
+.outputContent {
+  margin: 1.6em 0;
+
+  .info {
+    display: flex;
+    align-items: center;
+    margin-bottom: .5em;
+
+    button {
+      height: 2em;
+      padding: 0 1em;
+      margin-right: 1em;
+    }
+  }
+
+  textarea {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: .5em .6em;
+    font-size: 1.45rem;
+    resize: none;
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  .dropContent {
+    figure img {
+      width: 20vw;
+    }
+
+    label::after {
+      display: block;
+      margin-top: 1.2em;
+      font-size: 1.4rem;
+      content: "ここをタップしてファイルを選択してください";
+    }
+
+    p {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,22 @@
+// compileOnSave: false
+
+$fontColor: #333;
+$themeColor: #655c98;
+$pointColor: #e7e6ef;
+
+@mixin monoFont {
+  font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+}
+
+@mixin userSelect {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+@mixin formStyleReset {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
