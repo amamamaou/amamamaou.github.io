@@ -1,4 +1,4 @@
-/*! svg2png.js | v1.0.0 | MIT License */
+/*! svg2png.js | v1.0.1 | MIT License */
 {
   const
     maxSize = 20971520,  // 20MB
@@ -12,8 +12,8 @@
       blobURL = null;
     }
 
-    output.isReset = true;
-    output.height = 0;
+    output.reset = true;
+    output.height = '0';
     output.message = '';
     output.image = '';
   };
@@ -33,20 +33,20 @@
     dropArea = new Vue({
       el: '.dropContent',
       data: {
-        isOver: false,
-        isWait: false,
+        over: false,
+        wait: false,
       },
       methods: {
         dragover(ev) {
           if (enabled) {
             ev.dataTransfer.dropEffect = 'copy';
-            this.isOver = true;
+            this.over = true;
           }
         },
         readFile(ev) {
           const file = ev.dataTransfer.files[0];
           file && readFile(file);
-          this.isOver = false;
+          this.over = false;
         },
         change(ev) {
           const file = ev.target.files[0];
@@ -58,8 +58,8 @@
     output = new Vue({
       el: '#output',
       data: {
-        isReset: true,
-        height: 0,
+        reset: true,
+        height: '0',
         message: '',
         image: '',
         fileName: '',
@@ -67,32 +67,24 @@
     });
 
   output.$on('slideDown', () => {
-    output.isReset = false;
+    output.reset = false;
     output.$nextTick(() => {
-      output.height = output.$el.children[0].offsetHeight;
+      output.height = output.$el.children[0].offsetHeight + 'px';
     });
   });
 
   const viewError = text => {
     output.message = text;
     output.$emit('slideDown');
-    dropArea.isWait = false;
+    dropArea.wait = false;
     enabled = true;
   };
 
   const readFile = async file => {
-    dropArea.isWait = true;
-    output.isReset = true;
-    output.height = 0;
-    output.message = '';
-    output.image = '';
-
+    dropArea.wait = true;
     enabled = false;
 
-    if (blobURL) {
-      URL.revokeObjectURL(blobURL);
-      blobURL = null;
-    }
+    dropReset();
 
     if (!file.type.includes('image/')) {
       viewError(imageError);
@@ -193,7 +185,7 @@
     image.onload = function () {
       output.image = url;
       output.$emit('slideDown');
-      dropArea.isWait = false;
+      dropArea.wait = false;
       enabled = true;
     };
 

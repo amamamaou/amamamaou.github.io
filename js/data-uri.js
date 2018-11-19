@@ -1,21 +1,21 @@
-/* data-uri.js | v1.0.0 | MIT License */
+/* data-uri.js | v1.0.1 | MIT License */
 {
   const
     dropArea = new Vue({
       el: '#dropArea',
       data: {
-        isOver: false,
-        isWait: false,
+        over: false,
+        wait: false,
       },
       methods: {
         dragover(ev) {
           ev.dataTransfer.dropEffect = 'copy';
-          this.isOver = true;
+          this.over = true;
         },
         readFile(ev) {
           const file = ev.dataTransfer.files[0];
           file && convert(file);
-          this.isOver = false;
+          this.over = false;
         },
         change(ev) {
           const file = ev.target.files[0];
@@ -26,21 +26,18 @@
     }),
     output = new Vue({
       el: '#output',
-      data: {
-        fileInfo: '',
-        result: '',
-      },
+      data: {fileInfo: '', result: ''},
       methods: {
         clear() { this.fileInfo = this.result = ''; },
       },
     });
 
   const
-    sub = ['K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'],
+    sub = ['K', 'M', 'G'],
     filesize = bytes => {
       const
         exp = Math.log(bytes) / Math.log(1024) | 0,
-        size = bytes / Math.pow(1024, exp),
+        size = bytes / 1024**exp,
         unit = exp === 0 ? 'bytes' : sub[exp - 1] + 'B';
       return (exp === 0 ? size : size.toFixed(2)) + ' ' + unit;
     };
@@ -57,13 +54,13 @@
       return;
     }
 
-    dropArea.isWait = true;
+    dropArea.wait = true;
 
     const result = await readFile(file);
 
     output.fileInfo = `${file.name} (${filesize(file.size)})`;
     output.result = result;
 
-    dropArea.isWait = false;
+    dropArea.wait = false;
   };
 }

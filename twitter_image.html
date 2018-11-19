@@ -20,7 +20,7 @@
 <main>
   <aside class="topicPath">
     <ol>
-      <li><a href="./index.html">ものおき</a></li>
+      <li><a href="./">ものおき</a></li>
       <li>Twitter用画像劣化回避ツール</li>
     </ol>
   </aside>
@@ -47,7 +47,7 @@
     <div id="control" class="control">
       <div class="scale">
         <select v-model="scale">
-          <option value="1" selected>× 1</option>
+          <option value="1">× 1</option>
           <option value="2">× 2</option>
           <option value="3">× 3</option>
         </select>
@@ -60,9 +60,9 @@
 
     <div id="dropArea" class="dropContent">
       <label for="fileInput"
-        :class="{dragover: isOver, wait: isWait}"
+        :class="{over, wait}"
         @dragover.prevent="dragover"
-        @dragleave="isOver = false"
+        @dragleave="over = false"
         @drop.prevent="readFile">
         <figure><img src="./images/icon_image.svg" alt="画像ファイル"></figure>
         <p>
@@ -74,7 +74,7 @@
       <input type="file" accept="image/*" id="fileInput" @change="change">
     </div>
 
-    <div id="output" class="outputContent" :class="{reset: isReset}" :style="{height: height + 'px'}">
+    <div id="output" class="outputContent" :class="{reset}" :style="{height}">
       <div class="innerBody">
         <p class="message" v-if="message">{{ message }}</p>
         <div class="imgContent" v-if="image">
@@ -105,6 +105,6 @@
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-<script src="./js/twitter_image.js?v1.0.4"></script>
+<script src="./js/twitter_image.js?v1.0.5"></script>
 </body>
 </html>

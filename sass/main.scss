@@ -244,7 +244,7 @@ section {
     transition: opacity .2s, filter .2s;
 
     &:active,
-    &.dragover {
+    &.over {
       filter: brightness(.85);
     }
 

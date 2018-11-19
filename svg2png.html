@@ -13,7 +13,7 @@
 <main>
   <aside class="topicPath">
     <ol>
-      <li><a href="./index.html">ものおき</a></li>
+      <li><a href="./">ものおき</a></li>
       <li>SVG to PNG</li>
     </ol>
   </aside>
@@ -24,9 +24,9 @@
   <section class="flexSection">
     <div class="dropContent flexContent">
       <label for="fileInput"
-        :class="{dragover: isOver, wait: isWait}"
+        :class="{dragover, wait}"
         @dragover.prevent="dragover"
-        @dragleave="isOver = false"
+        @dragleave="over = false"
         @drop.prevent="readFile">
         <figure><img src="./images/icon_svg.svg" alt="SVGファイル"></figure>
         <p>
@@ -66,7 +66,7 @@
       </fieldset>
     </div>
 
-    <div id="output" class="flexContent full outputContent" :class="{reset: isReset}" :style="{height: height + 'px'}">
+    <div id="output" class="flexContent full outputContent" :class="{reset}" :style="{height}">
       <div class="innerBody">
         <p class="message" v-if="message">{{ message }}</p>
         <div class="imgContent" v-if="image">
@@ -79,6 +79,6 @@
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-<script src="./js/svg2png.js?v1.0.4"></script>
+<script src="./js/svg2png.js?v1.0.1"></script>
 </body>
 </html>

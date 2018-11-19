@@ -1,4 +1,4 @@
-/*! twitter_image.js | v1.0.4 | MIT License */
+/*! twitter_image.js | v1.0.5 | MIT License */
 {
   const
     maxSize = 3145728,  // 3MB
@@ -14,8 +14,8 @@
 
     if (enabled) { control.scale = '1'; }
 
-    output.isReset = true;
-    output.height = 0;
+    output.reset = true;
+    output.height = '0';
     output.message = '';
     output.image = '';
   };
@@ -30,20 +30,20 @@
     dropArea = new Vue({
       el: '#dropArea',
       data: {
-        isOver: false,
-        isWait: false,
+        over: false,
+        wait: false,
       },
       methods: {
         dragover(ev) {
           if (enabled) {
             ev.dataTransfer.dropEffect = 'copy';
-            this.isOver = true;
+            this.over = true;
           }
         },
         readFile(ev) {
           const file = ev.dataTransfer.files[0];
           file && readFile(file);
-          this.isOver = false;
+          this.over = false;
         },
         change(ev) {
           const file = ev.target.files[0];
@@ -55,8 +55,8 @@
     output = new Vue({
       el: '#output',
       data: {
-        isReset: true,
-        height: 0,
+        reset: true,
+        height: '0',
         message: '',
         image: '',
         fileName: '',
@@ -64,21 +64,21 @@
     });
 
   output.$on('slideDown', () => {
-    output.isReset = false;
+    output.reset = false;
     output.$nextTick(() => {
-      output.height = output.$el.children[0].offsetHeight;
+      output.height = output.$el.children[0].offsetHeight + 'px';
     });
   });
 
   const viewError = text => {
     output.message = text;
     output.$emit('slideDown');
-    dropArea.isWait = false;
+    dropArea.wait = false;
     enabled = true;
   };
 
   const readFile = file => {
-    dropArea.isWait = true;
+    dropArea.wait = true;
     enabled = false;
 
     dropReset();
@@ -168,7 +168,7 @@
       }
       output.image = url;
       output.$emit('slideDown');
-      dropArea.isWait = false;
+      dropArea.wait = false;
       enabled = true;
     };
     image.src = url;

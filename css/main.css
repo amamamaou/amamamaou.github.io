@@ -86,7 +86,7 @@ section { margin: 1.5em 0; }
 
 .dropContent label { display: block; padding: 20px; background: #e7e6ef; border-radius: 4px; border: 4px #655c98 dashed; text-align: center; cursor: pointer; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; transition: opacity .2s, filter .2s; }
 
-.dropContent label:active, .dropContent label.dragover { filter: brightness(0.85); }
+.dropContent label:active, .dropContent label.over { filter: brightness(0.85); }
 
 .dropContent label.wait { pointer-events: none; opacity: .5; }
 
