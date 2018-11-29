@@ -1,4 +1,4 @@
-/*! twitter_image.js | v1.0.5 | MIT License */
+/*! twitter_image.js | v1.0.6 | MIT License */
 {
   const
     maxSize = 3145728,  // 3MB
@@ -63,11 +63,10 @@
       },
     });
 
-  output.$on('slideDown', () => {
+  output.$on('slideDown', async () => {
     output.reset = false;
-    output.$nextTick(() => {
-      output.height = output.$el.children[0].offsetHeight + 'px';
-    });
+    await output.$nextTick();
+    output.height = output.$el.children[0].offsetHeight + 'px';
   });
 
   const viewError = text => {
@@ -77,27 +76,31 @@
     enabled = true;
   };
 
-  const readFile = file => {
+  const onLoad = elem => new Promise((resolve, reject) => {
+    elem.onload = () => resolve(true);
+    elem.onerror = reject;
+  }).catch(() => false);
+
+  const readFile = async file => {
     dropArea.wait = true;
     enabled = false;
 
     dropReset();
 
-    if (!file.type.includes('image/')) {
-      viewError(imageError);
-    } else if (file.size > maxSize) {
-      viewError('ファイルサイズが3MBを超えています！');
-    } else {
-      const
-        image = new Image,
-        url = URL.createObjectURL(file);
+    if (!file.type.includes('image/')) { return viewError(imageError); }
+    if (file.size > maxSize) { return viewError('ファイルサイズが3MBを超えています！'); }
 
-      image.onload = () => {
-        URL.revokeObjectURL(url);
-        optimizeImage(image, file.name);
-      };
-      image.onerror = () => viewError(imageError);
-      image.src = url;
+    const
+      image = new Image,
+      url = URL.createObjectURL(file);
+
+    image.src = url;
+
+    if (await onLoad(image)) {
+      URL.revokeObjectURL(url);
+      optimizeImage(image, file.name);
+    } else {
+      viewError(imageError);
     }
   };
 
@@ -134,10 +137,7 @@
 
     output.fileName = name ? name.replace(/\.\w+$/, '_tw.png') : 'clipbord.png';
 
-    if (width === 0 || height === 0) {
-      viewError(imageError);
-      return;
-    }
+    if (width === 0 || height === 0) { return viewError(imageError); }
 
     width *= scale;
     height *= scale;
@@ -162,16 +162,18 @@
 
     const {url, size} = await blob2URL(canvas);
 
-    image.onload = function () {
-      if (size > maxSize) {
-        output.message = '3MBを超えています。Twitterにアップロードできません。';
-      }
-      output.image = url;
-      output.$emit('slideDown');
-      dropArea.wait = false;
-      enabled = true;
-    };
     image.src = url;
+
+    await onLoad(image);
+
+    if (size > maxSize) {
+      output.message = '3MBを超えています。Twitterにアップロードできません。';
+    }
+
+    output.image = url;
+    output.$emit('slideDown');
+    dropArea.wait = false;
+    enabled = true;
   };
 
   document.addEventListener('paste', ev => {

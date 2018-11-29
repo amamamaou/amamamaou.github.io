@@ -1,4 +1,4 @@
-/*! svg2png.js | v1.0.1 | MIT License */
+/*! svg2png.js | v1.0.2 | MIT License */
 {
   const
     maxSize = 20971520,  // 20MB
@@ -66,11 +66,10 @@
       },
     });
 
-  output.$on('slideDown', () => {
+  output.$on('slideDown', async () => {
     output.reset = false;
-    output.$nextTick(() => {
-      output.height = output.$el.children[0].offsetHeight + 'px';
-    });
+    await output.$nextTick();
+    output.height = output.$el.children[0].offsetHeight + 'px';
   });
 
   const viewError = text => {
@@ -80,32 +79,32 @@
     enabled = true;
   };
 
+  const onLoad = elem => new Promise((resolve, reject) => {
+    elem.onload = () => resolve(true);
+    elem.onerror = reject;
+  }).catch(() => false);
+
   const readFile = async file => {
     dropArea.wait = true;
     enabled = false;
 
     dropReset();
 
-    if (!file.type.includes('image/')) {
-      viewError(imageError);
-    } else if (file.size > maxSize) {
-      viewError('ファイルサイズが3MBを超えています！');
-    } else {
-      const uri = await new Promise((resolve, reject) => {
-        const reader = new FileReader;
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      }).catch(() => null);
+    if (!file.type.includes('image/')) { return viewError(imageError); }
+    if (file.size > maxSize) { return viewError('ファイルサイズが3MBを超えています！'); }
 
-      if (uri) {
-        const image = new Image;
-        image.onload = () => buildImage(image, file.name);
-        image.onerror = () => viewError(imageError);
-        image.src = uri;
-      } else {
-        viewError('ファイルの読み込みに失敗しました');
-      }
+    const reader = new FileReader;
+    reader.readAsDataURL(file);
+
+    if (!await onLoad(reader)) { return viewError('ファイルの読み込みに失敗しました'); }
+
+    const image = new Image;
+    image.src = reader.result;
+
+    if (await onLoad(image)) {
+      buildImage(image, file.name);
+    } else {
+      viewError(imageError);
     }
   };
 
@@ -131,7 +130,7 @@
     const
       canvas = document.createElement('canvas'),
       ctx = canvas.getContext('2d'),
-      image = document.createElement('img'),
+      image = new Image,
       scale = parseFloat(scaleBlock.scale) || 1,
       optWidth = parseFloat(scaleBlock.width),
       optHeight = parseFloat(scaleBlock.height);
@@ -151,10 +150,7 @@
       source.remove();
     }
 
-    if (naturalWidth === 0 || naturalHeight === 0) {
-      viewError(imageError);
-      return;
-    }
+    if (naturalWidth === 0 || naturalHeight === 0) { return viewError(imageError); }
 
     if (scaleBlock.type === 'size') {
       width = naturalWidth * scale;
@@ -181,14 +177,13 @@
     ctx.drawImage(source, 0, 0, width, height);
 
     const url = await blob2URL(canvas);
-
-    image.onload = function () {
-      output.image = url;
-      output.$emit('slideDown');
-      dropArea.wait = false;
-      enabled = true;
-    };
-
     image.src = url;
+
+    await onLoad(image);
+
+    output.image = url;
+    output.$emit('slideDown');
+    dropArea.wait = false;
+    enabled = true;
   };
 }
