@@ -127,7 +127,6 @@
     const
       canvas = document.createElement('canvas'),
       ctx = canvas.getContext('2d'),
-      image = new Image,
       scale = parseFloat(scaleBlock.scale) || 1,
       optWidth = parseFloat(scaleBlock.width),
       optHeight = parseFloat(scaleBlock.height);
@@ -175,7 +174,7 @@
 
     const url = await blob2URL(canvas);
 
-    await onLoad(image, url);
+    await onLoad(new Image, url);
 
     output.image = url;
 
