@@ -1,10 +1,16 @@
-/*! twitter_image.js | v1.0.6 | MIT License */
+/*! twitter_image.js | v1.0.7 | MIT License */
 {
   const
     maxSize = 3145728,  // 3MB
     imageError = 'ブラウザが対応していない画像フォーマットです。';
 
   let blobURL = null, enabled = true;
+
+  const onLoad = (image, url) => new Promise((resolve, reject) => {
+    image.onload = () => resolve(true);
+    image.onerror = reject;
+    image.src = url;
+  }).catch(() => false);
 
   const dropReset = () => {
     if (blobURL) {
@@ -63,23 +69,18 @@
       },
     });
 
-  output.$on('slideDown', async () => {
+  const showResult = async () => {
     output.reset = false;
     await output.$nextTick();
     output.height = output.$el.children[0].offsetHeight + 'px';
-  });
-
-  const viewError = text => {
-    output.message = text;
-    output.$emit('slideDown');
     dropArea.wait = false;
     enabled = true;
   };
 
-  const onLoad = elem => new Promise((resolve, reject) => {
-    elem.onload = () => resolve(true);
-    elem.onerror = reject;
-  }).catch(() => false);
+  const viewError = text => {
+    output.message = text;
+    showResult();
+  };
 
   const readFile = async file => {
     dropArea.wait = true;
@@ -94,9 +95,7 @@
       image = new Image,
       url = URL.createObjectURL(file);
 
-    image.src = url;
-
-    if (await onLoad(image)) {
+    if (await onLoad(image, url)) {
       URL.revokeObjectURL(url);
       optimizeImage(image, file.name);
     } else {
@@ -104,28 +103,23 @@
     }
   };
 
-  const blob2URL = canvas => {
+  const blob2URL = async canvas => {
+    let blob;
+
     if (canvas.toBlob) {
-      return new Promise(resolve => {
-        canvas.toBlob(blob => {
-          blobURL = URL.createObjectURL(blob);
-          resolve({url: blobURL, size: blob.size});
-        });
-      });
+      blob = await new Promise(resolve => canvas.toBlob(resolve));
+    } else if (canvas.msToBlob) {
+      blob = canvas.msToBlob();
+    } else {
+      return {url: canvas.toDataURL(), size: 0};
     }
 
-    if (canvas.msToBlob) {
-      const blob = canvas.msToBlob();
-      blobURL = URL.createObjectURL(blob);
-      return {url: blobURL, size: blob.size};
-    }
-
-    return {url: canvas.toDataURL(), size: 0};
+    blobURL = URL.createObjectURL(blob);
+    return {url: blobURL, size: blob.size};
   };
 
   const optimizeImage = async (source, name) => {
     const
-      image = new Image,
       canvas = document.createElement('canvas'),
       ctx = canvas.getContext('2d'),
       scale = parseInt(control.scale, 10) || 1;
@@ -141,7 +135,6 @@
 
     width *= scale;
     height *= scale;
-
     canvas.width = width;
     canvas.height = height;
 
@@ -162,23 +155,19 @@
 
     const {url, size} = await blob2URL(canvas);
 
-    image.src = url;
-
-    await onLoad(image);
-
-    if (size > maxSize) {
-      output.message = '3MBを超えています。Twitterにアップロードできません。';
-    }
+    await onLoad(new Image, url);
 
     output.image = url;
-    output.$emit('slideDown');
-    dropArea.wait = false;
-    enabled = true;
+
+    if (size > maxSize) { output.message = '3MBを超えています。Twitterにアップロードできません。'; }
+
+    showResult();
   };
 
   document.addEventListener('paste', ev => {
     if (enabled && ev.clipboardData) {
       const {items} = ev.clipboardData;
+
       if (items) {
         for (const item of Array.from(items)) {
           if (item.type.includes('image/')) {
