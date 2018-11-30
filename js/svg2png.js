@@ -1,4 +1,4 @@
-/*! svg2png.js | v1.0.2 | MIT License */
+/*! svg2png.js | v1.0.3 | MIT License */
 {
   const
     maxSize = 20971520,  // 20MB
@@ -17,6 +17,12 @@
     output.message = '';
     output.image = '';
   };
+
+  const onLoad = (elem, url = null) => new Promise((resolve, reject) => {
+    elem.onload = () => resolve(true);
+    elem.onerror = reject;
+    if (url) { elem.src = url; }
+  }).catch(() => false);
 
   // instance
   const
@@ -66,23 +72,18 @@
       },
     });
 
-  output.$on('slideDown', async () => {
+  const slideDown = async () => {
     output.reset = false;
     await output.$nextTick();
     output.height = output.$el.children[0].offsetHeight + 'px';
-  });
-
-  const viewError = text => {
-    output.message = text;
-    output.$emit('slideDown');
     dropArea.wait = false;
     enabled = true;
   };
 
-  const onLoad = elem => new Promise((resolve, reject) => {
-    elem.onload = () => resolve(true);
-    elem.onerror = reject;
-  }).catch(() => false);
+  const viewError = text => {
+    output.message = text;
+    slideDown();
+  };
 
   const readFile = async file => {
     dropArea.wait = true;
@@ -99,31 +100,27 @@
     if (!await onLoad(reader)) { return viewError('ファイルの読み込みに失敗しました'); }
 
     const image = new Image;
-    image.src = reader.result;
 
-    if (await onLoad(image)) {
+    if (await onLoad(image, reader.result)) {
       buildImage(image, file.name);
     } else {
       viewError(imageError);
     }
   };
 
-  const blob2URL = canvas => {
+  const blob2URL = async canvas => {
+    let blob;
+
     if (canvas.toBlob) {
-      return new Promise(resolve => {
-        canvas.toBlob(blob => {
-          blobURL = URL.createObjectURL(blob);
-          resolve(blobURL);
-        });
-      });
+      blob = await new Promise(resolve => canvas.toBlob(resolve));
+    } else if (canvas.msToBlob) {
+      blob = canvas.msToBlob();
+    } else {
+      return canvas.toDataURL();
     }
 
-    if (canvas.msToBlob) {
-      blobURL = URL.createObjectURL(canvas.msToBlob());
-      return blobURL;
-    }
-
-    return canvas.toDataURL();
+    blobURL = URL.createObjectURL(blob);
+    return blobURL;
   };
 
   const buildImage = async (source, name) => {
@@ -177,13 +174,11 @@
     ctx.drawImage(source, 0, 0, width, height);
 
     const url = await blob2URL(canvas);
-    image.src = url;
 
-    await onLoad(image);
+    await onLoad(image, url);
 
     output.image = url;
-    output.$emit('slideDown');
-    dropArea.wait = false;
-    enabled = true;
+
+    slideDown();
   };
 }
