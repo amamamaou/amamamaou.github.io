@@ -13,15 +13,15 @@
 
 .control {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 0 0 15px;
+  align-items: flex-end;
+  margin: 0 0 12px;
 
   .scale {
     select {
       @include formStyleReset;
       @extend %formElem;
       padding: 0 .8em;
+      cursor: pointer;
     }
 
     small {
@@ -29,9 +29,17 @@
     }
   }
 
-  .button button {
-    padding: 0 1.2em;
-    @extend %formElem;
+  .optipng {
+    margin-top: 6px;
+  }
+
+  .button {
+    margin: 0 0 0 auto;
+
+    button {
+      padding: 0 1.2em;
+      @extend %formElem;
+    }
   }
 }
 

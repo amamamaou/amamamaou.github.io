@@ -11,10 +11,10 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@amamamaou">
 <meta name="twitter:title" content="Twitter用画像劣化回避ツール">
-<meta name="twitter:description" content="イラストやドット絵などをTwitterにツイートするときにJPEG劣化を回避できるPNG形式に変換します。">
+<meta name="twitter:description" content="Twitterにイラストやドット絵などをツイートする際の、JPEG劣化を回避できるPNG形式へ変換します。">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="stylesheet" href="./css/main.css">
-<link rel="stylesheet" href="./css/twitter_image.css">
+<link rel="stylesheet" href="./css/main.css?20181205">
+<link rel="stylesheet" href="./css/twitter_image.css?20181205">
 </head>
 <body>
 <main>
@@ -26,9 +26,9 @@
   </aside>
 
   <h1>Twitter用画像劣化回避ツール</h1>
-  <p class="description">イラストやドット絵などをTwitterにツイートするときにJPEG劣化を回避できるPNG形式に変換します。</p>
+  <p class="description">Twitterにイラストやドット絵などをツイートする際の、JPEG劣化を回避できるPNG形式へ変換します。</p>
 
-  <ul class="snsButton">
+  <!-- <ul class="snsButton">
     <li>
       <a href="https://twitter.com/share" class="twitter-share-button">Tweet</a>
       <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','twitter-wjs');</script>
@@ -41,17 +41,23 @@
       <a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="ja"></a>
       <script>!function(d,i){if(!d.getElementById(i)){var j=d.createElement('script');j.id=i;j.src='https://widgets.getpocket.com/v1/j/btn.js?v=1';var w=d.getElementById(i);d.body.appendChild(j);}}(document,'pocket-btn-js');</script>
     </li>
-  </ul>
+  </ul> -->
 
   <section>
     <div id="control" class="control">
-      <div class="scale">
-        <select v-model="scale">
-          <option value="1">× 1</option>
-          <option value="2">× 2</option>
-          <option value="3">× 3</option>
-        </select>
-        <small>拡大前 512x512 まで</small>
+      <div>
+        <div class="scale">
+          <select v-model="scale">
+            <option value="1">× 1</option>
+            <option value="2">× 2</option>
+            <option value="3">× 3</option>
+          </select>
+          <small>拡大前 512x512 まで</small>
+        </div>
+        <div class="optipng">
+          <input type="checkbox" id="optipng" v-model="optipng">
+          <label for="optipng" tabindex="0">PNGを圧縮する<small>（時間がかかります）</small></label>
+        </div>
       </div>
       <div class="button">
         <button @click="dropReset">Reset</button>
@@ -71,14 +77,18 @@
           最大ファイルサイズは3MBまでです
         </p>
       </label>
+      <!-- <ul class="process" v-if="list">
+        <li v-for="process in list">{{process}}</li>
+      </ul> -->
+      <pre id="test"></pre>
       <input type="file" accept="image/*" id="fileInput" @change="change">
     </div>
 
     <div id="output" class="outputContent" :class="{reset}" :style="{height}">
       <div class="innerBody">
-        <p class="message" v-if="message">{{ message }}</p>
+        <p class="message" v-if="message">{{message}}</p>
         <div class="imgContent" v-if="image">
-          <div class="dlBtn"><a :href="image" :download="fileName">Download</a></div>
+          <div class="dlBtn"><a :href="image" :download="fileName">Download <small>({{size}})</small></a></div>
           <div class="outputImage"><img alt="output image" :src="image"></div>
         </div>
       </div>
@@ -89,7 +99,6 @@
     <h2>ツールについて</h2>
 
     <p>Twitterでは透過PNGはJPEGに変換されない仕様を利用し、画像の左上1ピクセルの不透明度を99%（透明度1%）にしたPNG画像を生成して回避します。</p>
-    <p>最新のiOSやAndroidであれば、スマートフォンでも使用できます。</p>
 
     <h3>注意事項など</h3>
 
@@ -98,13 +107,16 @@
       <li>画像のサイズが大きい等の理由で回避できずにJPEGに圧縮されてしまう可能性もあります。</li>
       <li>Twitterにツイートできる画像のファイルサイズは仕様により最大3MBまでです。</li>
       <li>ブラウザで画像の処理を行うのでブラウザが多少重くなる可能性もあります。</li>
-      <li>処理の関係上無圧縮のPNG形式の画像になるので、3MBを超えてしまう場合があります。</li>
+      <li>PNGの圧縮処理はブラウザ上で行われるため、端末のスペックによっては時間がかかります。</li>
       <li>何かありましたら幸乃ととめ (<a href="https://twitter.com/amamamaou" target="_blank">@amamamaou</a>) まで。</li>
     </ul>
+
+    <p>PNGの圧縮処理には <a href="https://github.com/LI-NA/optipng.js" target="_blank">Optipng.js</a> を使用しています。</p>
   </section>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-<script src="./js/twitter_image.js?v1.0.7"></script>
+<script src="./js/optipng.min.js"></script>
+<script src="./js/twitter_image.js?v1.1.0"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-/*! twitter_image.js | v1.0.7 | MIT License */
+/*! twitter_image.js | v1.1.0 | MIT License */
 {
   const
     maxSize = 3145728,  // 3MB
@@ -6,19 +6,46 @@
 
   let blobURL = null, enabled = true;
 
+  // calc bytes
+  const filesize = bytes => {
+    const
+      exp = Math.log(bytes) / Math.log(1024) | 0,
+      size = bytes / 1024**exp,
+      unit = exp === 0 ? 'bytes' : ['K', 'M'][exp - 1] + 'B';
+    return (exp === 0 ? size : size.toFixed(2)) + ' ' + unit;
+  };
+
+  // use Optiong.js
+  const doOptipng = buffer => {
+    const {data} = optipng(buffer, ['-o2']);
+    return new Blob([data], {type: 'image/png'});
+  };
+
+  // Blob to Uint8Array
+  const blob2Array = blob => new Promise(resolve => {
+    const reader = new FileReader;
+    reader.onload = () => resolve(new Uint8Array(reader.result));
+    reader.readAsArrayBuffer(blob);
+  });
+
+  // onload Promise
   const onLoad = (image, url) => new Promise((resolve, reject) => {
     image.onload = () => resolve(true);
     image.onerror = reject;
     image.src = url;
   }).catch(() => false);
 
+  // reset options
   const dropReset = () => {
     if (blobURL) {
       URL.revokeObjectURL(blobURL);
       blobURL = null;
     }
 
-    if (enabled) { control.scale = '1'; }
+    if (enabled) {
+      control.scale = '1';
+      control.optipng = false;
+    }
 
     output.reset = true;
     output.height = '0';
@@ -30,7 +57,7 @@
   const
     control = new Vue({
       el: '#control',
-      data: {scale: '1'},
+      data: {scale: '1', optipng: false},
       methods: {dropReset},
     }),
     dropArea = new Vue({
@@ -66,6 +93,7 @@
         message: '',
         image: '',
         fileName: '',
+        size: '',
       },
     });
 
@@ -82,6 +110,38 @@
     showResult();
   };
 
+  // Blob to Object URL
+  const blob2URL = async canvas => {
+    let blob, buffer = null;
+
+    if (canvas.toBlob) {
+      blob = await new Promise(resolve => canvas.toBlob(resolve));
+    } else if (canvas.msToBlob) {
+      blob = canvas.msToBlob();
+    } else {
+      if (!control.optipng) { return {url: canvas.toDataURL(), size: 0}; }
+
+      // low performance
+      const
+        binary = atob(canvas.toDataURL().split(',')[1]),
+        length = binary.length;
+
+      buffer = new Uint8Array(length);
+
+      for (let i = 0; i < length; i++) { buffer[i] = binary.charCodeAt(i); }
+    }
+
+    // use Optiong.js
+    if (control.optipng) {
+      blob = doOptipng(buffer || await blob2Array(blob));
+    }
+
+    blobURL = URL.createObjectURL(blob);
+
+    return {url: blobURL, size: blob.size};
+  };
+
+  // read File object
   const readFile = async file => {
     dropArea.wait = true;
     enabled = false;
@@ -103,21 +163,7 @@
     }
   };
 
-  const blob2URL = async canvas => {
-    let blob;
-
-    if (canvas.toBlob) {
-      blob = await new Promise(resolve => canvas.toBlob(resolve));
-    } else if (canvas.msToBlob) {
-      blob = canvas.msToBlob();
-    } else {
-      return {url: canvas.toDataURL(), size: 0};
-    }
-
-    blobURL = URL.createObjectURL(blob);
-    return {url: blobURL, size: blob.size};
-  };
-
+  // optimize
   const optimizeImage = async (source, name) => {
     const
       canvas = document.createElement('canvas'),
@@ -158,12 +204,14 @@
     await onLoad(new Image, url);
 
     output.image = url;
+    output.size = filesize(size);
 
     if (size > maxSize) { output.message = '3MBを超えています。Twitterにアップロードできません。'; }
 
     showResult();
   };
 
+  // paste image on clipbord
   document.addEventListener('paste', ev => {
     if (enabled && ev.clipboardData) {
       const {items} = ev.clipboardData;

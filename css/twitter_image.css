@@ -2,11 +2,15 @@
 /* twitter_image */
 .control .scale select, .control .button button { height: 32px; font-size: 1.6rem; font-weight: bold; }
 
-.control { display: flex; justify-content: space-between; align-items: center; margin: 0 0 15px; }
+.control { display: flex; align-items: flex-end; margin: 0 0 12px; }
 
-.control .scale select { -webkit-appearance: none; -moz-appearance: none; appearance: none; padding: 0 .8em; }
+.control .scale select { -webkit-appearance: none; -moz-appearance: none; appearance: none; padding: 0 .8em; cursor: pointer; }
 
 .control .scale small { margin-left: .4em; }
+
+.control .optipng { margin-top: 6px; }
+
+.control .button { margin: 0 0 0 auto; }
 
 .control .button button { padding: 0 1.2em; }
 
