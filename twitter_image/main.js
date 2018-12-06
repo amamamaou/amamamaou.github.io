@@ -103,7 +103,7 @@
     });
 
   // Web Worker
-  worker.addEventListener('message', async ev => {
+  worker.addEventListener('message', ev => {
     const {type, data = null} = ev.data;
     if (type === 'ready') {
       dropArea.wait = false;
