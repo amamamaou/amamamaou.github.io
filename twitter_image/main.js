@@ -1,10 +1,11 @@
-/*! twitter_image | v1.2.0 | MIT License */
+/*! twitter_image | v1.2.1 | MIT License */
 {
   // Web Worker
   const worker = new Worker('worker.js');
 
   const
-    maxSize = 3145728,  // 3MB
+    megaByte = 1048576,      // 1MB
+    maxSize = megaByte * 3,  // 3MB
     imageError = 'ブラウザが対応していない画像フォーマットです。';
 
   let blobURL = null;
@@ -104,7 +105,6 @@
   // Web Worker
   worker.addEventListener('message', async ev => {
     const {type, data = null} = ev.data;
-
     if (type === 'ready') {
       dropArea.wait = false;
     } else if (type === 'done') {
@@ -134,7 +134,14 @@
     dropReset();
 
     if (!file.type.includes('image/')) { return viewError(imageError); }
-    if (file.size > maxSize) { return viewError('ファイルサイズが3MBを超えています！'); }
+
+    // max 3.5MB
+    if (file.size > maxSize + megaByte / 2) {
+      return viewError('ファイルサイズが3.5MBを超えています！');
+    }
+
+    // if the file size exceeds 3MB, use Optipng
+    if (file.size > maxSize) { control.optipng = true; }
 
     const
       image = new Image,
