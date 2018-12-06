@@ -1,7 +1,7 @@
-/*! twitter_image | v1.2.1 | MIT License */
+/*! twitter_image | v1.2.2 | MIT License */
 {
   // Web Worker
-  const worker = new Worker('worker.js');
+  const worker = new Worker('worker.js?v1.0.1');
 
   const
     mega = 1048576,      // 1MB
@@ -19,8 +19,8 @@
     return (exp === 0 ? size : size.toFixed(2)) + ' ' + unit;
   };
 
-  // Blob to Object URL
-  const blob2URL = async canvas => {
+  // canvas to blob
+  const canvas2blob = async canvas => {
     let blob;
 
     if (canvas.toBlob) {
@@ -129,19 +129,21 @@
 
   // read File object
   const readFile = async file => {
+    const {type, size, name} = file;
+
     dropArea.wait = true;
 
     dropReset();
 
-    if (!file.type.includes('image/')) { return viewError(imageError); }
+    if (!type.includes('image/')) { return viewError(imageError); }
 
     // max 4MB
-    if (file.size > maxSize + mega) {
+    if (size > maxSize + mega) {
       return viewError('ファイルサイズが4MBを超えています！');
     }
 
     // if the file size exceeds 3MB, use Optipng
-    if (file.size > maxSize) { control.optipng = true; }
+    if (size > maxSize) { control.optipng = true; }
 
     const
       image = new Image,
@@ -149,7 +151,7 @@
 
     if (await onLoad(image, url)) {
       URL.revokeObjectURL(url);
-      optimizeImage(image, file.name);
+      optimizeImage(image, name);
     } else {
       viewError(imageError);
     }
@@ -207,8 +209,20 @@
     ctx.drawImage(source, 0, 0, 1, 1, 0, 0, 1, 1);
 
     const
-      origBlob = await blob2URL(canvas),
+      origBlob = await canvas2blob(canvas),
       base64 = canvas.toDataURL().split(',')[1];
+
+    if (origBlob) {
+      const {size} = origBlob;
+
+      // max 4MB
+      if (size > maxSize + mega) {
+        return viewError('ファイルサイズが4MBを超えています！');
+      }
+
+      // if the file size exceeds 3MB, use Optipng
+      if (size > maxSize) { control.optipng = true; }
+    }
 
     worker.postMessage({origBlob, base64, optipng: control.optipng});
   };

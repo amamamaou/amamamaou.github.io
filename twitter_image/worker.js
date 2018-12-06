@@ -1,4 +1,4 @@
-/*! worker.js | v1.0.0 | MIT License */
+/*! worker.js | v1.0.1 | MIT License */
 {
   importScripts('/js/optipng.min.js');
 
@@ -12,14 +12,14 @@
   };
 
   // Blob to Uint8Array
-  const blob2Array = blob => new Promise(resolve => {
+  const blob2array = blob => new Promise(resolve => {
     const reader = new FileReader;
     reader.onload = () => resolve(new Uint8Array(reader.result));
     reader.readAsArrayBuffer(blob);
   });
 
   // base64 to array
-  const base64URL2Array = uri => {
+  const dataURL2array = uri => {
     const
       binary = atob(uri),
       length = binary.length,
@@ -35,7 +35,7 @@
     let blob = origBlob, buffer;
 
     if (origBlob == null) {
-      buffer = base64URL2Array(base64);
+      buffer = dataURL2array(base64);
 
       if (!optipng) {
         blob = new Blob([buffer], {type: 'image/png'});
