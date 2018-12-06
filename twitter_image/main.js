@@ -8,8 +8,6 @@
     maxSize = mega * 3,  // 3MB
     imageError = 'ブラウザが対応していない画像フォーマットです。';
 
-  let blobURL = null;
-
   // calc bytes
   const filesize = bytes => {
     const
@@ -41,10 +39,7 @@
 
   // reset options
   const dropReset = () => {
-    if (blobURL) {
-      URL.revokeObjectURL(blobURL);
-      blobURL = null;
-    }
+    URL.revokeObjectURL(output.image);
 
     if (!dropArea.wait) {
       control.scale = '1';
@@ -153,8 +148,6 @@
 
   const drawImage = async blob => {
     const url = URL.createObjectURL(blob);
-
-    blobURL = url;
 
     await onLoad(new Image, url);
 

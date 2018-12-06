@@ -4,14 +4,10 @@
     maxSize = 20971520,  // 20MB
     imageError = 'ブラウザが対応していないフォーマットです。';
 
-  let blobURL = null, enabled = true;
+  let enabled = true;
 
   const dropReset = () => {
-    if (blobURL) {
-      URL.revokeObjectURL(blobURL);
-      blobURL = null;
-    }
-
+    URL.revokeObjectURL(output.image);
     output.reset = true;
     output.height = '0';
     output.message = '';
@@ -119,8 +115,7 @@
       return canvas.toDataURL();
     }
 
-    blobURL = URL.createObjectURL(blob);
-    return blobURL;
+    return URL.createObjectURL(blob);
   };
 
   const buildImage = async (source, name) => {
