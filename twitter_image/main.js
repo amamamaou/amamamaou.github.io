@@ -1,15 +1,7 @@
 /*! twitter_image | v1.2.0 | MIT License */
 {
-  const newWorkerViaBlob = relativePath => {
-    const
-      baseURL = location.href.replace(/\\/g, '/').replace(/\/[^/]*$/, '/'),
-      blob = new Blob([`importScripts('${baseURL}${relativePath}');`], {type: 'text/javascript'});
-    return new Worker(URL.createObjectURL(blob));
-  };
-
   // Web Worker
-  // const worker = new Worker('worker.js');
-  const worker = newWorkerViaBlob('worker.js');
+  const worker = new Worker('worker.js');
 
   const
     maxSize = 3145728,  // 3MB

@@ -1,7 +1,6 @@
 /*! worker.js | v1.0.0 | MIT License */
 {
-  // importScripts('../js/optipng.min.js');
-  importScripts('file:///C:/Users/nin_p/Documents/GitHub/amamamaou.github.io/js/optipng.min.js');
+  importScripts('../js/optipng.min.js');
 
   // console
   const process = text => postMessage({type: 'process', data: text});
