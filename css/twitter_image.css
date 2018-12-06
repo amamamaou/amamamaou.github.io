@@ -2,7 +2,9 @@
 /* twitter_image */
 .control .scale select, .control .button button { height: 32px; font-size: 1.6rem; font-weight: bold; }
 
-.control { display: flex; align-items: flex-end; margin: 0 0 12px; }
+.control { display: flex; align-items: flex-end; margin: 0 0 12px; transition: opacity .2s; }
+
+.control.wait { pointer-events: none; opacity: .5; }
 
 .control .scale select { -webkit-appearance: none; -moz-appearance: none; appearance: none; padding: 0 .8em; cursor: pointer; }
 

@@ -1,4 +1,4 @@
-/*! twitter_image | v1.2.4 | MIT License */
+/*! twitter_image | v1.2.5 | MIT License */
 {
   // Web Worker
   const worker = new Worker('worker.js?v1.0.3');
@@ -41,7 +41,7 @@
   const dropReset = () => {
     URL.revokeObjectURL(output.image);
 
-    if (!dropArea.wait) {
+    if (!control.wait) {
       control.scale = '1';
       control.optipng = false;
     }
@@ -56,7 +56,11 @@
   const
     control = new Vue({
       el: '#control',
-      data: {scale: '1', optipng: false},
+      data: {
+        scale: '1',
+        optipng: false,
+        wait: false,
+      },
       methods: {dropReset},
     }),
     dropArea = new Vue({
@@ -101,7 +105,7 @@
   worker.addEventListener('message', ev => {
     const {type, data = null} = ev.data;
     if (type === 'ready') {
-      dropArea.wait = false;
+      control.wait = dropArea.wait = false;
     } else if (type === 'done') {
       dropArea.process = null;
       drawImage(data);
@@ -114,7 +118,7 @@
     output.reset = false;
     await output.$nextTick();
     output.height = output.$el.children[0].offsetHeight + 'px';
-    dropArea.wait = false;
+    control.wait = dropArea.wait = false;
   };
 
   const viewError = text => {
@@ -126,7 +130,7 @@
   const readFile = async file => {
     const {type, size, name} = file;
 
-    dropArea.wait = true;
+    control.wait = dropArea.wait = true;
 
     dropReset();
 
@@ -212,7 +216,7 @@
 
   // paste image on clipbord
   document.addEventListener('paste', ev => {
-    if (!dropArea.wait && ev.clipboardData) {
+    if (!control.wait && ev.clipboardData) {
       const {items} = ev.clipboardData;
 
       if (items) {

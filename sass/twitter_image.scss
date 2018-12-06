@@ -15,6 +15,12 @@
   display: flex;
   align-items: flex-end;
   margin: 0 0 12px;
+  transition: opacity .2s;
+
+  &.wait {
+    pointer-events: none;
+    opacity: .5;
+  }
 
   .scale {
     select {
