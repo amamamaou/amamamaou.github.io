@@ -1,7 +1,7 @@
-/*! twitter_image | v1.2.2 | MIT License */
+/*! twitter_image | v1.2.3 | MIT License */
 {
   // Web Worker
-  const worker = new Worker('worker.js?v1.0.1');
+  const worker = new Worker('worker.js?v1.0.2');
 
   const
     mega = 1048576,      // 1MB
@@ -137,13 +137,7 @@
 
     if (!type.includes('image/')) { return viewError(imageError); }
 
-    // max 4MB
-    if (size > maxSize + mega) {
-      return viewError('ファイルサイズが4MBを超えています！');
-    }
-
-    // if the file size exceeds 3MB, use Optipng
-    if (size > maxSize) { control.optipng = true; }
+    if (size > mega * 10) { return viewError('画像サイズが10MBを超えています！'); }
 
     const
       image = new Image,
@@ -215,12 +209,8 @@
     if (origBlob) {
       const {size} = origBlob;
 
-      // max 4MB
-      if (size > maxSize + mega) {
-        return viewError('ファイルサイズが4MBを超えています！');
-      }
+      if (size > mega * 5) { return viewError('画像サイズが5MB以上なので処理を中断しました。'); }
 
-      // if the file size exceeds 3MB, use Optipng
       if (size > maxSize) { control.optipng = true; }
     }
 

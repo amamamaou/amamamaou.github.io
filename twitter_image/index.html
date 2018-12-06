@@ -107,8 +107,8 @@
       <li>Twitterにツイートできる画像のファイルサイズは仕様により最大3MBまでです。</li>
       <li>Twitter側で画像のサイズが大きい等の理由で回避できずにJPEGに圧縮されてしまう可能性もあります。</li>
       <li>変換処理やPNGの圧縮処理はブラウザ上で行われるため、端末のスペックによっては時間がかかります。</li>
-      <li>このツールの画像の最大許容サイズは4MBです。</li>
-      <li>変換後の画像が3MBを超える画像は強制的に圧縮処理が行われます。</li>
+      <li>このツールの変換前の画像の最大許容サイズは無圧縮画像を考慮して10MBになっています。</li>
+      <li>変換後の画像が3～5MBの場合は強制的にPNGの圧縮処理が行われます。</li>
       <li>何かありましたら幸乃ととめ (<a href="https://twitter.com/amamamaou" target="_blank">@amamamaou</a>) まで。</li>
     </ul>
 
@@ -118,6 +118,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script src="/js/optipng.min.js"></script>
-<script src="main.js?v1.2.2"></script>
+<script src="main.js?v1.2.3"></script>
 </body>
 </html>

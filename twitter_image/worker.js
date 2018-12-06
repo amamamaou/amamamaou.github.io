@@ -1,4 +1,4 @@
-/*! worker.js | v1.0.1 | MIT License */
+/*! worker.js | v1.0.2 | MIT License */
 {
   importScripts('/js/optipng.min.js');
 
@@ -43,7 +43,7 @@
     }
 
     if (optipng) {
-      blob = doOptipng(buffer || await blob2Array(blob));
+      blob = doOptipng(buffer || await blob2array(blob));
     }
 
     postMessage({type: 'done', data: blob});
