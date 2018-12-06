@@ -4,8 +4,8 @@
   const worker = new Worker('worker.js');
 
   const
-    megaByte = 1048576,      // 1MB
-    maxSize = megaByte * 3,  // 3MB
+    mega = 1048576,      // 1MB
+    maxSize = mega * 3,  // 3MB
     imageError = 'ブラウザが対応していない画像フォーマットです。';
 
   let blobURL = null;
@@ -135,9 +135,9 @@
 
     if (!file.type.includes('image/')) { return viewError(imageError); }
 
-    // max 3.5MB
-    if (file.size > maxSize + megaByte / 2) {
-      return viewError('ファイルサイズが3.5MBを超えています！');
+    // max 4MB
+    if (file.size > maxSize + mega) {
+      return viewError('ファイルサイズが4MBを超えています！');
     }
 
     // if the file size exceeds 3MB, use Optipng
