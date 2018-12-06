@@ -43,6 +43,19 @@
   }
 }
 
+.dropContent {
+  .console {
+    overflow: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin-bottom: 0;
+    padding: 0 1em;
+    font-size: 1.4rem;
+    font-family: monospace, serif;
+    line-height: 1.2;
+  }
+}
+
 .outputContent {
   overflow: {
     x: auto;

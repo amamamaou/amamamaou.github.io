@@ -1,4 +1,4 @@
-/* data-uri.js | v1.0.1 | MIT License */
+/* data-uri | v1.0.1 | MIT License */
 {
   const
     dropArea = new Vue({

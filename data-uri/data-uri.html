@@ -6,14 +6,14 @@
 <meta name="description" content="画像ファイル等をデータURIスキームに変換します。">
 <meta name="author" content="幸乃ととめ">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="stylesheet" href="./css/main.css">
-<link rel="stylesheet" href="./css/data-uri.css">
+<link rel="stylesheet" href="../css/main.css">
+<link rel="stylesheet" href="../css/data-uri.css">
 </head>
 <body>
 <main>
   <aside class="topicPath">
     <ol>
-      <li><a href="./">ものおき</a></li>
+      <li><a href="../">ものおき</a></li>
       <li>Data URI scheme 変換</li>
     </ol>
   </aside>
@@ -28,7 +28,7 @@
         @dragover.prevent="dragover"
         @dragleave="over = false"
         @drop.prevent="readFile">
-        <figure><img src="./images/icon_file.svg" alt="ファイル"></figure>
+        <figure><img src="../images/icon_file.svg" alt="ファイル"></figure>
         <p>
           ファイルをここにドラッグ＆ドロップしてください<br>
           クリックしてファイルを選択することもできます
@@ -53,6 +53,6 @@
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-<script src="./js/data-uri.js?v1.0.1"></script>
+<script src="./main.js?v1.0.1"></script>
 </body>
 </html>

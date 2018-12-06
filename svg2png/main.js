@@ -1,4 +1,4 @@
-/*! svg2png.js | v1.0.3 | MIT License */
+/*! svg2png | v1.0.3 | MIT License */
 {
   const
     maxSize = 20971520,  // 20MB
