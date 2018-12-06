@@ -13,14 +13,14 @@
 <meta name="twitter:title" content="Twitter用画像劣化回避ツール">
 <meta name="twitter:description" content="Twitterにイラストやドット絵などをツイートする際の、JPEG劣化を回避できるPNG形式へ変換します。">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="stylesheet" href="./css/main.css?20181205">
-<link rel="stylesheet" href="./css/twitter_image.css?20181205">
+<link rel="stylesheet" href="../css/main.css?20181205">
+<link rel="stylesheet" href="../css/twitter_image.css?20181205">
 </head>
 <body>
 <main>
   <aside class="topicPath">
     <ol>
-      <li><a href="./">ものおき</a></li>
+      <li><a href="../">ものおき</a></li>
       <li>Twitter用画像劣化回避ツール</li>
     </ol>
   </aside>
@@ -28,7 +28,7 @@
   <h1>Twitter用画像劣化回避ツール</h1>
   <p class="description">Twitterにイラストやドット絵などをツイートする際の、JPEG劣化を回避できるPNG形式へ変換します。</p>
 
-  <!-- <ul class="snsButton">
+  <ul class="snsButton">
     <li>
       <a href="https://twitter.com/share" class="twitter-share-button">Tweet</a>
       <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','twitter-wjs');</script>
@@ -41,7 +41,7 @@
       <a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="ja"></a>
       <script>!function(d,i){if(!d.getElementById(i)){var j=d.createElement('script');j.id=i;j.src='https://widgets.getpocket.com/v1/j/btn.js?v=1';var w=d.getElementById(i);d.body.appendChild(j);}}(document,'pocket-btn-js');</script>
     </li>
-  </ul> -->
+  </ul>
 
   <section>
     <div id="control" class="control">
@@ -70,21 +70,24 @@
         @dragover.prevent="dragover"
         @dragleave="over = false"
         @drop.prevent="readFile">
-        <figure><img src="./images/icon_image.svg" alt="画像ファイル"></figure>
+        <figure><img src="../images/icon_image.svg" alt="画像ファイル"></figure>
         <p>
           画像ファイルをここにドラッグ＆ドロップしてください<br>
           クリップボードの画像のペースト (Ctrl+V / ⌘V) や、クリックして画像ファイルを選択することもできます<br>
           最大ファイルサイズは3MBまでです
         </p>
       </label>
+      <pre class="console" v-if="process">{{ process }}</pre>
       <input type="file" accept="image/*" id="fileInput" @change="change">
     </div>
 
     <div id="output" class="outputContent" :class="{reset}" :style="{height}">
       <div class="innerBody">
-        <p class="message" v-if="message">{{message}}</p>
+        <p class="message" v-if="message">{{ message }}</p>
         <div class="imgContent" v-if="image">
-          <div class="dlBtn"><a :href="image" :download="fileName">Download <small>({{size}})</small></a></div>
+          <div class="dlBtn">
+            <a :href="image" :download="fileName">Download <small>({{ size }})</small></a>
+          </div>
           <div class="outputImage"><img alt="output image" :src="image"></div>
         </div>
       </div>
@@ -112,7 +115,7 @@
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-<script src="./js/optipng.min.js"></script>
-<script src="./js/twitter_image.js?v1.1.0"></script>
+<script src="../js/optipng.min.js"></script>
+<script src="./main.js?v1.2.0"></script>
 </body>
 </html>

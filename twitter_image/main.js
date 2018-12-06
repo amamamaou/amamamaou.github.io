@@ -1,32 +1,43 @@
-/*! twitter_image.js | v1.1.0 | MIT License */
+/*! twitter_image | v1.2.0 | MIT License */
 {
+  const newWorkerViaBlob = relativePath => {
+    const
+      baseURL = location.href.replace(/\\/g, '/').replace(/\/[^/]*$/, '/'),
+      blob = new Blob([`importScripts('${baseURL}${relativePath}');`], {type: 'text/javascript'});
+    return new Worker(URL.createObjectURL(blob));
+  };
+
+  // Web Worker
+  // const worker = new Worker('worker.js');
+  const worker = newWorkerViaBlob('worker.js');
+
   const
     maxSize = 3145728,  // 3MB
     imageError = 'ブラウザが対応していない画像フォーマットです。';
 
-  let blobURL = null, enabled = true;
+  let blobURL = null;
 
   // calc bytes
   const filesize = bytes => {
     const
       exp = Math.log(bytes) / Math.log(1024) | 0,
       size = bytes / 1024**exp,
-      unit = exp === 0 ? 'bytes' : ['K', 'M'][exp - 1] + 'B';
+      unit = exp === 0 ? 'bytes' : 'KM'[exp - 1] + 'B';
     return (exp === 0 ? size : size.toFixed(2)) + ' ' + unit;
   };
 
-  // use Optiong.js
-  const doOptipng = buffer => {
-    const {data} = optipng(buffer, ['-o2']);
-    return new Blob([data], {type: 'image/png'});
-  };
+  // Blob to Object URL
+  const blob2URL = async canvas => {
+    let blob;
 
-  // Blob to Uint8Array
-  const blob2Array = blob => new Promise(resolve => {
-    const reader = new FileReader;
-    reader.onload = () => resolve(new Uint8Array(reader.result));
-    reader.readAsArrayBuffer(blob);
-  });
+    if (canvas.toBlob) {
+      blob = await new Promise(resolve => canvas.toBlob(resolve));
+    } else if (canvas.msToBlob) {
+      blob = canvas.msToBlob();
+    }
+
+    return blob;
+  };
 
   // onload Promise
   const onLoad = (image, url) => new Promise((resolve, reject) => {
@@ -42,7 +53,7 @@
       blobURL = null;
     }
 
-    if (enabled) {
+    if (!dropArea.wait) {
       control.scale = '1';
       control.optipng = false;
     }
@@ -64,11 +75,12 @@
       el: '#dropArea',
       data: {
         over: false,
-        wait: false,
+        wait: true,
+        process: null,
       },
       methods: {
         dragover(ev) {
-          if (enabled) {
+          if (!this.wait) {
             ev.dataTransfer.dropEffect = 'copy';
             this.over = true;
           }
@@ -97,12 +109,25 @@
       },
     });
 
+  // Web Worker
+  worker.addEventListener('message', async ev => {
+    const {type, data = null} = ev.data;
+
+    if (type === 'ready') {
+      dropArea.wait = false;
+    } else if (type === 'done') {
+      dropArea.process = null;
+      drawImage(data);
+    } else if (type === 'process') {
+      dropArea.process += data + '\n';
+    }
+  });
+
   const showResult = async () => {
     output.reset = false;
     await output.$nextTick();
     output.height = output.$el.children[0].offsetHeight + 'px';
     dropArea.wait = false;
-    enabled = true;
   };
 
   const viewError = text => {
@@ -110,41 +135,9 @@
     showResult();
   };
 
-  // Blob to Object URL
-  const blob2URL = async canvas => {
-    let blob, buffer = null;
-
-    if (canvas.toBlob) {
-      blob = await new Promise(resolve => canvas.toBlob(resolve));
-    } else if (canvas.msToBlob) {
-      blob = canvas.msToBlob();
-    } else {
-      if (!control.optipng) { return {url: canvas.toDataURL(), size: 0}; }
-
-      // low performance
-      const
-        binary = atob(canvas.toDataURL().split(',')[1]),
-        length = binary.length;
-
-      buffer = new Uint8Array(length);
-
-      for (let i = 0; i < length; i++) { buffer[i] = binary.charCodeAt(i); }
-    }
-
-    // use Optiong.js
-    if (control.optipng) {
-      blob = doOptipng(buffer || await blob2Array(blob));
-    }
-
-    blobURL = URL.createObjectURL(blob);
-
-    return {url: blobURL, size: blob.size};
-  };
-
   // read File object
   const readFile = async file => {
     dropArea.wait = true;
-    enabled = false;
 
     dropReset();
 
@@ -161,6 +154,21 @@
     } else {
       viewError(imageError);
     }
+  };
+
+  const drawImage = async blob => {
+    const url = URL.createObjectURL(blob);
+
+    blobURL = url;
+
+    await onLoad(new Image, url);
+
+    output.image = url;
+    output.size = filesize(blob.size);
+
+    if (blob.size > maxSize) { output.message = '3MBを超えています。Twitterにアップロードできません。'; }
+
+    showResult();
   };
 
   // optimize
@@ -199,21 +207,16 @@
     ctx.globalAlpha = 0.99;
     ctx.drawImage(source, 0, 0, 1, 1, 0, 0, 1, 1);
 
-    const {url, size} = await blob2URL(canvas);
+    const
+      origBlob = await blob2URL(canvas),
+      base64 = canvas.toDataURL().split(',')[1];
 
-    await onLoad(new Image, url);
-
-    output.image = url;
-    output.size = filesize(size);
-
-    if (size > maxSize) { output.message = '3MBを超えています。Twitterにアップロードできません。'; }
-
-    showResult();
+    worker.postMessage({origBlob, base64, optipng: control.optipng});
   };
 
   // paste image on clipbord
   document.addEventListener('paste', ev => {
-    if (enabled && ev.clipboardData) {
+    if (!dropArea.wait && ev.clipboardData) {
       const {items} = ev.clipboardData;
 
       if (items) {
