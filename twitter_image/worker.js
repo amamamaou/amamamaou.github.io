@@ -6,8 +6,8 @@
   const process = text => postMessage({type: 'process', data: text});
 
   // use Optiong.js
-  const doOptipng = buffer => {
-    const {data} = optipng(buffer, ['-o2'], process);
+  const doOptipng = u8arr => {
+    const {data} = optipng(u8arr, ['-o2'], process);
     return new Blob([data], {type: 'image/png'});
   };
 
@@ -23,27 +23,27 @@
     const
       binary = atob(url.split(',')[1]),
       length = binary.length,
-      buffer = new Uint8Array(length);
+      u8arr = new Uint8Array(length);
 
-    for (let i = 0; i < length; i++) { buffer[i] = binary.charCodeAt(i); }
+    for (let i = 0; i < length; i++) { u8arr[i] = binary.charCodeAt(i); }
 
-    return buffer;
+    return u8arr;
   };
 
   addEventListener('message', async ev => {
     const {origBlob, dataURL, optipng} = ev.data;
-    let blob = origBlob, buffer;
+    let blob = origBlob, u8arr;
 
     if (origBlob == null) {
-      buffer = dataURL2array(dataURL);
+      u8arr = dataURL2array(dataURL);
 
       if (!optipng) {
-        blob = new Blob([buffer], {type: 'image/png'});
+        blob = new Blob([u8arr], {type: 'image/png'});
       }
     }
 
     if (optipng) {
-      blob = doOptipng(buffer || await blob2array(blob));
+      blob = doOptipng(u8arr || await blob2array(blob));
     }
 
     postMessage({type: 'done', data: blob});
