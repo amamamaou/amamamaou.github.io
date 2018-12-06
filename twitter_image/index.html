@@ -75,11 +75,11 @@
         <p>
           画像ファイルをここにドラッグ＆ドロップしてください<br>
           クリップボードの画像のペースト (Ctrl+V / ⌘V) や、クリックして画像ファイルを選択することもできます<br>
-          最大ファイルサイズは3MBまでです
+          最大許容サイズは無圧縮画像を考慮して10MBまでです
         </p>
       </label>
-      <pre class="console" v-if="process">{{ process }}</pre>
       <input type="file" accept="image/*" id="fileInput" @change="change">
+      <pre class="console" v-if="process">{{ process }}</pre>
     </div>
 
     <div id="output" class="outputContent" :class="{reset}" :style="{height}">
