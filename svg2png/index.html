@@ -6,14 +6,14 @@
 <meta name="description" content="SVG形式をPNG形式に変換します">
 <meta name="author" content="幸乃ととめ">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<link href="../css/main.css" rel="stylesheet">
-<link href="../css/svg2png.css" rel="stylesheet">
+<link href="/css/main.css" rel="stylesheet">
+<link href="/css/svg2png.css" rel="stylesheet">
 </head>
 <body>
 <main>
   <aside class="topicPath">
     <ol>
-      <li><a href="../">ものおき</a></li>
+      <li><a href="/">ものおき</a></li>
       <li>SVG to PNG</li>
     </ol>
   </aside>
@@ -28,7 +28,7 @@
         @dragover.prevent="dragover"
         @dragleave="over = false"
         @drop.prevent="readFile">
-        <figure><img src="../images/icon_svg.svg" alt="SVGファイル"></figure>
+        <figure><img src="/images/icon_svg.svg" alt="SVGファイル"></figure>
         <p>
           SVGファイルをここにドラッグ＆ドロップしてください<br>
           クリックしてSVGファイルを選択することもできます
@@ -79,6 +79,6 @@
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-<script src="./main.js?v1.0.3"></script>
+<script src="main.js?v1.0.3"></script>
 </body>
 </html>

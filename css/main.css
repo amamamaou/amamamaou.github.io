@@ -26,7 +26,7 @@ a:link, a:visited { color: #655c98; }
 
 a:hover { text-decoration: underline; }
 
-a[target="_blank"]::after { display: inline-block; position: relative; top: .1em; z-index: 0; height: .9em; width: 1em; margin-left: .2em; background: url("../images/icon_blank.svg") no-repeat 50% 50%/contain; content: ""; }
+a[target="_blank"]::after { display: inline-block; position: relative; top: .1em; z-index: 0; height: .9em; width: 1em; margin-left: .2em; background: url("/images/icon_blank.svg") no-repeat 50% 50%/contain; content: ""; }
 
 a[href^="#"]:not([href="#"])::before { margin-left: .1em; content: "#"; }
 
@@ -60,7 +60,7 @@ section { margin: 1.5em 0; }
 
 .topicPath ol li { display: inline-block; }
 
-.topicPath ol li:first-child ~ li::before { display: inline-block; width: 1em; height: .8em; margin-right: .2em; background: url("../images/parts_greater.svg") no-repeat 50% 50%/contain; vertical-align: middle; content: ""; }
+.topicPath ol li:first-child ~ li::before { display: inline-block; width: 1em; height: .8em; margin-right: .2em; background: url("/images/parts_greater.svg") no-repeat 50% 50%/contain; vertical-align: middle; content: ""; }
 
 .description { margin: 1em 0; }
 
@@ -119,7 +119,7 @@ input[type="checkbox"] + label:hover { background: rgba(101, 92, 152, 0.1); }
 
 input[type="checkbox"] + label::before { display: block; position: absolute; top: 0; bottom: 0; left: 4px; width: 20px; height: 20px; margin: auto 0; background: rgba(101, 92, 152, 0.45); border-radius: 2px; content: ""; transition: all .2s; }
 
-input[type="checkbox"] + label::after { display: block; position: absolute; top: 0; bottom: 0; left: 4px; width: 20px; height: 20px; margin: auto 0; background: url("../images/parts_check.svg") no-repeat 50% 50%/14px 14px; opacity: 0; transform: scale(1.5); content: ""; transition: all .2s; }
+input[type="checkbox"] + label::after { display: block; position: absolute; top: 0; bottom: 0; left: 4px; width: 20px; height: 20px; margin: auto 0; background: url("/images/parts_check.svg") no-repeat 50% 50%/14px 14px; opacity: 0; transform: scale(1.5); content: ""; transition: all .2s; }
 
 input[type="checkbox"]:checked + label::before { background: rgba(101, 92, 152, 0.8); }
 
