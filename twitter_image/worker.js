@@ -1,4 +1,4 @@
-/*! worker.js | v1.0.2 | MIT License */
+/*! worker.js | v1.0.3 | MIT License */
 {
   importScripts('/js/optipng.min.js');
 
@@ -19,9 +19,9 @@
   });
 
   // base64 to array
-  const dataURL2array = uri => {
+  const dataURL2array = url => {
     const
-      binary = atob(uri),
+      binary = atob(url.split(',')[1]),
       length = binary.length,
       buffer = new Uint8Array(length);
 
@@ -31,11 +31,11 @@
   };
 
   addEventListener('message', async ev => {
-    const {origBlob, base64, optipng} = ev.data;
+    const {origBlob, dataURL, optipng} = ev.data;
     let blob = origBlob, buffer;
 
     if (origBlob == null) {
-      buffer = dataURL2array(base64);
+      buffer = dataURL2array(dataURL);
 
       if (!optipng) {
         blob = new Blob([buffer], {type: 'image/png'});

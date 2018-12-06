@@ -1,7 +1,7 @@
-/*! twitter_image | v1.2.3 | MIT License */
+/*! twitter_image | v1.2.4 | MIT License */
 {
   // Web Worker
-  const worker = new Worker('worker.js?v1.0.2');
+  const worker = new Worker('worker.js?v1.0.3');
 
   const
     mega = 1048576,      // 1MB
@@ -197,7 +197,7 @@
 
     const
       origBlob = await canvas2blob(canvas),
-      base64 = canvas.toDataURL().split(',')[1];
+      dataURL = canvas.toDataURL();
 
     if (origBlob) {
       const {size} = origBlob;
@@ -207,7 +207,7 @@
       if (size > maxSize) { control.optipng = true; }
     }
 
-    worker.postMessage({origBlob, base64, optipng: control.optipng});
+    worker.postMessage({origBlob, dataURL, optipng: control.optipng});
   };
 
   // paste image on clipbord
