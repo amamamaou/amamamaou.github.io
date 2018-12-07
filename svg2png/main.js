@@ -1,10 +1,8 @@
-/*! svg2png | v1.0.3 | MIT License */
+/*! svg2png | v1.0.4 | MIT License */
 {
   const
     maxSize = 20971520,  // 20MB
     imageError = 'ブラウザが対応していないフォーマットです。';
-
-  let enabled = true;
 
   const dropReset = () => {
     URL.revokeObjectURL(output.image);
@@ -40,7 +38,7 @@
       },
       methods: {
         dragover(ev) {
-          if (enabled) {
+          if (!dropArea.wait) {
             ev.dataTransfer.dropEffect = 'copy';
             this.over = true;
           }
@@ -73,7 +71,6 @@
     await output.$nextTick();
     output.height = output.$el.children[0].offsetHeight + 'px';
     dropArea.wait = false;
-    enabled = true;
   };
 
   const viewError = text => {
@@ -83,7 +80,6 @@
 
   const readFile = async file => {
     dropArea.wait = true;
-    enabled = false;
 
     dropReset();
 
@@ -143,7 +139,7 @@
 
     if (naturalWidth === 0 || naturalHeight === 0) { return viewError(imageError); }
 
-    if (scaleBlock.type === 'size') {
+    if (scaleBlock.type === 'relative') {
       width = naturalWidth * scale;
       height = naturalHeight * scale;
     } else {
