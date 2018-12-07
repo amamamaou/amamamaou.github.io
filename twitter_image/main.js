@@ -1,4 +1,4 @@
-/*! twitter_image | v1.2.5 | MIT License */
+/*! twitter_image | v1.2.6 | MIT License */
 {
   // Web Worker
   const worker = new Worker('worker.js?v1.0.3');
@@ -101,19 +101,6 @@
       },
     });
 
-  // Web Worker
-  worker.addEventListener('message', ev => {
-    const {type, data = null} = ev.data;
-    if (type === 'ready') {
-      control.wait = dropArea.wait = false;
-    } else if (type === 'done') {
-      dropArea.process = null;
-      drawImage(data);
-    } else if (type === 'process') {
-      dropArea.process += data + '\n';
-    }
-  });
-
   const showResult = async () => {
     output.reset = false;
     await output.$nextTick();
@@ -136,7 +123,9 @@
 
     if (!type.includes('image/')) { return viewError(imageError); }
 
-    if (size > mega * 10) { return viewError('画像サイズが10MBを超えています！'); }
+    if (size > mega * 10) {
+      return viewError('画像サイズが10MBを超えています！');
+    }
 
     const
       image = new Image,
@@ -158,7 +147,9 @@
     output.image = url;
     output.size = filesize(blob.size);
 
-    if (blob.size > maxSize) { output.message = '3MBを超えています。Twitterにアップロードできません。'; }
+    if (blob.size > maxSize) {
+      output.message = '3MBを超えています。Twitterにアップロードできません。';
+    }
 
     showResult();
   };
@@ -206,13 +197,30 @@
     if (origBlob) {
       const {size} = origBlob;
 
-      if (size > mega * 5) { return viewError('画像サイズが5MB以上なので処理を中断しました。'); }
+      if (size > mega * 5) {
+        return viewError('画像サイズが5MB以上なので処理を中断しました。');
+      }
 
       if (size > maxSize) { control.optipng = true; }
+
+      if (!control.optipng) { return drawImage(origBlob); }
     }
 
     worker.postMessage({origBlob, dataURL, optipng: control.optipng});
   };
+
+  // Web Worker
+  worker.addEventListener('message', ev => {
+    const {type, data = null} = ev.data;
+    if (type === 'ready') {
+      control.wait = dropArea.wait = false;
+    } else if (type === 'done') {
+      dropArea.process = null;
+      drawImage(data);
+    } else if (type === 'process') {
+      dropArea.process += data + '\n';
+    }
+  });
 
   // paste image on clipbord
   document.addEventListener('paste', ev => {
