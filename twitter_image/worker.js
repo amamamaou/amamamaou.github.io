@@ -1,4 +1,4 @@
-/*! worker.js | v1.0.3 | MIT License */
+/*! worker.js | v1.0.4 | MIT License */
 {
   importScripts('/js/optipng.min.js');
 
@@ -18,14 +18,16 @@
     reader.readAsArrayBuffer(blob);
   });
 
-  // base64 to array
+  // dataURL to array
   const dataURL2array = url => {
     const
       binary = atob(url.split(',')[1]),
       length = binary.length,
       u8arr = new Uint8Array(length);
 
-    for (let i = 0; i < length; i++) { u8arr[i] = binary.charCodeAt(i); }
+    let i = length;
+
+    while (i--) { u8arr[i] = binary.charCodeAt(i); }
 
     return u8arr;
   };
@@ -34,17 +36,12 @@
     const {origBlob, dataURL, optipng} = ev.data;
     let blob = origBlob, u8arr;
 
-    if (origBlob == null) {
+    if (dataURL) {
       u8arr = dataURL2array(dataURL);
-
-      if (!optipng) {
-        blob = new Blob([u8arr], {type: 'image/png'});
-      }
+      if (!optipng) { blob = new Blob([u8arr], {type: 'image/png'}); }
     }
 
-    if (optipng) {
-      blob = doOptipng(u8arr || await blob2array(blob));
-    }
+    if (optipng) { blob = doOptipng(u8arr || await blob2array(blob)); }
 
     postMessage({type: 'done', data: blob});
   });

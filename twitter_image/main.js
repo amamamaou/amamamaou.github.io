@@ -1,7 +1,7 @@
 /*! twitter_image | v1.2.6 | MIT License */
 {
   // Web Worker
-  const worker = new Worker('worker.js?v1.0.3');
+  const worker = new Worker('worker.js?v1.0.4');
 
   const
     mega = 1048576,      // 1MB
@@ -19,7 +19,7 @@
 
   // canvas to blob
   const canvas2blob = async canvas => {
-    let blob;
+    let blob = null;
 
     if (canvas.toBlob) {
       blob = await new Promise(resolve => canvas.toBlob(resolve));
@@ -176,13 +176,8 @@
     canvas.height = height;
 
     if (scale > 1) {
-      if ('imageSmoothingEnabled' in ctx) {
-        ctx.imageSmoothingEnabled = false;
-      } else {
-        ctx.webkitImageSmoothingEnabled = false;
-        ctx.mozImageSmoothingEnabled = false;
-        ctx.msImageSmoothingEnabled = false;
-      }
+      ctx.msImageSmoothingEnabled = false;
+      ctx.imageSmoothingEnabled = false;
     }
 
     ctx.drawImage(source, 0, 0, width, height);
@@ -190,9 +185,8 @@
     ctx.globalAlpha = 0.99;
     ctx.drawImage(source, 0, 0, 1, 1, 0, 0, 1, 1);
 
-    const
-      origBlob = await canvas2blob(canvas),
-      dataURL = canvas.toDataURL();
+    const origBlob = await canvas2blob(canvas);
+    let dataURL = null;
 
     if (origBlob) {
       const {size} = origBlob;
@@ -202,11 +196,15 @@
       }
 
       if (size > maxSize) { control.optipng = true; }
-
-      if (!control.optipng) { return drawImage(origBlob); }
+    } else {
+      dataURL = canvas.toDataURL();
     }
 
-    worker.postMessage({origBlob, dataURL, optipng: control.optipng});
+    if (dataURL || control.optipng) {
+      worker.postMessage({origBlob, dataURL, optipng: control.optipng});
+    } else {
+      drawImage(origBlob);
+    }
   };
 
   // Web Worker
