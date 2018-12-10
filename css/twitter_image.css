@@ -10,7 +10,7 @@
 
 .control .scale small { margin-left: .4em; }
 
-.control .optipng { margin-top: 6px; }
+.control .optipng { margin: 6px 6px 0 0; }
 
 .control .button { margin: 0 0 0 auto; }
 
@@ -35,6 +35,8 @@
 .outputContent .dlBtn a:hover { background: #e7e6ef; }
 
 .outputContent .outputImage img { display: block; margin: 0 auto; }
+
+@media screen and (max-width: 375px) { .control .optipng small { display: block; } }
 
 @media screen and (max-width: 1280px) { .dropContent figure img { width: 20vw; }
   .dropContent label::after { display: block; margin-top: 1.2em; font-size: 1.4rem; content: "ここをタップして画像を選択してください"; }

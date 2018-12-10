@@ -12,7 +12,8 @@ body {
   font: 1.6em / 1.4 "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Helvetica Neue", "Hiragino Kaku Gothic ProN", "メイリオ" , "Meiryo", sans-serif;
   color: $fontColor;
   background: #eee;
-  margin: 1.5em 1em 3em;
+  margin: 0;
+  padding: 1.5em 1em;
 }
 main {
   overflow: hidden;
@@ -39,11 +40,11 @@ main {
 }
 
 h1 {
-  font-size: 2.8rem;
+  font-size: 2.6rem;
 }
 
 h2 {
-  font-size: 2.4rem;
+  font-size: 2.2rem;
   margin-bottom: .7em;
   padding: 0 0 .1em;
   border-bottom: 1px solid #ccc;
@@ -54,8 +55,12 @@ h2 {
 }
 
 h3 {
-  font-size: 2rem;
+  font-size: 1.8rem;
   margin: 1.2em 0 .8em;
+}
+
+p {
+  font-size: 1.5rem;
 }
 
 a {
@@ -106,7 +111,7 @@ dd + dt {
   margin-left: 1.5em;
 
   li {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
 
     &:first-child ~ li {
       margin-top: .25em;
@@ -117,9 +122,9 @@ dd + dt {
 .snsButton {
   display: flex;
   align-items: center;
-  margin: 18px 0 12px;
+  margin: 1.5em 0 1em;
   padding: 0;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   line-height: 1;
 
   li {
