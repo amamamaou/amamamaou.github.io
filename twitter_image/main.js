@@ -1,11 +1,12 @@
-/*! twitter_image | v1.2.6 | MIT License */
+/*! twitter_image | v1.2.7 | MIT License */
 {
   // Web Worker
-  const worker = new Worker('worker.js?v1.0.4');
+  const worker = new Worker('worker.js?v1.0.5');
 
   const
     mega = 1048576,      // 1MB
     maxSize = mega * 3,  // 3MB
+    maxWH = 1600,
     imageError = 'ブラウザが対応していない画像フォーマットです。';
 
   // calc bytes
@@ -20,13 +21,11 @@
   // canvas to blob
   const canvas2blob = async canvas => {
     let blob = null;
-
     if (canvas.toBlob) {
       blob = await new Promise(resolve => canvas.toBlob(resolve));
     } else if (canvas.msToBlob) {
       blob = canvas.msToBlob();
     }
-
     return blob;
   };
 
@@ -50,26 +49,19 @@
     output.height = '0';
     output.message = '';
     output.image = '';
+    output.fileName = '';
   };
 
   // instance
   const
     control = new Vue({
       el: '#control',
-      data: {
-        scale: '1',
-        optipng: false,
-        wait: false,
-      },
+      data: {scale: '1', optipng: false, wait: false},
       methods: {dropReset},
     }),
     dropArea = new Vue({
       el: '#dropArea',
-      data: {
-        over: false,
-        wait: true,
-        process: null,
-      },
+      data: {over: false, wait: true, process: null},
       methods: {
         dragover(ev) {
           if (!this.wait) {
@@ -133,7 +125,8 @@
 
     if (await onLoad(image, url)) {
       URL.revokeObjectURL(url);
-      optimizeImage(image, name);
+      optimizeImage(image);
+      output.fileName = name ? name.replace(/\.\w+$/, '_tw.png') : 'clipbord.png';
     } else {
       viewError(imageError);
     }
@@ -155,23 +148,21 @@
   };
 
   // optimize
-  const optimizeImage = async (source, name) => {
+  const optimizeImage = async source => {
     const
       canvas = document.createElement('canvas'),
       ctx = canvas.getContext('2d'),
       scale = parseInt(control.scale, 10) || 1;
 
-    let {
-      naturalWidth: width = 0,
-      naturalHeight: height = 0,
-    } = source;
-
-    output.fileName = name ? name.replace(/\.\w+$/, '_tw.png') : 'clipbord.png';
+    let {naturalWidth: width = 0, naturalHeight: height = 0} = source;
 
     if (width === 0 || height === 0) { return viewError(imageError); }
 
-    width *= scale;
-    height *= scale;
+    if (width * scale <= maxWH || height * scale <= maxWH) {
+      width *= scale;
+      height *= scale;
+    }
+
     canvas.width = width;
     canvas.height = height;
 
@@ -192,7 +183,7 @@
       const {size} = origBlob;
 
       if (size > mega * 5) {
-        return viewError('画像サイズが5MB以上なので処理を中断しました。');
+        return viewError('圧縮前の画像サイズが5MB以上なので処理を中断しました。');
       }
 
       if (size > maxSize) { control.optipng = true; }
@@ -210,13 +201,17 @@
   // Web Worker
   worker.addEventListener('message', ev => {
     const {type, data = null} = ev.data;
-    if (type === 'ready') {
-      control.wait = dropArea.wait = false;
-    } else if (type === 'done') {
-      dropArea.process = null;
-      drawImage(data);
-    } else if (type === 'process') {
-      dropArea.process += data + '\n';
+    switch (type) {
+      case 'ready':
+        control.wait = dropArea.wait = false;
+        break;
+      case 'process':
+        dropArea.process += data + '\n';
+        break;
+      case 'done':
+        dropArea.process = null;
+        drawImage(data);
+        break;
     }
   });
 
@@ -224,7 +219,6 @@
   document.addEventListener('paste', ev => {
     if (!control.wait && ev.clipboardData) {
       const {items} = ev.clipboardData;
-
       if (items) {
         for (const item of Array.from(items)) {
           if (item.type.includes('image/')) {

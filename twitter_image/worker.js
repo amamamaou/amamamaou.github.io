@@ -1,9 +1,9 @@
-/*! worker.js | v1.0.4 | MIT License */
+/*! worker.js | v1.0.5 | MIT License */
 {
-  importScripts('/js/optipng.min.js');
+  self.importScripts('/js/optipng.min.js');
 
   // console
-  const process = text => postMessage({type: 'process', data: text});
+  const process = text => self.postMessage({type: 'process', data: text});
 
   // use Optiong.js
   const doOptipng = u8arr => {
@@ -32,7 +32,7 @@
     return u8arr;
   };
 
-  addEventListener('message', async ev => {
+  self.addEventListener('message', async ev => {
     const {origBlob, dataURL, optipng} = ev.data;
     let blob = origBlob, u8arr;
 
@@ -43,8 +43,8 @@
 
     if (optipng) { blob = doOptipng(u8arr || await blob2array(blob)); }
 
-    postMessage({type: 'done', data: blob});
+    self.postMessage({type: 'done', data: blob});
   });
 
-  postMessage({type: 'ready'});
+  self.postMessage({type: 'ready'});
 }

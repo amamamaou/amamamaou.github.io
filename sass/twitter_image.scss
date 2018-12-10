@@ -36,7 +36,7 @@
   }
 
   .optipng {
-    margin-top: 6px;
+    margin: 6px 6px 0 0;
   }
 
   .button {
@@ -120,6 +120,16 @@
   .outputImage img {
     display: block;
     margin: 0 auto;
+  }
+}
+
+@media screen and (max-width: 375px) {
+  .control {
+    .optipng {
+      small {
+        display: block;
+      }
+    }
   }
 }
 
