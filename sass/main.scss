@@ -316,6 +316,7 @@ input {
     @extend %inputFont;
   }
   &[type="button"] {
+    @include userSelect;
     cursor: pointer;
 
     &:hover {
@@ -330,6 +331,7 @@ input {
 
     + label {
       @extend %inputDefault;
+      @include userSelect;
       display: inline-block;
       position: relative;
       padding: 6px 6px 7px 30px;
@@ -407,6 +409,7 @@ textarea {
 
 button {
   @extend %inputDefault;
+  @include userSelect;
   cursor: pointer;
 
   &:hover {

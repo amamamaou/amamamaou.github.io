@@ -109,13 +109,13 @@ input:focus, input[type="checkbox"] + label:focus, select:focus, textarea:focus,
 
 input[type="button"]:active, button:active { box-shadow: 0 0 3px #aaa inset; }
 
-input[type="button"] { cursor: pointer; }
+input[type="button"] { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; cursor: pointer; }
 
 input[type="button"]:hover { background: rgba(101, 92, 152, 0.1); }
 
 input[type="checkbox"] { display: none; }
 
-input[type="checkbox"] + label { display: inline-block; position: relative; padding: 6px 6px 7px 30px; font-size: 1.5rem; line-height: 1; cursor: pointer; }
+input[type="checkbox"] + label { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; display: inline-block; position: relative; padding: 6px 6px 7px 30px; font-size: 1.5rem; line-height: 1; cursor: pointer; }
 
 input[type="checkbox"] + label:hover { background: rgba(101, 92, 152, 0.1); }
 
@@ -127,7 +127,7 @@ input[type="checkbox"]:checked + label::before { background: rgba(101, 92, 152, 
 
 input[type="checkbox"]:checked + label::after { opacity: 1; transform: scale(1); }
 
-button { cursor: pointer; }
+button { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; cursor: pointer; }
 
 button:hover { background: rgba(101, 92, 152, 0.1); }
 
