@@ -303,7 +303,7 @@ section {
   box-shadow: 0 0 3px #aaa inset;
 }
 
-input {
+input:not([type="range"]) {
   @extend %inputDefault;
 
   &:hover {
@@ -421,6 +421,79 @@ button {
   }
   &:active {
     @extend %inputActive;
+  }
+}
+
+/* range */
+
+@mixin rangeTrack {
+  width: 100%;
+  height: 3px;
+  border: none;
+  border-radius: 6px;
+  background: #aaa;
+}
+@mixin rangeThumb {
+  @include formStyleReset;
+  width: 15px;
+  height: 15px;
+  border: none;
+  border-radius: 50%;
+  background: $themeColor;
+  cursor: pointer;
+}
+
+input[type="range"] {
+  @include formStyleReset;
+  width: 100%;
+  height: 15px;
+  padding: 0;
+  outline: none;
+  border: none;
+  box-shadow: none;
+
+  &::-webkit-slider-runnable-track {
+    @include rangeTrack;
+    margin: 6px 0;
+  }
+  &::-moz-range-track {
+    @include rangeTrack;
+  }
+  &::-ms-track {
+    @include rangeTrack;
+    color: transparent;
+  }
+
+  &::-webkit-slider-thumb {
+    @include rangeThumb;
+    margin-top: -6px;
+  }
+  &::-moz-range-thumb {
+    @include rangeThumb;
+  }
+  &::-ms-thumb {
+    @include rangeThumb;
+  }
+
+  &::-ms-tooltip {
+    display: none;
+  }
+
+  &::-ms-fill-lower,
+  &::-ms-fill-upper {
+    background: #999;
+  }
+}
+
+// Edge
+@supports (-ms-ime-align: auto) {
+  input[type="range"] {
+    box-shadow: none !important;
+    background: none;
+
+    &::-webkit-slider-thumb {
+      margin-top: 0;
+    }
   }
 }
 

@@ -10,7 +10,7 @@
 
 .scaleBlock legend { padding: 0 .6em; }
 
-.radioBlock ~ .radioBlock { margin: 1.2em 0 0; }
+.radioBlock ~ .radioBlock { margin: .786em 0 0; }
 
 .radioBlock label { display: inline-block; position: relative; margin-bottom: .4em; padding-left: 22px; line-height: 1.5; cursor: pointer; }
 
@@ -32,23 +32,9 @@
 
 .radioBlock .radioContent output { font-weight: bold; }
 
-.radioBlock input[type="range"] { -webkit-appearance: none; -moz-appearance: none; appearance: none; width: 100%; outline: none; border: none; margin: .5em 0; box-shadow: none; }
+.radioBlock input[type="range"] { margin: 3px 0 0; }
 
-.radioBlock input[type="range"]::-webkit-slider-runnable-track { width: 100%; height: 3px; background: #aaa; border: none; border-radius: 10px; }
-
-.radioBlock input[type="range"]::-moz-range-track { width: 100%; height: 3px; background: #aaa; border: none; border-radius: 10px; }
-
-.radioBlock input[type="range"]::-ms-track { width: 100%; height: 3px; background: #aaa; appearance: none; border-color: #fff; border-width: 6px 0; color: rgba(0, 0, 0, 0); }
-
-.radioBlock input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; -moz-appearance: none; appearance: none; width: 15px; height: 15px; border: none; border-radius: 50%; background: #655c98; cursor: pointer; margin-top: -6px; }
-
-.radioBlock input[type="range"]::-moz-range-thumb { -webkit-appearance: none; -moz-appearance: none; appearance: none; width: 15px; height: 15px; border: none; border-radius: 50%; background: #655c98; cursor: pointer; }
-
-.radioBlock input[type="range"]::-ms-thumb { width: 15px; height: 15px; border: none; border-radius: 50%; background: #655c98; cursor: pointer; }
-
-.radioBlock input[type="range"]::-ms-fill-lower, .radioBlock input[type="range"]::-ms-fill-upper { background: #999; border-radius: 10px; }
-
-.radioBlock input[type="number"] { width: 100px; height: 1.8em; margin-right: 1em; padding: 0 .5em; box-sizing: border-box; }
+.radioBlock input[type="number"] { width: 80px; margin-right: 1em; padding: .25em .5em; font-size: 1.6rem; line-height: 1; box-sizing: border-box; }
 
 .dropContent { padding-top: 9px; }
 
