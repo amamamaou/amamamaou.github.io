@@ -273,6 +273,18 @@ section {
   }
 }
 
+footer {
+  margin: 1em 1em 0;
+  animation: slideIn .4s ease-out, fadeIn .4s ease-in-out;
+
+  p {
+    margin: 0;
+    opacity: .8;
+    font-size: 1.4rem;
+    text-align: center;
+  }
+}
+
 /* form */
 
 %inputDefault {

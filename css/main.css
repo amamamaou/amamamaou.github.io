@@ -96,6 +96,10 @@ section { margin: 1.5em 0; }
 
 .dropContent p { margin: 15px 0 0; font-size: 1.3rem; pointer-events: none; }
 
+footer { margin: 1em 1em 0; animation: slideIn .4s ease-out, fadeIn .4s ease-in-out; }
+
+footer p { margin: 0; opacity: .8; font-size: 1.4rem; text-align: center; }
+
 /* form */
 input:not([type="range"]), input:not([type="range"])[type="checkbox"] + label, select, textarea, button { padding: 0 .4em; border: 2px solid rgba(101, 92, 152, 0.8); background: #fff; color: #333; font-size: 1em; border-radius: 4px; outline: none; box-sizing: border-box; transition: all .2s; }
 
