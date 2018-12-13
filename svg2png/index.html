@@ -37,7 +37,7 @@
       <input type="file" accept=".svg,.svgz" id="fileInput" @change="change">
     </div>
 
-    <div class="flexContent">
+    <div class="options lexContent">
       <fieldset class="scaleBlock">
         <legend>サイズ指定</legend>
 
@@ -59,8 +59,8 @@
           <label for="inputSize">手入力で指定する</label>
 
           <div class="radioContent">
-            width: <input type="number" placeholder="auto" v-model="width">
-            height: <input type="number" placeholder="auto" v-model="height">
+            <label>width: <input type="number" placeholder="auto" v-model="width"></label>
+            <label>height: <input type="number" placeholder="auto" v-model="height"></label>
           </div>
         </div>
       </fieldset>

@@ -6,8 +6,6 @@ body { font: 1.6em / 1.4 "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Hel
 
 main { overflow: hidden; display: block; max-width: 960px; margin: 0 auto; padding: 0 40px 10px; background: #fff; border-radius: 15px; box-sizing: border-box; box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.15); animation: slideIn .4s ease-out, fadeIn .4s ease-in-out; }
 
-main.wide { max-width: 1280px; }
-
 ::selection { background: #e7e6ef; }
 
 ::-moz-selection { background: #e7e6ef; }
@@ -82,7 +80,7 @@ section { margin: 1.5em 0; }
 
 .flexSection { display: flex; flex-wrap: wrap; justify-content: space-between; }
 
-.flexSection .flexContent { width: calc(50% - 12px); }
+.flexSection .flexContent { width: 49%; }
 
 .dropContent input[type="file"] { display: none; }
 
@@ -167,11 +165,13 @@ input[type="range"]::-ms-fill-lower, input[type="range"]::-ms-fill-upper { backg
   100% { transform: rotate(2160deg); } }
 
 /* for sp */
-@media screen and (max-width: 1280px) { body { margin: .8em .8em 2em; font-size: 1.4rem; }
-  main { padding: 0 1.2em .6em; }
+@media screen and (max-width: 960px) { body { padding: 1em 1em 2em; font-size: 1.4rem; }
+  main { padding: 0 1em .5em; }
   h1 { font-size: 2.2rem; }
   h2 { font-size: 2rem; }
   h3 { font-size: 1.8rem; }
   .flexList h3 { font-size: 1.7rem; line-height: 1.2; }
   .flexList a { padding: .8em 1em; }
-  .flexList p { font-size: 1.3rem; } }
+  .flexList p { font-size: 1.3rem; }
+  .flexSection { flex-direction: column; }
+  .flexSection .flexContent { width: auto; } }
