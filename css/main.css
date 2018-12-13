@@ -99,7 +99,7 @@ section { margin: 1.5em 0; }
 /* form */
 input:not([type="range"]), input:not([type="range"])[type="checkbox"] + label, select, textarea, button { padding: 0 .4em; border: 2px solid rgba(101, 92, 152, 0.8); background: #fff; color: #333; font-size: 1em; border-radius: 4px; outline: none; box-sizing: border-box; transition: all .2s; }
 
-input:not([type="range"]):not([type="button"]), textarea { font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace; }
+input:not([type="range"]):not([type="button"]), textarea { font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace, serif; }
 
 input:not([type="range"]):hover, input:not([type="range"])[type="checkbox"] + label:hover, select:hover, textarea:hover, button:hover { border-color: #655c98; }
 

@@ -1,24 +1,26 @@
 @charset "UTF-8";
 /* twitter_image */
-.control .scale select, .control .button button { height: 32px; font-size: 1.6rem; font-weight: bold; }
-
 .control { display: flex; align-items: flex-end; margin: 0 0 12px; transition: opacity .2s; }
 
 .control.wait { pointer-events: none; opacity: .5; }
 
-.control .scale select { -webkit-appearance: none; -moz-appearance: none; appearance: none; padding: 0 .8em; cursor: pointer; }
+.control .options { width: 440px; max-width: 100%; margin-right: 1em; }
 
-.control .scale small { margin-left: .4em; }
+.control .options .heading { margin: 0; font-size: 1.5rem; }
 
-.control .optipng { margin: 6px 6px 0 0; }
+.control .options .heading output { font-weight: bold; }
+
+.control .options input[type="range"] { margin: .5em 0; }
 
 .control .button { margin: 0 0 0 auto; }
 
-.control .button button { padding: 0 1.2em; }
+.control .button button { padding: 0 1.2em; height: 32px; font-size: 1.6rem; font-weight: bold; }
+
+.dropContent .fileInfo { margin: 1em 0; padding: 0 1em; font-size: 1.5rem; text-align: center; animation: fadeIn .4s; }
 
 .dropContent .console { overflow: hidden; white-space: pre-wrap; word-wrap: break-word; margin-bottom: 0; padding: 0 1em; font-size: 1.4rem; line-height: 1.2; font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace, serif; }
 
-.outputContent { overflow-x: auto; overflow-y: hidden; height: 0; margin-top: 30px; background: #eee; border-radius: 4px; text-align: center; transition: height .3s; box-shadow: inset 0 2px 6px 0 rgba(0, 0, 0, 0.15); }
+.outputContent { overflow-x: auto; overflow-y: hidden; height: 0; margin-top: 1em; background: #eee; border-radius: 4px; text-align: center; transition: height .3s; box-shadow: inset 0 2px 6px 0 rgba(0, 0, 0, 0.15); }
 
 .outputContent.reset { margin: 0; transition: none; }
 

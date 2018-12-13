@@ -5,12 +5,6 @@
 
 /* twitter_image */
 
-%formElem {
-  height: 32px;
-  font-size: 1.6rem;
-  font-weight: bold;
-}
-
 .control {
   display: flex;
   align-items: flex-end;
@@ -22,21 +16,23 @@
     opacity: .5;
   }
 
-  .scale {
-    select {
-      @include formStyleReset;
-      @extend %formElem;
-      padding: 0 .8em;
-      cursor: pointer;
+  .options {
+    width: 440px;
+    max-width: 100%;
+    margin-right: 1em;
+
+    .heading {
+      margin: 0;
+      font-size: 1.5rem;
+
+      output {
+        font-weight: bold;
+      }
     }
 
-    small {
-      margin-left: .4em;
+    input[type="range"] {
+      margin: .5em 0;
     }
-  }
-
-  .optipng {
-    margin: 6px 6px 0 0;
   }
 
   .button {
@@ -44,12 +40,21 @@
 
     button {
       padding: 0 1.2em;
-      @extend %formElem;
+      height: 32px;
+      font-size: 1.6rem;
+      font-weight: bold;
     }
   }
 }
 
 .dropContent {
+  .fileInfo {
+    margin: 1em 0;
+    padding: 0 1em;
+    font-size: 1.5rem;
+    text-align: center;
+    animation: fadeIn .4s;
+  }
   .console {
     overflow: hidden;
     white-space: pre-wrap;
@@ -68,7 +73,7 @@
     y: hidden;
   }
   height: 0;
-  margin-top: 30px;
+  margin-top: 1em;
   background: #eee;
   border-radius: 4px;
   text-align: center;

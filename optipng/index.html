@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Optping - PNG Optimizer</title>
+<meta name="description" content="PNG画像をブラウザ上で最適化します">
+<meta name="author" content="幸乃ととめ">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="/css/main.css?2018121011">
+<link rel="stylesheet" href="/css/optipng.css?2018121011">
+</head>
+<body>
+<main>
+  <aside class="topicPath">
+    <ol>
+      <li><a href="/">ものおき</a></li>
+      <li>Optipng - PNG Optimizer</li>
+    </ol>
+  </aside>
+
+  <h1>Optipng - PNG Optimizer</h1>
+  <p class="description">PNG画像をブラウザ上で最適化します。</p>
+
+  <ul class="snsButton">
+    <li>
+      <a href="https://twitter.com/share" class="twitter-share-button">Tweet</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','twitter-wjs');</script>
+    </li>
+    <li>
+      <a href="https://b.hatena.ne.jp/entry/" class="hatena-bookmark-button" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20"></a>
+      <script src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async></script>
+    </li>
+    <li>
+      <a data-pocket-label="pocket" data-pocket-count="horizontal" class="pocket-btn" data-lang="ja"></a>
+      <script>!function(d,i){if(!d.getElementById(i)){var j=d.createElement('script');j.id=i;j.src='https://widgets.getpocket.com/v1/j/btn.js?v=1';var w=d.getElementById(i);d.body.appendChild(j);}}(document,'pocket-btn-js');</script>
+    </li>
+  </ul>
+
+  <section>
+    <div id="control" class="control" :class="{wait}">
+      <div class="options">
+        <p class="heading">最適化レベル：<output for="levelRange">{{ level }}</output></p>
+        <input type="range"
+          min="0" max="7" step="1" value="2"
+          id="levelRange"
+          v-model="level">
+      </div>
+      <div class="button">
+        <button @click="dropReset">Reset</button>
+      </div>
+    </div>
+
+    <div id="dropArea" class="dropContent">
+      <label for="fileInput"
+        :class="{over, wait}"
+        @dragover.prevent="dragover"
+        @dragleave="over = false"
+        @drop.prevent="readFile">
+        <figure><img src="/images/icon_image.svg" alt="画像ファイル"></figure>
+        <p>
+          画像ファイルをここにドラッグ＆ドロップしてください<br>
+          クリップボードの画像のペースト (Ctrl+V / ⌘V) や、クリックして画像ファイルを選択することもできます<br>
+          最大許容サイズは10MBまでです
+        </p>
+      </label>
+      <input type="file" accept="image/*" id="fileInput" @change="change">
+      <div class="fileInfo" v-if="fileName">Input image: <b>{{ fileName }} ({{ size }})</b></div>
+      <pre class="console" v-if="process">{{ process }}</pre>
+    </div>
+
+    <div id="output" class="outputContent" :class="{reset}" :style="{height}">
+      <div class="innerBody">
+        <p class="message" v-if="message">{{ message }}</p>
+        <div class="imgContent" v-if="image">
+          <div class="dlBtn">
+            <a :href="image" :download="fileName">Download ({{ size }})</a>
+          </div>
+          <div class="outputImage"><img alt="output image" :src="image"></div>
+        </div>
+      </div>
+    </div>
+
+    <p>0 は最適化しません。通常は 1 ～ 5 で指定してください。最適なレベルは 2 です。<br>
+    レベルが高いほど処理に時間がかかり、ブラウザにも負担がかかる場合があります。<br>
+    最適化レベルを高くしても結果が変わらない場合もあります。</p>
+
+    <p>PNGの最適化処理には <a href="https://github.com/LI-NA/optipng.js" target="_blank">Optipng.js</a> を使用しています。</p>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="main.js?v0.0.1"></script>
+</body>
+</html>
