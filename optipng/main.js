@@ -98,7 +98,7 @@
   };
 
   // read File object
-  const readFile = async file => {
+  const readFile = file => {
     const {type, size, name} = file;
 
     control.wait = dropArea.wait = true;
