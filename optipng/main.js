@@ -1,4 +1,4 @@
-/*! optipng main.js | v0.0.1 | MIT License */
+/*! optipng main.js | v0.0.2 | MIT License */
 {
   // Web Worker
   const worker = new Worker('worker.js?v0.0.1');
@@ -6,8 +6,7 @@
   const
     mega = 1048576,       // 1MB
     maxSize = mega * 10,  // 10MB
-    maxWH = 1600,
-    imageError = 'ブラウザが対応していない画像フォーマットです。';
+    maxWH = 1600;
 
   // calc bytes
   const filesize = bytes => {
@@ -106,7 +105,7 @@
 
     dropReset();
 
-    if (!type.includes('image/')) { return viewError(imageError); }
+    if (type !== 'image/png') { return viewError('PNG形式の画像のみです'); }
 
     if (size > maxSize) { return viewError('画像サイズが10MBを超えています！'); }
 

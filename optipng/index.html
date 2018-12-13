@@ -63,7 +63,7 @@
           最大許容サイズは10MBまでです
         </p>
       </label>
-      <input type="file" accept="image/*" id="fileInput" @change="change">
+      <input type="file" accept="image/png" id="fileInput" @change="change">
       <div class="fileInfo" v-if="fileName">Input image: <b>{{ fileName }} ({{ size }})</b></div>
       <pre class="console" v-if="process">{{ process }}</pre>
     </div>
@@ -92,6 +92,6 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-<script src="main.js?v0.0.1"></script>
+<script src="main.js?v0.0.2"></script>
 </body>
 </html>
