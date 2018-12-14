@@ -1,6 +1,6 @@
 /*! worker.js | v1.0.5 | MIT License */
 {
-  self.importScripts('/js/optipng.min.js');
+  self.importScripts('https://cdn.jsdelivr.net/npm/optipng-js');
 
   // console
   const process = text => self.postMessage({type: 'process', data: text});
