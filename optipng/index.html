@@ -7,7 +7,7 @@
 <meta name="author" content="幸乃ととめ">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="stylesheet" href="/css/main.css?2018121317">
-<link rel="stylesheet" href="/css/optipng.css?2018121317">
+<link rel="stylesheet" href="/css/optipng.css?2018121412">
 </head>
 <body>
 <main>
@@ -65,7 +65,6 @@
       </label>
       <input type="file" accept="image/png" id="fileInput" @change="change">
       <div class="fileInfo" v-if="fileName">Input image: <b>{{ fileName }} ({{ size }})</b></div>
-      <pre class="console" v-if="process">{{ process }}</pre>
     </div>
 
     <div id="output" class="outputContent" :class="{reset}" :style="{height}">
@@ -86,12 +85,17 @@
 
     <p>PNGの最適化処理には <a href="https://github.com/LI-NA/optipng.js" target="_blank">Optipng.js</a> を使用しています。</p>
   </section>
+
+  <aside id="console" class="consoleBody">
+    <p>Console</p>
+    <pre class="console">{{ console }}</pre>
+  </aside>
 </main>
 <footer>
   <p>&copy; 2018 @amamamaou</p>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-<script src="main.js?v0.0.2"></script>
+<script src="main.js?v0.0.3"></script>
 </body>
 </html>

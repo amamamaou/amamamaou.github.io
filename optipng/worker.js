@@ -1,13 +1,13 @@
-/*! worker.js | v0.0.1 | MIT License */
+/*! worker.js | v0.0.2 | MIT License */
 {
   self.importScripts('/js/optipng.min.js');
 
   // console
-  const process = text => self.postMessage({type: 'process', data: text});
+  const console = text => self.postMessage({type: 'console', data: text});
 
   // use Optiong.js
   const doOptipng = (u8arr, level) => {
-    const {data} = optipng(u8arr, ['-o' + level], process);
+    const {data} = optipng(u8arr, ['-o' + level], console);
     return new Blob([data], {type: 'image/png'});
   };
 
@@ -21,8 +21,17 @@
   self.addEventListener('message', async ev => {
     const
       {file, level} = ev.data,
+      start = performance.now();
+
+    console('Start Web Worker...');
+    console(`Optimize level: ${level}\n`);
+
+    const
       u8arr = await blob2array(file),
-      blob = doOptipng(u8arr, level);
+      blob = doOptipng(u8arr, level),
+      time = (performance.now() - start).toFixed(0);
+
+    console(`Completed (${time}ms)`);
 
     self.postMessage({type: 'done', data: blob});
   });

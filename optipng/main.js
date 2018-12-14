@@ -1,7 +1,7 @@
-/*! optipng main.js | v0.0.2 | MIT License */
+/*! optipng main.js | v0.0.3 | MIT License */
 {
   // Web Worker
-  const worker = new Worker('worker.js?v0.0.1');
+  const worker = new Worker('worker.js?v0.0.2');
 
   const
     mega = 1048576,       // 1MB
@@ -28,9 +28,12 @@
   const dropReset = () => {
     URL.revokeObjectURL(output.image);
 
-    if (!control.wait) {
+    if (control.wait) {
+      console.console = '';
+    } else {
       control.level = '2';
       dropArea.fileName = dropArea.size = '';
+      console.console = 'Ready';
     }
 
     output.reset = true;
@@ -52,7 +55,6 @@
         wait: true,
         fileName: '',
         size: '',
-        process: null,
       },
       methods: {
         dragover(ev) {
@@ -83,6 +85,10 @@
         fileName: '',
         size: '',
       },
+    }),
+    console =  new Vue({
+      el: '#console',
+      data: {console: 'Please wait...'},
     });
 
   const showResult = async () => {
@@ -113,6 +119,7 @@
     dropArea.size = filesize(size);
 
     output.fileName = name ? name.replace(/\.\w+$/, '_optimized.png') : 'clipbord.png';
+    console.console = '';
 
     worker.postMessage({file, level: control.level});
   };
@@ -134,12 +141,12 @@
     switch (type) {
       case 'ready':
         control.wait = dropArea.wait = false;
+        console.console = 'Web Worker is ready';
         break;
-      case 'process':
-        dropArea.process += data + '\n';
+      case 'console':
+        if (data != null) { console.console += data + '\n'; }
         break;
       case 'done':
-        dropArea.process = null;
         drawImage(data);
         break;
     }
