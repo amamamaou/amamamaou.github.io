@@ -204,7 +204,7 @@
         control.wait = dropArea.wait = false;
         break;
       case 'process':
-        dropArea.process += data + '\n';
+        if (data != null) { dropArea.process += data + '\n'; }
         break;
       case 'done':
         dropArea.process = null;
