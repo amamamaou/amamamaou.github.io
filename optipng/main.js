@@ -1,7 +1,7 @@
-/*! optipng main.js | v0.0.3 | MIT License */
+/*! optipng main.js | v0.0.4 | MIT License */
 {
   // Web Worker
-  const worker = new Worker('worker.js?v0.0.2');
+  const worker = new Worker('worker.js?v0.0.3');
 
   const
     mega = 1048576,       // 1MB

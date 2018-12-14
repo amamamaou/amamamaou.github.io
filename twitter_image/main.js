@@ -1,7 +1,7 @@
-/*! twitter_image | v1.2.7 | MIT License */
+/*! twitter_image | v1.2.8 | MIT License */
 {
   // Web Worker
-  const worker = new Worker('worker.js?v1.0.5');
+  const worker = new Worker('worker.js?v1.0.6');
 
   const
     mega = 1048576,      // 1MB

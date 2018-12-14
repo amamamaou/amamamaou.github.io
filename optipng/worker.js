@@ -1,4 +1,4 @@
-/*! worker.js | v0.0.2 | MIT License */
+/*! worker.js | v0.0.3 | MIT License */
 {
   self.importScripts('https://cdn.jsdelivr.net/npm/optipng-js');
 
