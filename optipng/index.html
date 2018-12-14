@@ -72,7 +72,7 @@
         </p>
       </label>
       <input type="file" accept="image/png" id="fileInput" @change="change">
-      <div class="fileInfo" v-if="fileName">Input image: <b>{{ fileName }} ({{ size }})</b></div>
+      <div class="fileInfo" v-if="fileName" v-cloak>Input image: <b>{{ fileName }} ({{ size }})</b></div>
     </div>
 
     <div id="output" class="outputContent" :class="{reset}" :style="{height}">
@@ -96,7 +96,7 @@
 
   <aside id="console" class="consoleBody">
     <p>Console</p>
-    <pre class="console">{{ console }}</pre>
+    <pre class="console" v-cloak>{{ console }}</pre>
   </aside>
 </main>
 <footer>

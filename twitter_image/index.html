@@ -78,7 +78,7 @@
         </p>
       </label>
       <input type="file" accept="image/*" id="fileInput" @change="change">
-      <pre class="console" v-if="process">{{ process }}</pre>
+      <pre class="console" v-if="process" v-cloak>{{ process }}</pre>
     </div>
 
     <div id="output" class="outputContent" :class="{reset}" :style="{height}">
