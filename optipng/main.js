@@ -45,7 +45,7 @@
   const
     control = new Vue({
       el: '#control',
-      data: {level: '2', wait: false},
+      data: {level: '2', wait: true},
       methods: {dropReset},
     }),
     dropArea = new Vue({

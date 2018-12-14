@@ -54,7 +54,7 @@
   const
     control = new Vue({
       el: '#control',
-      data: {scale: '1', optipng: false, wait: false},
+      data: {scale: '1', optipng: false, wait: true},
       methods: {dropReset},
     }),
     dropArea = new Vue({
