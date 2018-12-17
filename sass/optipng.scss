@@ -126,9 +126,7 @@
   }
 
   .console {
-    overflow: hidden;
-    white-space: pre-wrap;
-    word-wrap: break-word;
+    overflow: auto;
     margin-bottom: 0;
     padding: .8em 1em;
     background: #eee;
