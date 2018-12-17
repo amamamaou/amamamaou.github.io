@@ -67,7 +67,7 @@
     </div>
 
     <div id="output" class="flexContent full outputContent" :class="{reset}" :style="{height}">
-      <div class="innerBody">
+      <div class="innerBody" ref="body">
         <p class="message" v-if="message">{{ message }}</p>
         <div class="imgContent" v-if="image">
           <div class="dlBtn"><a :href="image" :download="fileName">Download</a></div>
@@ -82,6 +82,6 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-<script src="main.js?v1.0.4"></script>
+<script src="main.js?v1.0.5"></script>
 </body>
 </html>

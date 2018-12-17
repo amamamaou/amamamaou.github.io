@@ -1,4 +1,4 @@
-/*! svg2png | v1.0.4 | MIT License */
+/*! svg2png | v1.0.5 | MIT License */
 {
   const
     maxSize = 20971520,  // 20MB
@@ -8,8 +8,7 @@
     URL.revokeObjectURL(output.image);
     output.reset = true;
     output.height = '0';
-    output.message = '';
-    output.image = '';
+    output.message = output.image = '';
   };
 
   const onLoad = (elem, url = null) => new Promise((resolve, reject) => {
@@ -70,7 +69,7 @@
     if (text) { output.message = text; }
     output.reset = false;
     await output.$nextTick();
-    output.height = output.$el.children[0].offsetHeight + 'px';
+    output.height = output.$refs.body.offsetHeight + 'px';
     dropArea.wait = false;
   };
 

@@ -1,4 +1,4 @@
-/*! optipng main.js | v0.0.4 | MIT License */
+/*! optipng main.js | v0.0.5 | MIT License */
 {
   // Web Worker
   const worker = new Worker('worker.js?v0.0.3');
@@ -95,7 +95,7 @@
     if (text) { output.message = text; }
     output.reset = false;
     await output.$nextTick();
-    output.height = output.$el.children[0].offsetHeight + 'px';
+    output.height = output.$refs.body.offsetHeight + 'px';
     control.wait = dropArea.wait = false;
   };
 
