@@ -15,7 +15,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="canonical" href="https://amamamaou.github.io/optipng/">
 <link rel="stylesheet" href="/css/main.css?2018121317">
-<link rel="stylesheet" href="/css/optipng.css?2018121412">
+<link rel="stylesheet" href="/css/optipng.css?2018121714">
 </head>
 <body>
 <main>
@@ -32,7 +32,7 @@
   <ul class="snsButton">
     <li>
       <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a>
-      <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+      <script src="https://platform.twitter.com/widgets.js" charset="utf-8" async></script>
     </li>
     <li>
       <a href="https://b.hatena.ne.jp/entry/" class="hatena-bookmark-button" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20"></a>
@@ -45,9 +45,12 @@
   </ul>
 
   <section>
+    <p>0 はメタ情報の最適化のみを行います。通常は 1 ～ 5 で指定してください。最適なレベルは 2 です。<br>
+    レベルを高くしても画像によっては結果が変わらない場合があります。</p>
+
     <div id="control" class="control" :class="{wait}">
       <div class="options">
-        <p class="heading">最適化レベル：<output for="levelRange">{{ level }}</output></p>
+        <p class="heading">最適化レベル：<output for="levelRange" v-cloak>{{ level }}</output></p>
         <input type="range"
           min="0" max="7" step="1" value="2"
           id="levelRange"
@@ -86,17 +89,13 @@
         </div>
       </div>
     </div>
-
-    <p>0 は最適化しません。通常は 1 ～ 5 で指定してください。最適なレベルは 2 です。<br>
-    レベルが高いほど処理に時間がかかり、ブラウザにも負担がかかる場合があります。<br>
-    最適化レベルを高くしても結果が変わらない場合もあります。</p>
-
-    <p>PNGの最適化処理には <a href="https://github.com/LI-NA/optipng.js" target="_blank">Optipng.js</a> を使用しています。</p>
   </section>
 
   <aside id="console" class="consoleBody">
-    <p>Console</p>
+    <h6>Console</h6>
     <pre class="console" v-cloak>{{ console }}</pre>
+
+    <p>PNGの最適化処理には <a href="https://github.com/LI-NA/optipng.js" target="_blank">Optipng.js</a> を使用しています。</p>
   </aside>
 </main>
 <footer>

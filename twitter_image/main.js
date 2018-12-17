@@ -91,16 +91,12 @@
       },
     });
 
-  const showResult = async () => {
+  const showResult = async (text = null) => {
+    if (text) { output.message = text; }
     output.reset = false;
     await output.$nextTick();
     output.height = output.$el.children[0].offsetHeight + 'px';
     control.wait = dropArea.wait = false;
-  };
-
-  const viewError = text => {
-    output.message = text;
-    showResult();
   };
 
   // read File object
@@ -111,10 +107,10 @@
 
     dropReset();
 
-    if (!type.includes('image/')) { return viewError(imageError); }
+    if (!type.includes('image/')) { return showResult(imageError); }
 
     if (size > mega * 10) {
-      return viewError('画像サイズが10MBを超えています！');
+      return showResult('画像サイズが10MBを超えています！');
     }
 
     const
@@ -126,23 +122,22 @@
       optimizeImage(image);
       output.fileName = name ? name.replace(/\.\w+$/, '_tw.png') : 'clipbord.png';
     } else {
-      viewError(imageError);
+      showResult(imageError);
     }
   };
 
   const drawImage = async blob => {
     const url = URL.createObjectURL(blob);
+    let text;
 
     await onLoad(new Image, url);
 
     output.image = url;
     output.size = filesize(blob.size);
 
-    if (blob.size > maxSize) {
-      output.message = '3MBを超えています。Twitterにアップロードできません。';
-    }
+    if (blob.size > maxSize) { text = '3MBを超えています。Twitterにアップロードできません。'; }
 
-    showResult();
+    showResult(text);
   };
 
   // optimize
@@ -154,7 +149,7 @@
 
     let {naturalWidth: width = 0, naturalHeight: height = 0} = source;
 
-    if (width === 0 || height === 0) { return viewError(imageError); }
+    if (width === 0 || height === 0) { return showResult(imageError); }
 
     if (width * scale <= maxWH || height * scale <= maxWH) {
       width *= scale;
@@ -181,7 +176,7 @@
       const {size} = origBlob;
 
       if (size > mega * 5) {
-        return viewError('圧縮前の画像サイズが5MB以上なので処理を中断しました。');
+        return showResult('圧縮前の画像サイズが5MB以上なので処理を中断しました。');
       }
 
       if (size > maxSize) { control.optipng = true; }

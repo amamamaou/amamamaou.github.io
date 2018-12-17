@@ -66,16 +66,12 @@
       },
     });
 
-  const slideDown = async () => {
+  const showResult = async (text = null) => {
+    if (text) { output.message = text; }
     output.reset = false;
     await output.$nextTick();
     output.height = output.$el.children[0].offsetHeight + 'px';
     dropArea.wait = false;
-  };
-
-  const viewError = text => {
-    output.message = text;
-    slideDown();
   };
 
   const readFile = async file => {
@@ -83,20 +79,20 @@
 
     dropReset();
 
-    if (!file.type.includes('image/')) { return viewError(imageError); }
-    if (file.size > maxSize) { return viewError('ファイルサイズが3MBを超えています！'); }
+    if (!file.type.includes('image/')) { return showResult(imageError); }
+    if (file.size > maxSize) { return showResult('ファイルサイズが3MBを超えています！'); }
 
     const reader = new FileReader;
     reader.readAsDataURL(file);
 
-    if (!await onLoad(reader)) { return viewError('ファイルの読み込みに失敗しました'); }
+    if (!await onLoad(reader)) { return showResult('ファイルの読み込みに失敗しました'); }
 
     const image = new Image;
 
     if (await onLoad(image, reader.result)) {
       buildImage(image, file.name);
     } else {
-      viewError(imageError);
+      showResult(imageError);
     }
   };
 
@@ -137,7 +133,7 @@
       source.remove();
     }
 
-    if (naturalWidth === 0 || naturalHeight === 0) { return viewError(imageError); }
+    if (naturalWidth === 0 || naturalHeight === 0) { return showResult(imageError); }
 
     if (scaleBlock.type === 'relative') {
       width = naturalWidth * scale;
@@ -169,6 +165,6 @@
 
     output.image = url;
 
-    slideDown();
+    showResult();
   };
 }

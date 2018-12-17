@@ -91,16 +91,12 @@
       data: {console: 'Please wait...'},
     });
 
-  const showResult = async () => {
+  const showResult = async (text = null) => {
+    if (text) { output.message = text; }
     output.reset = false;
     await output.$nextTick();
     output.height = output.$el.children[0].offsetHeight + 'px';
     control.wait = dropArea.wait = false;
-  };
-
-  const viewError = text => {
-    output.message = text;
-    showResult();
   };
 
   // read File object
@@ -111,9 +107,9 @@
 
     dropReset();
 
-    if (type !== 'image/png') { return viewError('PNG形式の画像のみです'); }
+    if (type !== 'image/png') { return showResult('PNG形式の画像のみです'); }
 
-    if (size > maxSize) { return viewError('画像サイズが10MBを超えています！'); }
+    if (size > maxSize) { return showResult('画像サイズが10MBを超えています！'); }
 
     dropArea.fileName = name;
     dropArea.size = filesize(size);
