@@ -30,10 +30,10 @@
   };
 
   // onload Promise
-  const onLoad = (image, url) => new Promise((resolve, reject) => {
+  const onLoad = (image, src) => new Promise((resolve, reject) => {
     image.onload = () => resolve(true);
     image.onerror = reject;
-    image.src = url;
+    image.src = src;
   }).catch(() => false);
 
   // reset options
@@ -94,7 +94,7 @@
   const showResult = async (text = null) => {
     if (text) { output.message = text; }
     output.reset = false;
-    await output.$nextTick();
+    await Vue.nextTick();
     output.height = output.$refs.body.offsetHeight + 'px';
     control.wait = dropArea.wait = false;
   };
@@ -106,6 +106,7 @@
     control.wait = dropArea.wait = true;
 
     dropReset();
+    await Vue.nextTick();
 
     if (!type.includes('image/')) { return showResult(imageError); }
 

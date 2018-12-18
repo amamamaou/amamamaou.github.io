@@ -11,10 +11,10 @@
     output.message = output.image = '';
   };
 
-  const onLoad = (elem, url = null) => new Promise((resolve, reject) => {
+  const onLoad = (elem, src = null) => new Promise((resolve, reject) => {
     elem.onload = () => resolve(true);
     elem.onerror = reject;
-    if (url) { elem.src = url; }
+    if (src) { elem.src = src; }
   }).catch(() => false);
 
   // instance
@@ -31,10 +31,7 @@
     }),
     dropArea = new Vue({
       el: '.dropContent',
-      data: {
-        over: false,
-        wait: false,
-      },
+      data: {over: false, wait: false},
       methods: {
         dragover(ev) {
           if (!dropArea.wait) {
@@ -68,7 +65,7 @@
   const showResult = async (text = null) => {
     if (text) { output.message = text; }
     output.reset = false;
-    await output.$nextTick();
+    await Vue.nextTick();
     output.height = output.$refs.body.offsetHeight + 'px';
     dropArea.wait = false;
   };
@@ -77,6 +74,7 @@
     dropArea.wait = true;
 
     dropReset();
+    await Vue.nextTick();
 
     if (!file.type.includes('image/')) { return showResult(imageError); }
     if (file.size > maxSize) { return showResult('ファイルサイズが3MBを超えています！'); }
@@ -122,7 +120,7 @@
       ratio = naturalWidth / (naturalHeight || 1),
       width, height;
 
-    output.fileName =  name.replace(/\.\w+$/, '.png');
+    output.fileName = name.replace(/\.\w+$/, '.png');
 
     if (naturalWidth === 0 || naturalHeight === 0) {
       document.body.appendChild(source);

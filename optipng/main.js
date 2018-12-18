@@ -18,11 +18,11 @@
   };
 
   // onload Promise
-  const onLoad = (image, url) => new Promise((resolve, reject) => {
-    image.onload = () => resolve(true);
-    image.onerror = reject;
-    image.src = url;
-  }).catch(() => false);
+  const onLoad = src => new Promise(resolve => {
+    const image = new Image;
+    image.onload = resolve;
+    image.src = src;
+  });
 
   // reset options
   const dropReset = () => {
@@ -86,7 +86,7 @@
         size: '',
       },
     }),
-    console =  new Vue({
+    console = new Vue({
       el: '#console',
       data: {console: 'Please wait...'},
     });
@@ -94,18 +94,19 @@
   const showResult = async (text = null) => {
     if (text) { output.message = text; }
     output.reset = false;
-    await output.$nextTick();
+    await Vue.nextTick();
     output.height = output.$refs.body.offsetHeight + 'px';
     control.wait = dropArea.wait = false;
   };
 
   // read File object
-  const readFile = file => {
+  const readFile = async file => {
     const {type, size, name} = file;
 
     control.wait = dropArea.wait = true;
 
     dropReset();
+    await Vue.nextTick();
 
     if (type !== 'image/png') { return showResult('PNG形式の画像のみです'); }
 
@@ -123,7 +124,7 @@
   const drawImage = async blob => {
     const url = URL.createObjectURL(blob);
 
-    await onLoad(new Image, url);
+    await onLoad(url);
 
     output.image = url;
     output.size = filesize(blob.size);

@@ -3,10 +3,7 @@
   const
     dropArea = new Vue({
       el: '#dropArea',
-      data: {
-        over: false,
-        wait: false,
-      },
+      data: {over: false, wait: false},
       methods: {
         dragover(ev) {
           ev.dataTransfer.dropEffect = 'copy';
@@ -32,15 +29,13 @@
       },
     });
 
-  const
-    sub = ['K', 'M', 'G'],
-    filesize = bytes => {
-      const
-        exp = Math.log(bytes) / Math.log(1024) | 0,
-        size = bytes / 1024**exp,
-        unit = exp === 0 ? 'bytes' : sub[exp - 1] + 'B';
-      return (exp === 0 ? size : size.toFixed(2)) + ' ' + unit;
-    };
+  const filesize = bytes => {
+    const
+      exp = Math.log(bytes) / Math.log(1024) | 0,
+      size = bytes / 1024**exp,
+      unit = exp === 0 ? 'bytes' : 'KMG'[exp - 1] + 'B';
+    return (exp === 0 ? size : size.toFixed(2)) + ' ' + unit;
+  };
 
   const readFile = file => new Promise(resolve => {
     const reader = new FileReader;
@@ -56,10 +51,8 @@
 
     dropArea.wait = true;
 
-    const result = await readFile(file);
-
     output.fileInfo = `${file.name} (${filesize(file.size)})`;
-    output.result = result;
+    output.result = await readFile(file);
 
     dropArea.wait = false;
   };
