@@ -1,12 +1,11 @@
-/*! optipng main.js | v0.0.5 | MIT License */
+/*! optipng main.js | v0.0.6 | MIT License */
 {
   // Web Worker
   const worker = new Worker('worker.js?v0.0.3');
 
   const
-    mega = 1048576,       // 1MB
-    maxSize = mega * 10,  // 10MB
-    maxWH = 1600;
+    maxMB = 20,
+    maxByte = 1048576 * maxMB;
 
   // calc bytes
   const filesize = bytes => {
@@ -51,6 +50,7 @@
     dropArea = new Vue({
       el: '#dropArea',
       data: {
+        maxMB,
         over: false,
         wait: true,
         fileName: '',
@@ -110,7 +110,7 @@
 
     if (type !== 'image/png') { return showResult('PNG形式の画像のみです'); }
 
-    if (size > maxSize) { return showResult('画像サイズが10MBを超えています！'); }
+    if (size > maxByte) { return showResult(`画像サイズが ${maxMB}MB を超えています！`); }
 
     dropArea.fileName = name;
     dropArea.size = filesize(size);

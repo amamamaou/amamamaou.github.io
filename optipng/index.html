@@ -68,10 +68,10 @@
         @dragleave="over = false"
         @drop.prevent="readFile">
         <figure><img src="/images/icon_image.svg" alt="画像ファイル"></figure>
-        <p>
+        <p v-cloak>
           画像ファイルをここにドラッグ＆ドロップしてください<br>
           クリップボードの画像のペースト (Ctrl+V / ⌘V) や、クリックして画像ファイルを選択することもできます<br>
-          最大許容サイズは10MBまでです
+          最大許容サイズは {{ maxMB }}MB までです
         </p>
       </label>
       <input type="file" accept="image/png" id="fileInput" @change="change">
@@ -103,6 +103,6 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-<script src="main.js?v0.0.5"></script>
+<script src="main.js?v0.0.6"></script>
 </body>
 </html>
