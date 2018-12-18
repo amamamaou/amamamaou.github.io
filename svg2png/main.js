@@ -1,7 +1,8 @@
 /*! svg2png | v1.0.5 | MIT License */
 {
   const
-    maxSize = 20971520,  // 20MB
+    maxMB = 20,
+    maxByte = 1048576 * maxMB,
     imageError = 'ブラウザが対応していないフォーマットです。';
 
   const dropReset = () => {
@@ -77,7 +78,7 @@
     await Vue.nextTick();
 
     if (!file.type.includes('image/')) { return showResult(imageError); }
-    if (file.size > maxSize) { return showResult('ファイルサイズが3MBを超えています！'); }
+    if (file.size > maxByte) { return showResult(`ファイルサイズが ${maxMB}MB を超えています！`); }
 
     const reader = new FileReader;
     reader.readAsDataURL(file);
