@@ -12,11 +12,8 @@
   };
 
   // Blob to Uint8Array
-  const blob2array = blob => new Promise(resolve => {
-    const reader = new FileReader;
-    reader.onload = () => resolve(new Uint8Array(reader.result));
-    reader.readAsArrayBuffer(blob);
-  });
+  const blob2array = async blob =>
+    new Uint8Array(await new Response(blob).arrayBuffer());
 
   // dataURL to array
   const dataURL2array = url => {
