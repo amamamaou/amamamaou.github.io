@@ -1,11 +1,12 @@
-/*! twitter_image | v1.2.9 | MIT License */
+/*! twitter_image | v1.2.10 | MIT License */
 {
   // Web Worker
   const worker = new Worker('worker.js?v1.0.6');
 
   const
-    mega = 1048576,      // 1MB
-    maxSize = mega * 3,  // 3MB
+    mega = 1048576,  // 1MB
+    allowMB = 10,
+    opMaxMB = 5,
     maxWH = 1600,
     imageError = 'ブラウザが対応していない画像フォーマットです。';
 
@@ -13,7 +14,7 @@
   const filesize = bytes => {
     const
       exp = Math.log(bytes) / Math.log(1024) | 0,
-      size = bytes / 1024**exp,
+      size = bytes / 1024 ** exp,
       unit = exp === 0 ? 'bytes' : 'KM'[exp - 1] + 'B';
     return (exp === 0 ? size : size.toFixed(2)) + ' ' + unit;
   };
@@ -50,46 +51,43 @@
     output.message = output.image = output.fileName = '';
   };
 
-  // instance
-  const
-    control = new Vue({
-      el: '#control',
-      data: {scale: '1', optipng: false, wait: true},
-      methods: {dropReset},
-    }),
-    dropArea = new Vue({
-      el: '#dropArea',
-      data: {over: false, wait: true, process: null},
-      methods: {
-        dragover(ev) {
-          if (!this.wait) {
-            ev.dataTransfer.dropEffect = 'copy';
-            this.over = true;
-          }
-        },
-        readFile(ev) {
-          const file = ev.dataTransfer.files[0];
-          file && readFile(file);
-          this.over = false;
-        },
-        change(ev) {
-          const file = ev.target.files[0];
-          ev.target.value = '';
-          file && readFile(file);
-        },
+  // Vue instances
+  const control = new Vue({
+    el: '#control',
+    data: {scale: '1', optipng: false, wait: true},
+    methods: {dropReset},
+  });
+  const dropArea = new Vue({
+    el: '#dropArea',
+    data: {over: false, wait: true, process: null},
+    methods: {
+      dragover(ev) {
+        if (!this.wait) {
+          ev.dataTransfer.dropEffect = 'copy';
+          this.over = true;
+        }
       },
-    }),
-    output = new Vue({
-      el: '#output',
-      data: {
-        reset: true,
-        height: '0',
-        message: '',
-        image: '',
-        fileName: '',
-        size: '',
+      readFile(ev) {
+        this.over = false;
+        readFile(ev.dataTransfer.files[0]);
       },
-    });
+      change({target}) {
+        target.value = '';
+        readFile(target.files[0]);
+      },
+    },
+  });
+  const output = new Vue({
+    el: '#output',
+    data: {
+      reset: true,
+      height: '0',
+      message: '',
+      image: '',
+      fileName: '',
+      size: '',
+    },
+  });
 
   const showResult = async (text = null) => {
     if (text) { output.message = text; }
@@ -101,6 +99,8 @@
 
   // read File object
   const readFile = async file => {
+    if (!file) { return; }
+
     const {type, size, name} = file;
 
     control.wait = dropArea.wait = true;
@@ -110,9 +110,7 @@
 
     if (!type.includes('image/')) { return showResult(imageError); }
 
-    if (size > mega * 10) {
-      return showResult('画像サイズが10MBを超えています！');
-    }
+    if (size > mega * allowMB) { return showResult(`画像サイズが ${allowMB}MB を超えています！`); }
 
     const
       image = new Image,
@@ -136,7 +134,9 @@
     output.image = url;
     output.size = filesize(blob.size);
 
-    if (blob.size > maxSize) { text = '3MBを超えています。Twitterにアップロードできません。'; }
+    if (blob.size > mega * 3) {
+      text = '3MB を超えています。Twitterにアップロードできません。';
+    }
 
     showResult(text);
   };
@@ -146,7 +146,7 @@
     const
       canvas = document.createElement('canvas'),
       ctx = canvas.getContext('2d'),
-      scale = parseInt(control.scale, 10) || 1;
+      scale = control.scale | 0 || 1;
 
     let {naturalWidth: width = 0, naturalHeight: height = 0} = source;
 
@@ -176,8 +176,8 @@
     if (origBlob) {
       const {size} = origBlob;
 
-      if (size > mega * 5) {
-        return showResult('圧縮前の画像サイズが5MB以上なので処理を中断しました。');
+      if (size > mega * opMaxMB) {
+        return showResult(`最適化前の画像サイズが ${opMaxMB}MB 以上なので処理を中断しました。`);
       }
 
       if (size > maxSize) { control.optipng = true; }

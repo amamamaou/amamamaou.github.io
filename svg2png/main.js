@@ -1,4 +1,4 @@
-/*! svg2png | v1.0.5 | MIT License */
+/*! svg2png | v1.0.6 | MIT License */
 {
   const
     maxMB = 20,
@@ -18,50 +18,47 @@
     if (src) { elem.src = src; }
   }).catch(() => false);
 
-  // instance
-  const
-    scaleBlock = new Vue({
-      el: '.scaleBlock',
-      data: {
-        type: 'relative',
-        scale: '1',
-        width: '',
-        height: '',
+  // Vue instances
+  const scaleBlock = new Vue({
+    el: '.scaleBlock',
+    data: {
+      type: 'relative',
+      scale: '1',
+      width: '',
+      height: '',
+    },
+    methods: {dropReset},
+  });
+  const dropArea = new Vue({
+    el: '.dropContent',
+    data: {over: false, wait: false},
+    methods: {
+      dragover(ev) {
+        if (!dropArea.wait) {
+          ev.dataTransfer.dropEffect = 'copy';
+          this.over = true;
+        }
       },
-      methods: {dropReset},
-    }),
-    dropArea = new Vue({
-      el: '.dropContent',
-      data: {over: false, wait: false},
-      methods: {
-        dragover(ev) {
-          if (!dropArea.wait) {
-            ev.dataTransfer.dropEffect = 'copy';
-            this.over = true;
-          }
-        },
-        readFile(ev) {
-          const file = ev.dataTransfer.files[0];
-          file && readFile(file);
-          this.over = false;
-        },
-        change(ev) {
-          const file = ev.target.files[0];
-          ev.target.value = '';
-          file && readFile(file);
-        },
+      readFile(ev) {
+        this.over = false;
+        readFile(ev.dataTransfer.files[0]);
       },
-    }),
-    output = new Vue({
-      el: '#output',
-      data: {
-        reset: true,
-        height: '0',
-        message: '',
-        image: '',
-        fileName: '',
+      change({target}) {
+        target.value = '';
+        readFile(target.files[0]);
       },
-    });
+    },
+  });
+  const output = new Vue({
+    el: '#output',
+    data: {
+      reset: true,
+      height: '0',
+      message: '',
+      image: '',
+      fileName: '',
+    },
+  });
 
   const showResult = async (text = null) => {
     if (text) { output.message = text; }
@@ -131,7 +128,9 @@
       source.remove();
     }
 
-    if (naturalWidth === 0 || naturalHeight === 0) { return showResult(imageError); }
+    if (naturalWidth === 0 || naturalHeight === 0) {
+      return showResult(imageError);
+    }
 
     if (scaleBlock.type === 'relative') {
       width = naturalWidth * scale;

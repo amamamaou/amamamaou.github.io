@@ -1,4 +1,4 @@
-/*! optipng main.js | v0.0.6 | MIT License */
+/*! optipng main.js | v0.0.7 | MIT License */
 {
   // Web Worker
   const worker = new Worker('worker.js?v0.0.3');
@@ -11,7 +11,7 @@
   const filesize = bytes => {
     const
       exp = Math.log(bytes) / Math.log(1024) | 0,
-      size = bytes / 1024**exp,
+      size = bytes / 1024 ** exp,
       unit = exp === 0 ? 'bytes' : 'KM'[exp - 1] + 'B';
     return (exp === 0 ? size : size.toFixed(2)) + ' ' + unit;
   };
@@ -28,11 +28,11 @@
     URL.revokeObjectURL(output.image);
 
     if (control.wait) {
-      console.console = '';
+      footer.console = '';
     } else {
       control.level = '2';
       dropArea.fileName = dropArea.size = '';
-      console.console = 'Ready';
+      footer.console = 'Ready';
     }
 
     output.reset = true;
@@ -40,56 +40,53 @@
     output.message = output.image = output.fileName = '';
   };
 
-  // instance
-  const
-    control = new Vue({
-      el: '#control',
-      data: {level: '2', wait: true},
-      methods: {dropReset},
-    }),
-    dropArea = new Vue({
-      el: '#dropArea',
-      data: {
-        maxMB,
-        over: false,
-        wait: true,
-        fileName: '',
-        size: '',
+  // Vue instances
+  const control = new Vue({
+    el: '#control',
+    data: {level: '2', wait: true},
+    methods: {dropReset},
+  });
+  const dropArea = new Vue({
+    el: '#dropArea',
+    data: {
+      maxMB,
+      over: false,
+      wait: true,
+      fileName: '',
+      size: '',
+    },
+    methods: {
+      dragover(ev) {
+        if (!this.wait) {
+          ev.dataTransfer.dropEffect = 'copy';
+          this.over = true;
+        }
       },
-      methods: {
-        dragover(ev) {
-          if (!this.wait) {
-            ev.dataTransfer.dropEffect = 'copy';
-            this.over = true;
-          }
-        },
-        readFile(ev) {
-          const file = ev.dataTransfer.files[0];
-          file && readFile(file);
-          this.over = false;
-        },
-        change(ev) {
-          const file = ev.target.files[0];
-          ev.target.value = '';
-          file && readFile(file);
-        },
+      readFile(ev) {
+        this.over = false;
+        readFile(ev.dataTransfer.files[0]);
       },
-    }),
-    output = new Vue({
-      el: '#output',
-      data: {
-        reset: true,
-        height: '0',
-        message: '',
-        image: '',
-        fileName: '',
-        size: '',
+      change({target}) {
+        target.value = '';
+        readFile(target.files[0]);
       },
-    }),
-    console = new Vue({
-      el: '#console',
-      data: {console: 'Please wait...'},
-    });
+    },
+  });
+  const output = new Vue({
+    el: '#output',
+    data: {
+      reset: true,
+      height: '0',
+      message: '',
+      image: '',
+      fileName: '',
+      size: '',
+    },
+  });
+  const footer = new Vue({
+    el: '#footer',
+    data: {console: 'Please wait...'},
+  });
 
   const showResult = async (text = null) => {
     if (text) { output.message = text; }
@@ -101,6 +98,8 @@
 
   // read File object
   const readFile = async file => {
+    if (!file) { return; }
+
     const {type, size, name} = file;
 
     control.wait = dropArea.wait = true;
@@ -116,7 +115,7 @@
     dropArea.size = filesize(size);
 
     output.fileName = name ? name.replace(/\.\w+$/, '_optimized.png') : 'clipbord.png';
-    console.console = '';
+    footer.console = '';
 
     worker.postMessage({file, level: control.level});
   };
@@ -138,10 +137,10 @@
     switch (type) {
       case 'ready':
         control.wait = dropArea.wait = false;
-        console.console = 'Web Worker is ready';
+        footer.console = 'Web Worker is ready';
         break;
       case 'console':
-        if (data != null) { console.console += data + '\n'; }
+        if (data != null) { footer.console += data + '\n'; }
         break;
       case 'done':
         drawImage(data);
