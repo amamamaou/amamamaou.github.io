@@ -34,10 +34,8 @@
     data: {over: false, wait: false},
     methods: {
       dragover(ev) {
-        if (!dropArea.wait) {
-          ev.dataTransfer.dropEffect = 'copy';
-          this.over = true;
-        }
+        ev.dataTransfer.dropEffect = 'copy';
+        this.over = true;
       },
       readFile(ev) {
         this.over = false;
