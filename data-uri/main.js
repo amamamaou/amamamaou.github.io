@@ -14,8 +14,8 @@
         convert(ev.dataTransfer.files[0]);
       },
       change({target}) {
+        convert(target.files[0]);
         target.value = '';
-        file && convert(target.files[0]);
       },
     },
   });

@@ -67,8 +67,8 @@
         readFile(ev.dataTransfer.files[0]);
       },
       change({target}) {
-        target.value = '';
         readFile(target.files[0]);
+        target.value = '';
       },
     },
   });
