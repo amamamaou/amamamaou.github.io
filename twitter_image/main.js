@@ -180,7 +180,7 @@
         return showResult(`最適化前の画像サイズが ${opMaxMB}MB 以上なので処理を中断しました。`);
       }
 
-      if (size > maxSize) { control.optipng = true; }
+      if (size > mega * 3) { control.optipng = true; }
     } else {
       dataURL = canvas.toDataURL();
     }
