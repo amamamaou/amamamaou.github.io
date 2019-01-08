@@ -1,4 +1,4 @@
-/*! optipng main.js | v0.0.7 | MIT License */
+/*! optipng main.js | v0.0.8 | MIT License */
 {
   // Web Worker
   const worker = new Worker('worker.js?v0.0.3');
@@ -112,7 +112,7 @@
     dropArea.fileName = name;
     dropArea.size = filesize(size);
 
-    output.fileName = name ? name.replace(/\.\w+$/, '_optimized.png') : 'clipbord.png';
+    output.fileName = name || 'clipbord.png';
     footer.console = '';
 
     worker.postMessage({file, level: control.level});
