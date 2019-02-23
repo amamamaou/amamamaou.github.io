@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Convert to JPEG</title>
+<meta name="description" content="画像をJPEGに変換します。処理の関係上Chromeのみ対応です。">
+<meta name="author" content="幸乃ととめ">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="/css/main.css?2018121317" rel="stylesheet">
+<link href="/css/convert2jpeg.css?20190224" rel="stylesheet">
+</head>
+<body>
+<main>
+  <aside class="topicPath">
+    <ol>
+      <li><a href="/">ものおき</a></li>
+      <li>Convert to JPEG</li>
+    </ol>
+  </aside>
+
+  <h1>Convert to JPEG</h1>
+  <p class="description">画像をJPEGに変換します。処理の関係上Chromeのみ対応です。</p>
+
+  <section>
+    <p>複数の画像を変換する場合、画質の設定は変換開始時の値が適用されます。<br>
+    Chromeなど <code>OffscreenCanvas</code> に対応しているブラウザのみです。</p>
+
+    <div id="control" class="control">
+      <div class="options">
+        <p class="heading">画質：<output for="qualityRange" v-cloak>{{ quality }}%</output></p>
+        <input type="range"
+          min="0" max="100" step="1" value="90"
+          id="qualityRange"
+          v-model="quality">
+      </div>
+      <div class="button" :class="{wait}">
+        <button @click="clear">Clear</button>
+      </div>
+    </div>
+
+    <div id="dropArea" class="dropContent">
+      <label for="fileInput"
+        :class="{over}"
+        @dragover.prevent="dragover"
+        @dragleave="over = false"
+        @drop.prevent="readFile">
+        <figure><img src="/images/icon_image.svg" alt="画像ファイル"></figure>
+        <p>
+          画像ファイルをここにドラッグ＆ドロップしてください<br>
+          複数の画像をまとめてドロップできます<br>
+          クリックして画像ファイルを複数選択することもできます
+        </p>
+      </label>
+      <input type="file" accept="image/*" id="fileInput" @change="change" multiple>
+    </div>
+
+    <div id="output" class="outputContent">
+      <ul v-if="progress || completed.length > 0 || standby.length > 0" v-cloak>
+        <li v-for="item in completed" :class="{progress: item.progress}">
+          <a :href="item.src" :download="item.name">
+            <img :src="item.src" :alt="item.name">
+          </a>
+        </li>
+        <li v-if="progress" class="progress">
+          <img :src="progress.src" :alt="progress.name">
+        </li>
+        <li v-for="item in standby" class="standby">
+          <img :src="item.src" :alt="item.name">
+        </li>
+      </ul>
+    </div>
+  </section>
+</main>
+<footer>
+  <p>&copy; 2019 @amamamaou</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="main.js?0.0.3"></script>
+</body>
+</html>
