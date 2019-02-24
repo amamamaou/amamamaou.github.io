@@ -104,7 +104,6 @@
       output.items.push({
         index, file, src,
         name: file.name,
-        size: filesize(file.size),
         status: 'standby',
       });
 

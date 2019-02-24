@@ -60,7 +60,6 @@
   }
 
   li {
-    overflow: hidden;
     position: relative;
     width: calc(25% - 20px);
     height: 140px;
@@ -69,6 +68,7 @@
     box-sizing: border-box;
 
     &.standby, &.progress {
+      overflow: hidden;
       pointer-events: none;
 
       &::before, &::after {
@@ -107,10 +107,59 @@
       animation: loading 1s infinite linear;
     }
 
+    .tooltip {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1;
+      transform: translate3d(0, -95%, 0) scale(.7);
+      background: rgba(#000, .75);
+      border-radius: 4px;
+      padding: 8px 10px;
+      color: #fff;
+      font-size: 1.5rem;
+      text-align: center;
+      opacity: 0;
+      transition: all .15s;
+      pointer-events: none;
+
+      &::after {
+        display: block;
+        position: absolute;
+        left: 0;
+        right: 0;
+        width: 0;
+        bottom: -10px;
+        height: 0;
+        margin: 0 auto;
+        border: {
+          top: 10px solid rgba(#000, .75);
+          left: 6px solid rgba(#000, 0);
+          right: 6px solid rgba(#000, 0);
+        }
+        content: "";
+      }
+
+      .fileName {
+        display: block;
+        margin-bottom: 4px;
+        line-height: 1.15;
+      }
+    }
+
     a {
       display: block;
+      position: relative;
       width: 100%;
       height: 100%;
+      border-radius: 8px;
+
+      &:hover .tooltip {
+        opacity: 1;
+        transform: translate3d(0, calc(-100% - 12px), 0) scale(1);
+      }
     }
 
     img {
@@ -118,6 +167,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      border-radius: 8px;
     }
   }
 }

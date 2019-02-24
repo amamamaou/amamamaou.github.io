@@ -56,8 +56,14 @@
     <div id="output" class="outputContent">
       <ul v-if="items.length > 0" v-cloak>
         <li v-for="item in items" :class="item.status">
-          <a v-if="item.status === 'completed'" :href="item.src" :download="item.name">
+          <a v-if="item.status === 'completed'"
+            :href="item.src"
+            :download="item.name">
             <img :src="item.src" :alt="item.name">
+            <span class="tooltip">
+              <span class="fileName">{{ item.name }}</span>
+              <span>{{ item.size }}</small>
+            </span>
           </a>
           <img v-else :src="item.src" :alt="item.name">
         </li>
