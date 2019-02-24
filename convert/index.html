@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>Convert to JPEG</title>
-<meta name="description" content="画像をJPEGに変換します。処理の関係上Chromeのみ対応です。">
+<meta name="description" content="画像をJPEGに変換します。">
 <meta name="author" content="幸乃ととめ">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link href="/css/main.css?2018121317" rel="stylesheet">
@@ -19,11 +19,11 @@
   </aside>
 
   <h1>Convert to JPEG</h1>
-  <p class="description">画像をJPEGに変換します。処理の関係上Chromeのみ対応です。</p>
+  <p class="description">画像をJPEGに変換します。</p>
 
   <section>
     <p>複数の画像を変換する場合、画質の設定は変換開始時の値が適用されます。<br>
-    Chromeなど <code>OffscreenCanvas</code> に対応しているブラウザのみです。</p>
+    Firefoxの場合は大きい画像でブラウザが一時的に固まる可能性があります。Edgeには対応していません。</p>
 
     <div id="control" class="control">
       <div class="options">
@@ -76,6 +76,6 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-<script src="main.js?0.0.3"></script>
+<script src="main.js?0.1.0"></script>
 </body>
 </html>

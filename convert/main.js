@@ -1,7 +1,7 @@
-/*! Convert to JPEG | v0.0.3 | MIT License */
+/*! Convert to JPEG | v0.1.0 | MIT License */
 {
   // Web Worker
-  const worker = new Worker('worker.js');
+  const worker = new Worker('worker.js?v0.0.1');
 
   const
     mega = 1048576,  // 1MB
@@ -15,24 +15,6 @@
       unit = exp === 0 ? 'bytes' : 'KM'[exp - 1] + 'B';
     return (exp === 0 ? size : size.toFixed(2)) + ' ' + unit;
   };
-
-  // canvas to blob
-  const canvas2blob = async canvas => {
-    let blob = null;
-    if (canvas.toBlob) {
-      blob = await new Promise(resolve => canvas.toBlob(resolve));
-    } else if (canvas.msToBlob) {
-      blob = canvas.msToBlob();
-    }
-    return blob;
-  };
-
-  // onload Promise
-  const onLoad = (image, src) => new Promise((resolve, reject) => {
-    image.onload = () => resolve(true);
-    image.onerror = reject;
-    image.src = src;
-  }).catch(() => false);
 
   // Vue instances
   const dropArea = new Vue({
@@ -79,16 +61,18 @@
     },
   });
 
+  // load image
+  const loadImage = src => new Promise(resolve => {
+    const image = new Image;
+    image.onload = () => resolve(image);
+    image.src = src;
+  });
+
+  // data-url
   const blob2dataURL = blob => new Promise(resolve => {
     const reader = new FileReader;
     reader.onload = () => resolve(reader.result);
     reader.readAsDataURL(blob);
-  });
-
-  const getImageData = blob => new Promise(async resolve => {
-    const image = new Image;
-    image.src = await blob2dataURL(blob);
-    image.onload = () => resolve(image);
   });
 
   // read File object
@@ -104,7 +88,9 @@
         continue;
       }
 
-      const {src, width, height} = await getImageData(file);
+      const
+        src = await blob2dataURL(file),
+        {width, height} = await loadImage(src);
 
       output.standby.push({
         file, src, width, height,
@@ -132,23 +118,40 @@
 
     if (typeof OffscreenCanvas !== 'undefined') {
       worker.postMessage({item, quality: control.quality});
+    } else {
+      convertImageSingleThread(item, control.quality);
     }
   };
 
-  const complete = ev => {
+  const convertImageSingleThread = async (item, quality) => {
+    const
+      canvas = document.createElement('canvas'),
+      ctx = canvas.getContext('2d'),
+      bitmap = await createImageBitmap(item.file);
+
+    canvas.width = item.width;
+    canvas.height = item.height;
+
+    ctx.drawImage(bitmap, 0, 0);
+    canvas.toBlob(blob => complete({
+      data: {blob, name: item.name.replace(/\.\w+$/, '.jpg')},
+    }));
+  };
+
+  const complete = async ev => {
     const
       {blob, name} = ev.data,
-      image = new Image;
+      src = URL.createObjectURL(blob);
 
-    image.src = URL.createObjectURL(blob);
-    image.onload = () => {
-      output.completed.push({
-        src: image.src,
-        name: name.replace(/\.\w+$/, '.jpg'),
-        size: filesize(blob.size),
-      });
-      nextImage();
-    };
+    await loadImage(src);
+
+    output.completed.push({
+      src,
+      name: name.replace(/\.\w+$/, '.jpg'),
+      size: filesize(blob.size),
+    });
+
+    nextImage();
   };
 
   // Web Worker
