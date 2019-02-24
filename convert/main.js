@@ -1,11 +1,12 @@
-/*! Convert to JPEG | v0.1.0 | MIT License */
+/*! Convert to JPEG | v0.3.0 | MIT License */
 {
   // Web Worker
-  const worker = new Worker('worker.js?v0.0.1');
+  const worker = new Worker('worker.js?v0.0.2');
 
   const
     mega = 1048576,  // 1MB
-    maxMB = 20 * mega;
+    maxMB = 20 * mega,
+    support = typeof OffscreenCanvas !== 'undefined';
 
   // calc bytes
   const filesize = bytes => {
@@ -37,7 +38,7 @@
   });
   const output = new Vue({
     el: '#output',
-    data: {completed: [], standby: [], progress: null},
+    data: {items: []},
   });
   const control = new Vue({
     el: '#control',
@@ -50,13 +51,10 @@
     },
     methods: {
       clear() {
-        for (const {src} of output.completed) {
-          URL.revokeObjectURL(src);
+        for (const {status, src} of output.items) {
+          status === 'completed' && URL.revokeObjectURL(src);
         }
-
-        output.completed = [];
-        output.standby = [];
-        output.progress = null;
+        output.items = [];
       },
     },
   });
@@ -64,7 +62,7 @@
   // load image
   const loadImage = src => new Promise(resolve => {
     const image = new Image;
-    image.onload = () => resolve(image);
+    image.onload = resolve;
     image.src = src;
   });
 
@@ -75,12 +73,22 @@
     reader.readAsDataURL(blob);
   });
 
+  // canvas to blob
+  const toBlob = (source, quality) => new Promise(resolve => {
+    const canvas = document.createElement('canvas');
+    canvas.width = source.width;
+    canvas.height = source.height;
+    canvas.getContext('2d').drawImage(source, 0, 0);
+    canvas.toBlob(resolve, 'image/jpeg', quality);
+  });
+
   // read File object
   const addFiles = async files => {
     if (!files || files.length === 0) { return; }
 
     files = Array.from(files);
 
+    const indexList = [];
     let i = 0;
 
     for (const file of files) {
@@ -90,68 +98,62 @@
 
       const
         src = await blob2dataURL(file),
-        {width, height} = await loadImage(src);
+        index = output.items.length;
 
-      output.standby.push({
-        file, src, width, height,
+      output.items.push({
+        index, file, src,
         name: file.name,
         size: filesize(file.size),
+        status: 'standby',
       });
 
-      if (++i === 2 && !output.progress) { nextImage(); }
+      if (support) {
+        convertImage(index);
+      } else {
+        indexList.push(index);
+      }
     }
 
-    if (i === 1 && !output.progress) { nextImage(); }
+    if (!support) {
+      for (const index of indexList) { await convertImage(index); }
+    }
   };
 
-  const nextImage = () => {
-    const item = output.standby.shift();
+  const convertImage = async index => {
+    const item = Object.assign({}, output.items[index]);
 
-    if (!item) {
-      output.progress = null;
-      control.wait = false;
-      return;
-    }
+    item.status = 'progress';
 
-    output.progress = item;
-    control.wait = true;
+    output.items.splice(index, 1, item);
 
-    if (typeof OffscreenCanvas !== 'undefined') {
+    if (support) {
       worker.postMessage({item, quality: control.quality});
     } else {
-      convertImageSingleThread(item, control.quality);
+      await convertImageSingleThread(item, control.quality);
     }
   };
 
-  const convertImageSingleThread = async (item, quality) => {
+  const convertImageSingleThread = async ({index, file, name}, quality) => {
     const
-      canvas = document.createElement('canvas'),
-      ctx = canvas.getContext('2d'),
-      bitmap = await createImageBitmap(item.file);
+      bitmap = await createImageBitmap(file),
+      blob = await toBlob(bitmap, quality / 100);
 
-    canvas.width = item.width;
-    canvas.height = item.height;
-
-    ctx.drawImage(bitmap, 0, 0);
-    canvas.toBlob(blob => complete({
-      data: {blob, name: item.name.replace(/\.\w+$/, '.jpg')},
-    }));
+    await complete({data: {blob, index, name}});
   };
 
   const complete = async ev => {
     const
-      {blob, name} = ev.data,
+      {blob, name, index} = ev.data,
       src = URL.createObjectURL(blob);
 
     await loadImage(src);
 
-    output.completed.push({
+    output.items.splice(index, 1, {
       src,
       name: name.replace(/\.\w+$/, '.jpg'),
       size: filesize(blob.size),
+      status: 'completed',
     });
-
-    nextImage();
   };
 
   // Web Worker

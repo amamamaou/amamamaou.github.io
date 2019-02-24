@@ -1,11 +1,11 @@
-/*! worker.js | v0.0.1 | MIT License */
+/*! worker.js | v0.0.2 | MIT License */
 {
   const convertImage = async ev => {
     const
-      {item, quality} = ev.data,
-      canvas = new OffscreenCanvas(item.width, item.height),
-      ctx = canvas.getContext('2d'),
-      bitmap = await self.createImageBitmap(item.file);
+      {item: {index, file, name}, quality} = ev.data,
+      bitmap = await self.createImageBitmap(file),
+      canvas = new OffscreenCanvas(bitmap.width, bitmap.height),
+      ctx = canvas.getContext('2d');
 
     ctx.drawImage(bitmap, 0, 0);
 
@@ -14,7 +14,7 @@
       quality: quality / 100,
     });
 
-    self.postMessage({blob, name: item.name.replace(/\.\w+$/, '.jpg')});
+    self.postMessage({blob, index, name});
   };
 
   self.addEventListener('message', convertImage);
