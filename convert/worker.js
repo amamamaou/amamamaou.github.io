@@ -1,4 +1,4 @@
-/*! worker.js | v0.0.2 | MIT License */
+/*! worker.js | v1.0.0 | MIT License */
 {
   const convertImage = async ev => {
     const

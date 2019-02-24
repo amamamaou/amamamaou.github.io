@@ -22,8 +22,7 @@
   <p class="description">画像をJPEGに変換します。</p>
 
   <section>
-    <p>複数の画像を変換する場合、画質の設定は変換開始時の値が適用されます。<br>
-    Firefoxの場合は大きい画像でブラウザが一時的に固まる可能性があります。Edgeには対応していません。</p>
+    <p>複数の画像を変換する場合、画質の設定は変換開始時の値が適用されます。Edgeには対応していません。</p>
 
     <div id="control" class="control">
       <div class="options">
@@ -56,8 +55,8 @@
 
     <div id="output" class="outputContent">
       <ul v-if="items.length > 0" v-cloak>
-        <li v-for="item in items" :class="status">
-          <a v-if="status === 'completed'" :href="item.src" :download="item.name">
+        <li v-for="item in items" :class="item.status">
+          <a v-if="item.status === 'completed'" :href="item.src" :download="item.name">
             <img :src="item.src" :alt="item.name">
           </a>
           <img v-else :src="item.src" :alt="item.name">
@@ -71,6 +70,6 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-<script src="main.js?0.3.0"></script>
+<script src="main.js?1.0.0"></script>
 </body>
 </html>

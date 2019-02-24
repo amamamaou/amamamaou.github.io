@@ -1,7 +1,7 @@
-/*! Convert to JPEG | v0.3.0 | MIT License */
+/*! Convert to JPEG | v1.0.0 | MIT License */
 {
   // Web Worker
-  const worker = new Worker('worker.js?v0.0.2');
+  const worker = new Worker('worker.js?v1.0.0');
 
   const
     mega = 1048576,  // 1MB
@@ -86,6 +86,7 @@
   const addFiles = async files => {
     if (!files || files.length === 0) { return; }
 
+    control.wait = true;
     files = Array.from(files);
 
     const indexList = [];
@@ -154,6 +155,11 @@
       size: filesize(blob.size),
       status: 'completed',
     });
+
+    await output.$nextTick();
+
+    const completedElements = output.$el.querySelectorAll('.completed');
+    control.wait = completedElements.length < output.items.length;
   };
 
   // Web Worker
