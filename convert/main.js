@@ -1,4 +1,4 @@
-/*! Convert to JPEG | v1.0.0 | MIT License */
+/*! Convert to JPEG | v1.0.2 | MIT License */
 {
   // Web Worker
   const worker = new Worker('worker.js?v1.0.0');
@@ -6,6 +6,7 @@
   const
     mega = 1048576,  // 1MB
     maxMB = 20 * mega,
+    mime = /\/(?:bmp|gif|jpe?g|png)$/,
     support = typeof OffscreenCanvas !== 'undefined';
 
   // calc bytes
@@ -60,9 +61,10 @@
   });
 
   // load image
-  const loadImage = src => new Promise(resolve => {
+  const loadImage = src => new Promise((resolve, reject) => {
     const image = new Image;
     image.onload = resolve;
+    image.onerror = reject;
     image.src = src;
   });
 
@@ -93,7 +95,7 @@
     let i = 0;
 
     for (const file of files) {
-      if (!file.type.includes('image/') || file.size > maxMB) {
+      if (!mime.test(file.type) || file.size > maxMB) {
         continue;
       }
 
@@ -115,11 +117,11 @@
     }
 
     if (!support) {
-      for (const index of indexList) { await convertImage(index); }
+      for (const index of indexList) { convertImage(index); }
     }
   };
 
-  const convertImage = async index => {
+  const convertImage = index => {
     const item = Object.assign({}, output.items[index]);
 
     item.status = 'progress';
@@ -129,16 +131,15 @@
     if (support) {
       worker.postMessage({item, quality: control.quality});
     } else {
-      await convertImageSingleThread(item, control.quality);
+      convertImageSingleThread(item, control.quality);
     }
   };
 
-  const convertImageSingleThread = async ({index, file, name}, quality) => {
+  const convertImageSingleThread = async ({index, src, name}, quality) => {
     const
       bitmap = await createImageBitmap(file),
       blob = await toBlob(bitmap, quality / 100);
-
-    await complete({data: {blob, index, name}});
+    complete({data: {blob, index, name}});
   };
 
   const complete = async ev => {
@@ -157,8 +158,8 @@
 
     await output.$nextTick();
 
-    const completedElements = output.$el.querySelectorAll('.completed');
-    control.wait = completedElements.length < output.items.length;
+    const completed = output.$el.querySelectorAll('.completed');
+    control.wait = completed.length < output.items.length;
   };
 
   // Web Worker
