@@ -1,11 +1,11 @@
-/*! Convert to JPEG | v1.0.2 | MIT License */
+/*! Convert to JPEG | v1.0.5 | MIT License */
 {
   // Web Worker
   const worker = new Worker('worker.js?v1.0.0');
 
   const
-    mega = 1048576,  // 1MB
-    maxMB = 20 * mega,
+    maxMB = 20,
+    maxSize = maxMB * 1048576;
     mime = /\/(?:bmp|gif|jpe?g|png)$/,
     support = typeof OffscreenCanvas !== 'undefined';
 
@@ -21,7 +21,7 @@
   // Vue instances
   const dropArea = new Vue({
     el: '#dropArea',
-    data: {over: false},
+    data: {over: false, maxMB},
     methods: {
       dragover(ev) {
         ev.dataTransfer.dropEffect = 'copy';
@@ -95,7 +95,7 @@
     let i = 0;
 
     for (const file of files) {
-      if (!mime.test(file.type) || file.size > maxMB) {
+      if (!mime.test(file.type) || file.size > maxSize) {
         continue;
       }
 
@@ -161,6 +161,17 @@
     const completed = output.$el.querySelectorAll('.completed');
     control.wait = completed.length < output.items.length;
   };
+
+  // paste image on clipbord
+  document.addEventListener('paste', ev => {
+    if (ev.clipboardData) {
+      const {items} = ev.clipboardData;
+      if (items) {
+        const files = Array.from(items).map(item => item.getAsFile());
+        addFiles(files);
+      }
+    }
+  });
 
   // Web Worker
   worker.addEventListener('message', complete);
