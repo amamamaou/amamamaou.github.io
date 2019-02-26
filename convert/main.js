@@ -1,4 +1,4 @@
-/*! Convert to JPEG | v1.0.6 | MIT License */
+/*! Convert to JPEG | v1.0.7 | MIT License */
 {
   // Web Worker
   const worker = new Worker('worker.js?v1.0.0');
@@ -67,13 +67,6 @@
     image.src = src;
   });
 
-  // data-url
-  const blob2dataURL = blob => new Promise(resolve => {
-    const reader = new FileReader;
-    reader.onload = () => resolve(reader.result);
-    reader.readAsDataURL(blob);
-  });
-
   // canvas to blob
   const toBlob = (source, quality) => new Promise(resolve => {
     const canvas = document.createElement('canvas');
@@ -99,7 +92,7 @@
       }
 
       const
-        src = await blob2dataURL(file),
+        src = URL.createObjectURL(file),
         index = output.items.length;
 
       output.items.push({
@@ -120,12 +113,16 @@
     }
   };
 
-  const convertImage = index => {
+  const convertImage = async index => {
     const item = Object.assign({}, output.items[index]);
 
     item.status = 'progress';
 
     output.items.splice(index, 1, item);
+
+    await output.$nextTick();
+
+    URL.revokeObjectURL(item.src);
 
     if (support) {
       worker.postMessage({item, quality: control.quality});
