@@ -5,7 +5,7 @@
 
   const
     maxMB = 20,
-    maxSize = maxMB * 1048576;
+    maxSize = maxMB * 1048576,
     mime = /\/(?:bmp|gif|jpe?g|png)$/,
     support = typeof OffscreenCanvas !== 'undefined';
 
@@ -61,10 +61,9 @@
   });
 
   // load image
-  const loadImage = src => new Promise((resolve, reject) => {
+  const loadImage = src => new Promise(resolve => {
     const image = new Image;
     image.onload = resolve;
-    image.onerror = reject;
     image.src = src;
   });
 
@@ -135,7 +134,7 @@
     }
   };
 
-  const convertImageSingleThread = async ({index, src, name}, quality) => {
+  const convertImageSingleThread = async ({index, name}, quality) => {
     const
       bitmap = await createImageBitmap(file),
       blob = await toBlob(bitmap, quality / 100);
