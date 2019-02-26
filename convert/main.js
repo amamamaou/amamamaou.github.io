@@ -1,7 +1,7 @@
 /*! Convert to JPEG | v1.0.7 | MIT License */
 {
   // Web Worker
-  const worker = new Worker('worker.js?v1.0.0');
+  const worker = new Worker('worker.js?v1.0.1');
 
   const
     maxMB = 20,
@@ -53,7 +53,7 @@
     methods: {
       clear() {
         for (const {status, src} of output.items) {
-          status === 'completed' && URL.revokeObjectURL(src);
+          if (status === 'completed') { URL.revokeObjectURL(src); }
         }
         output.items = [];
       },
@@ -76,24 +76,54 @@
     canvas.toBlob(resolve, 'image/jpeg', quality);
   });
 
+  // check status
+  const checkStatus = async () => {
+    await output.$nextTick();
+    const completed = output.$el.querySelectorAll('.completed, .failed');
+    control.wait = completed.length < output.items.length;
+  };
+
   // read File object
-  const addFiles = files => {
+  const addFiles = async files => {
     if (!files || files.length === 0) { return; }
 
     control.wait = true;
     files = Array.from(files);
 
-    const indexList = [];
+    const
+      indexList = [],
+      {items} = output;
 
     for (const file of files) {
-      if (!file || !mime.test(file.type) || file.size > maxSize) {
+      if (!mime.test(file.type)) {
+        items.push({
+          src: null,
+          status: 'failed',
+          reason: '対象外のファイルです',
+          name: file.name,
+        });
         continue;
       }
 
-      const index = output.items.length;
+      const size = filesize(file.size);
 
-      output.items.push({
-        index, file,
+      if (file.size > maxSize) {
+        const src = URL.createObjectURL(file);
+        items.push({
+          src,
+          status: 'failed',
+          reason: `${maxMB}MB を超えているため最適化は行われませんでした`,
+          name: `${file.name} (${size})`,
+        });
+        await output.$nextTick();
+        URL.revokeObjectURL(src);
+        continue;
+      }
+
+      const index = items.length;
+
+      items.push({
+        index, file, size,
         src: URL.createObjectURL(file),
         name: file.name,
         status: 'standby',
@@ -105,6 +135,8 @@
         indexList.push(index);
       }
     }
+
+    if (indexList.length === 0) { checkStatus(); }
 
     if (!support) {
       for (const index of indexList) { convertImage(index); }
@@ -125,20 +157,21 @@
     if (support) {
       worker.postMessage({item, quality: control.quality});
     } else {
-      convertImageSingleThread(item, control.quality);
+      doCconvert(item, control.quality);
     }
   };
 
-  const convertImageSingleThread = async ({index, name}, quality) => {
+  const doCconvert = async ({index, file}, quality) => {
     const
       bitmap = await createImageBitmap(file),
       blob = await toBlob(bitmap, quality / 100);
-    complete({data: {blob, index, name}});
+    complete({data: {blob, index}});
   };
 
   const complete = async ev => {
     const
-      {blob, name, index} = ev.data,
+      {blob, index} = ev.data,
+      {name, size} = output.items[index],
       src = URL.createObjectURL(blob);
 
     await loadImage(src);
@@ -147,13 +180,11 @@
       src,
       name: name.replace(/\.\w+$/, '.jpg'),
       size: filesize(blob.size),
+      orig: size,
       status: 'completed',
     });
 
-    await output.$nextTick();
-
-    const completed = output.$el.querySelectorAll('.completed');
-    control.wait = completed.length < output.items.length;
+    checkStatus();
   };
 
   // paste image on clipbord
@@ -163,7 +194,7 @@
       if (items) {
         const files = [];
         for (const item of Array.from(items)) {
-          mime.test(item.type) && files.push(item.getAsFile());
+          if (mime.test(item.type)) { files.push(item.getAsFile()); }
         }
         addFiles(files);
       }

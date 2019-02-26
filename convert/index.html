@@ -7,7 +7,7 @@
 <meta name="author" content="幸乃ととめ">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link href="/css/main.css?2018121317" rel="stylesheet">
-<link href="/css/convert2jpeg.css?20190224" rel="stylesheet">
+<link href="/css/convert2jpeg.css?20190226" rel="stylesheet">
 </head>
 <body>
 <main>
@@ -62,14 +62,21 @@
         <li v-for="item in items" :class="item.status">
           <a v-if="item.status === 'completed'"
             :href="item.src"
-            :download="item.name">
+            :download="item.name"
+            class="itemBody">
             <img :src="item.src" :alt="item.name">
             <span class="tooltip">
-              <span class="fileName">{{ item.name }}</span>
-              <span>{{ item.size }}</small>
+              <span class="mainText">{{ item.name }}</span>
+              <span>{{ item.orig }} → {{ item.size }}</span>
             </span>
           </a>
-          <img v-else :src="item.src" :alt="item.name">
+          <div v-else class="itemBody">
+            <img v-if="item.src" :src="item.src" :alt="item.name">
+            <span v-if="item.status === 'failed'" class="tooltip">
+              <span class="mainText">{{ item.reason }}</span>
+              <span>{{ item.name }}</span>
+            </span>
+          </div>
         </li>
       </ul>
     </div>

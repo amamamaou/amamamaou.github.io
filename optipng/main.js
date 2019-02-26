@@ -1,7 +1,7 @@
-/*! optipng main.js | v1.5.0 | MIT License */
+/*! optipng main.js | v1.5.2 | MIT License */
 {
   // Web Worker
-  const worker = new Worker('worker.js?v1.0.0');
+  const worker = new Worker('worker.js?v1.0.2');
 
   const
     maxMB = 20,
@@ -63,30 +63,65 @@
     image.src = src;
   });
 
+  // check status
+  const checkStatus = async () => {
+    await output.$nextTick();
+    const completed = output.$el.querySelectorAll('.completed, .failed');
+    control.wait = completed.length < output.items.length;
+  };
+
   // read File object
   const addFiles = async files => {
     if (!files || files.length === 0) { return; }
+
+    const {items} = output;
 
     control.wait = true;
     files = Array.from(files);
 
     for (const file of files) {
-      if (!file || file.type !== 'image/png' || file.size > maxSize) {
+      if (file.type !== 'image/png') {
+        items.push({
+          src: null,
+          status: 'failed',
+          reason: '対象外のファイルです',
+          name: file.name,
+        });
         continue;
       }
 
-      const
-        src = URL.createObjectURL(file),
-        index = output.items.length;
+      if (file.size > maxSize) {
+        const
+          src = URL.createObjectURL(file),
+          size = filesize(file.size);
 
-      output.items.push({
-        index, file, src,
+        items.push({
+          src,
+          status: 'failed',
+          reason: `${maxMB}MB を超えているため最適化は行われませんでした`,
+          name: `${file.name} (${size})`,
+        });
+
+        await output.$nextTick();
+        URL.revokeObjectURL(src);
+
+        continue;
+      }
+
+      const index = items.length;
+
+      items.push({
+        index, file,
+        src: URL.createObjectURL(file),
         name: file.name,
+        size: file.size,
         status: 'standby',
       });
 
       otimizeImage(index);
     }
+
+    checkStatus();
   };
 
   const otimizeImage = async index => {
@@ -104,7 +139,8 @@
 
   const complete = async data => {
     const
-      {blob, name, index} = data,
+      {blob, index} = data,
+      {name, size} = output.items[index],
       src = URL.createObjectURL(blob);
 
     await loadImage(src);
@@ -112,13 +148,12 @@
     output.items.splice(index, 1, {
       src, name,
       size: filesize(blob.size),
+      orig: filesize(size),
+      decrease: (100 - blob.size / size * 100).toFixed(2),
       status: 'completed',
     });
 
-    await output.$nextTick();
-
-    const completed = output.$el.querySelectorAll('.completed');
-    control.wait = completed.length < output.items.length;
+    checkStatus();
   };
 
   // paste image on clipbord
