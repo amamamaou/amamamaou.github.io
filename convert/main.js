@@ -95,7 +95,7 @@
     let i = 0;
 
     for (const file of files) {
-      if (!mime.test(file.type) || file.size > maxSize) {
+      if (!file || !mime.test(file.type) || file.size > maxSize) {
         continue;
       }
 
