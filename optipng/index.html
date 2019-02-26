@@ -48,7 +48,7 @@
     <p>0 はメタ情報の最適化のみを行います。通常は 1 ～ 5 で指定してください。最適なレベルは 2 です。<br>
     レベルを高くしても画像によっては結果が変わらない場合があります。</p>
 
-    <div id="control" class="control" :class="{wait}">
+    <div id="control" class="control">
       <div class="options">
         <p class="heading">最適化レベル：<output for="levelRange" v-cloak>{{ level }}</output></p>
         <input type="range"
@@ -56,8 +56,8 @@
           id="levelRange"
           v-model="level">
       </div>
-      <div class="button">
-        <button @click="dropReset">Reset</button>
+      <div class="button" :class="{wait}">
+        <button @click="clear">Clear</button>
       </div>
     </div>
 
@@ -69,32 +69,33 @@
         @drop.prevent="readFile">
         <figure><img src="/images/icon_image.svg" alt="画像ファイル"></figure>
         <p v-cloak>
-          画像ファイルをここにドラッグ＆ドロップしてください<br>
-          クリップボードの画像のペースト (Ctrl+V / ⌘V) や、クリックして画像ファイルを選択することもできます<br>
-          最大許容サイズは {{ maxMB }}MB までです
+          複数の画像ファイルをここにドラッグ＆ドロップしてください<br>
+          クリップボードの画像のペースト (Ctrl+V / ⌘V) や、クリックして画像ファイルを複数選択もできます<br>
+          ひとつの画像の最大許容サイズは {{ maxMB }}MB までです
         </p>
       </label>
-      <input type="file" accept="image/png" id="fileInput" @change="change">
-      <div class="fileInfo" v-if="fileName" v-cloak>Input image: <b>{{ fileName }} ({{ size }})</b></div>
+      <input type="file" accept="image/png" id="fileInput" @change="change" multiple>
     </div>
 
-    <div id="output" class="outputContent" :class="{reset}" :style="{height}">
-      <div class="innerBody" ref="body">
-        <p class="message" v-if="message">{{ message }}</p>
-        <div class="imgContent" v-if="image">
-          <div class="dlBtn">
-            <a :href="image" :download="fileName">Download ({{ size }})</a>
-          </div>
-          <div class="outputImage"><img alt="output image" :src="image"></div>
-        </div>
-      </div>
+    <div id="output" class="outputContent">
+      <ul v-if="items.length > 0" v-cloak>
+        <li v-for="item in items" :class="item.status">
+          <a v-if="item.status === 'completed'"
+            :href="item.src"
+            :download="item.name">
+            <img :src="item.src" :alt="item.name">
+            <span class="tooltip">
+              <span class="fileName">{{ item.name }}</span>
+              <span>{{ item.size }}</small>
+            </span>
+          </a>
+          <img v-else :src="item.src" :alt="item.name">
+        </li>
+      </ul>
     </div>
   </section>
 
-  <aside id="footer" class="consoleBody">
-    <h6>Console</h6>
-    <pre class="console" v-cloak>{{ console }}</pre>
-
+  <aside class="asideFooter">
     <p>PNGの最適化処理には <a href="https://github.com/LI-NA/optipng.js" target="_blank">Optipng.js</a> を使用しています。</p>
   </aside>
 </main>

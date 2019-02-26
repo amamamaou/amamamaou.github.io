@@ -1,11 +1,11 @@
-/*! optipng main.js | v0.0.8 | MIT License */
+/*! optipng main.js | v1.5.0 | MIT License */
 {
   // Web Worker
-  const worker = new Worker('worker.js?v0.0.3');
+  const worker = new Worker('worker.js?v1.0.0');
 
   const
     maxMB = 20,
-    maxByte = 1048576 * maxMB;
+    maxSize = maxMB * 1048576;
 
   // calc bytes
   const filesize = bytes => {
@@ -16,35 +16,18 @@
     return (exp === 0 ? size : size.toFixed(2)) + ' ' + unit;
   };
 
-  // onload Promise
-  const onLoad = src => new Promise(resolve => {
-    const image = new Image;
-    image.onload = resolve;
-    image.src = src;
-  });
-
-  // reset options
-  const dropReset = () => {
-    URL.revokeObjectURL(output.image);
-
-    if (control.wait) {
-      footer.console = '';
-    } else {
-      control.level = '2';
-      dropArea.fileName = dropArea.size = '';
-      footer.console = 'Ready';
-    }
-
-    output.reset = true;
-    output.height = '0';
-    output.message = output.image = output.fileName = '';
-  };
-
   // Vue instances
   const control = new Vue({
     el: '#control',
     data: {level: '2', wait: true},
-    methods: {dropReset},
+    methods: {
+      clear() {
+        for (const {status, src} of output.items) {
+          status === 'completed' && URL.revokeObjectURL(src);
+        }
+        output.items = [];
+      },
+    },
   });
   const dropArea = new Vue({
     el: '#dropArea',
@@ -52,8 +35,6 @@
       maxMB,
       over: false,
       wait: true,
-      fileName: '',
-      size: '',
     },
     methods: {
       dragover(ev) {
@@ -62,102 +43,105 @@
       },
       readFile(ev) {
         this.over = false;
-        readFile(ev.dataTransfer.files[0]);
+        addFiles(ev.dataTransfer.files);
       },
       change({target}) {
-        readFile(target.files[0]);
+        addFiles(target.files);
         target.value = '';
       },
     },
   });
   const output = new Vue({
     el: '#output',
-    data: {
-      reset: true,
-      height: '0',
-      message: '',
-      image: '',
-      fileName: '',
-      size: '',
-    },
-  });
-  const footer = new Vue({
-    el: '#footer',
-    data: {console: 'Please wait...'},
+    data: {items: []},
   });
 
-  const showResult = async (text = null) => {
-    if (text) { output.message = text; }
-    output.reset = false;
-    await Vue.nextTick();
-    output.height = output.$refs.body.offsetHeight + 'px';
-    control.wait = dropArea.wait = false;
-  };
+  // load image
+  const loadImage = src => new Promise(resolve => {
+    const image = new Image;
+    image.onload = resolve;
+    image.src = src;
+  });
 
   // read File object
-  const readFile = async file => {
-    if (!file) { return; }
+  const addFiles = async files => {
+    if (!files || files.length === 0) { return; }
 
-    const {type, size, name} = file;
+    control.wait = true;
+    files = Array.from(files);
 
-    control.wait = dropArea.wait = true;
+    for (const file of files) {
+      if (!file || file.type !== 'image/png' || file.size > maxSize) {
+        continue;
+      }
 
-    dropReset();
-    await Vue.nextTick();
+      const
+        src = URL.createObjectURL(file),
+        index = output.items.length;
 
-    if (type !== 'image/png') { return showResult('PNG形式の画像のみです'); }
+      output.items.push({
+        index, file, src,
+        name: file.name,
+        status: 'standby',
+      });
 
-    if (size > maxByte) { return showResult(`画像サイズが ${maxMB}MB を超えています！`); }
-
-    dropArea.fileName = name;
-    dropArea.size = filesize(size);
-
-    output.fileName = name || 'clipbord.png';
-    footer.console = '';
-
-    worker.postMessage({file, level: control.level});
+      otimizeImage(index);
+    }
   };
 
-  const drawImage = async blob => {
-    const url = URL.createObjectURL(blob);
+  const otimizeImage = async index => {
+    const item = Object.assign({}, output.items[index]);
 
-    await onLoad(url);
+    item.status = 'progress';
 
-    output.image = url;
-    output.size = filesize(blob.size);
+    output.items.splice(index, 1, item);
 
-    showResult();
+    await output.$nextTick();
+
+    URL.revokeObjectURL(item.src);
+    worker.postMessage({item, level: control.level});
   };
+
+  const complete = async data => {
+    const
+      {blob, name, index} = data,
+      src = URL.createObjectURL(blob);
+
+    await loadImage(src);
+
+    output.items.splice(index, 1, {
+      src, name,
+      size: filesize(blob.size),
+      status: 'completed',
+    });
+
+    await output.$nextTick();
+
+    const completed = output.$el.querySelectorAll('.completed');
+    control.wait = completed.length < output.items.length;
+  };
+
+  // paste image on clipbord
+  document.addEventListener('paste', ev => {
+    if (ev.clipboardData) {
+      const {items} = ev.clipboardData;
+      if (items) {
+        const files = [];
+        for (const item of Array.from(items)) {
+          item.type === 'image/png' && files.push(item.getAsFile());
+        }
+        addFiles(files);
+      }
+    }
+  });
 
   // Web Worker
   worker.addEventListener('message', ev => {
     const {type, data = null} = ev.data;
-    switch (type) {
-      case 'ready':
-        control.wait = dropArea.wait = false;
-        footer.console = 'Web Worker is ready';
-        break;
-      case 'console':
-        if (data != null) { footer.console += data + '\n'; }
-        break;
-      case 'done':
-        drawImage(data);
-        break;
-    }
-  });
-
-  // paste image on clipbord
-  document.addEventListener('paste', ev => {
-    if (!control.wait && ev.clipboardData) {
-      const {items} = ev.clipboardData;
-      if (items) {
-        for (const item of Array.from(items)) {
-          if (item.type.includes('image/')) {
-            readFile(item.getAsFile());
-            break;
-          }
-        }
-      }
+    if (type === 'complete') {
+      complete(data);
+    } else {
+      control.wait = dropArea.wait = false;
     }
   });
 }

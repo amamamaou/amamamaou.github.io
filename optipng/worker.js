@@ -1,9 +1,6 @@
-/*! worker.js | v0.0.3 | MIT License */
+/*! worker.js | v1.0.0 | MIT License */
 {
   self.importScripts('https://cdn.jsdelivr.net/npm/optipng-js');
-
-  // console
-  const console = text => self.postMessage({type: 'console', data: text});
 
   // use Optiong.js
   const doOptipng = (u8arr, level) => {
@@ -17,20 +14,11 @@
 
   self.addEventListener('message', async ev => {
     const
-      {file, level} = ev.data,
-      start = performance.now();
-
-    console('Start Web Worker...');
-    console(`Optimize level: ${level}\n`);
-
-    const
+      {item: {index, file, name}, level} = ev.data,
       u8arr = await blob2array(file),
-      blob = doOptipng(u8arr, level),
-      time = (performance.now() - start).toFixed(0);
+      blob = doOptipng(u8arr, level);
 
-    console(`Completed (${time}ms)`);
-
-    self.postMessage({type: 'done', data: blob});
+    self.postMessage({type: 'complete', data: {blob, index, name}});
   });
 
   self.postMessage({type: 'ready'});

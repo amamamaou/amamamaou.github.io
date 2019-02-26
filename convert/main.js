@@ -77,26 +77,24 @@
   });
 
   // read File object
-  const addFiles = async files => {
+  const addFiles = files => {
     if (!files || files.length === 0) { return; }
 
     control.wait = true;
     files = Array.from(files);
 
     const indexList = [];
-    let i = 0;
 
     for (const file of files) {
       if (!file || !mime.test(file.type) || file.size > maxSize) {
         continue;
       }
 
-      const
-        src = URL.createObjectURL(file),
-        index = output.items.length;
+      const index = output.items.length;
 
       output.items.push({
-        index, file, src,
+        index, file,
+        src: URL.createObjectURL(file),
         name: file.name,
         status: 'standby',
       });
