@@ -15,7 +15,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="canonical" href="https://amamamaou.github.io/optipng/">
 <link rel="stylesheet" href="/css/main.css?2018121317">
-<link rel="stylesheet" href="/css/optipng.css?20190226">
+<link rel="stylesheet" href="/css/optipng.css?20190227">
 </head>
 <body>
 <main>
@@ -48,6 +48,8 @@
     <p>0 はメタ情報の最適化のみを行います。通常は 1 ～ 5 で指定してください。最適なレベルは 2 です。<br>
     レベルを高くしても画像によっては結果が変わらない場合があります。</p>
 
+    <p>PNG以外の形式 (BMP/GIF/JPEG) もPNGへ変換後に最適化を行いますが、特にJPEGは扱いにご注意ください。</p>
+
     <div id="control" class="control">
       <div class="options">
         <p class="heading">最適化レベル：<output for="levelRange" v-cloak>{{ level }}</output></p>
@@ -74,7 +76,11 @@
           ひとつの画像の最大許容サイズは {{ maxMB }}MB までです
         </p>
       </label>
-      <input type="file" accept="image/png" id="fileInput" @change="change" multiple>
+      <input type="file"
+        accept="image/bmp,image/gif,image/jpeg,image/png"
+        id="fileInput"
+        @change="change"
+        multiple>
     </div>
 
     <div id="output" class="outputContent">
@@ -111,6 +117,6 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-<script src="main.js?v1.5.2"></script>
+<script src="main.js?v1.6.0"></script>
 </body>
 </html>

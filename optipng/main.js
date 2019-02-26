@@ -1,11 +1,13 @@
-/*! optipng main.js | v1.5.2 | MIT License */
+/*! optipng main.js | v1.6.0 | MIT License */
 {
   // Web Worker
-  const worker = new Worker('worker.js?v1.0.2');
+  const worker = new Worker('worker.js?v1.1.0');
 
   const
-    maxMB = 20,
-    maxSize = maxMB * 1048576;
+    maxMB = 10,
+    maxSize = maxMB * 1048576,
+    pngType = 'image/png',
+    convertType = /\/(?:bmp|gif|jpeg)$/;
 
   // calc bytes
   const filesize = bytes => {
@@ -63,6 +65,15 @@
     image.src = src;
   });
 
+  // canvas to blob
+  const toBlob = source => new Promise(resolve => {
+    const canvas = document.createElement('canvas');
+    canvas.width = source.width;
+    canvas.height = source.height;
+    canvas.getContext('2d').drawImage(source, 0, 0);
+    canvas.toBlob(resolve);
+  });
+
   // check status
   const checkStatus = async () => {
     await output.$nextTick();
@@ -80,7 +91,7 @@
     files = Array.from(files);
 
     for (const file of files) {
-      if (file.type !== 'image/png') {
+      if (file.type !== pngType && !convertType.test(file.type)) {
         items.push({
           src: null,
           status: 'failed',
@@ -90,10 +101,10 @@
         continue;
       }
 
+      const src = URL.createObjectURL(file);
+
       if (file.size > maxSize) {
-        const
-          src = URL.createObjectURL(file),
-          size = filesize(file.size);
+        const size = filesize(file.size);
 
         items.push({
           src,
@@ -104,32 +115,35 @@
 
         await output.$nextTick();
         URL.revokeObjectURL(src);
-
         continue;
       }
 
-      const index = items.length;
-
-      items.push({
-        index, file,
-        src: URL.createObjectURL(file),
+      const item = {
+        file, src,
         name: file.name,
         size: file.size,
         status: 'standby',
-      });
+        index: items.length,
+      };
 
-      otimizeImage(index);
+      items.push(item);
+      otimizeImage(item);
     }
 
     checkStatus();
   };
 
-  const otimizeImage = async index => {
-    const item = Object.assign({}, output.items[index]);
-
+  const otimizeImage = async item => {
+    item = Object.assign({}, item);
     item.status = 'progress';
 
-    output.items.splice(index, 1, item);
+    if (convertType.test(item.file.type)) {
+      const {target: image} = await loadImage(item.src);
+      item.file = await toBlob(image);
+      item.name = item.name.replace(/\.\w+$/, '.png');
+    }
+
+    output.items.splice(item.index, 1, item);
 
     await output.$nextTick();
 
@@ -139,8 +153,7 @@
 
   const complete = async data => {
     const
-      {blob, index} = data,
-      {name, size} = output.items[index],
+      {blob, item: {name, size, index}} = data,
       src = URL.createObjectURL(blob);
 
     await loadImage(src);
@@ -163,7 +176,7 @@
       if (items) {
         const files = [];
         for (const item of Array.from(items)) {
-          item.type === 'image/png' && files.push(item.getAsFile());
+          item.type === pngType && files.push(item.getAsFile());
         }
         addFiles(files);
       }

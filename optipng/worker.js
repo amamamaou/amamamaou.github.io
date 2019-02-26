@@ -1,4 +1,4 @@
-/*! worker.js | v1.0.2 | MIT License */
+/*! worker.js | v1.1.0 | MIT License */
 {
   self.importScripts('https://cdn.jsdelivr.net/npm/optipng-js');
 
@@ -14,11 +14,11 @@
 
   self.addEventListener('message', async ev => {
     const
-      {item: {index, file}, level} = ev.data,
-      u8arr = await blob2array(file),
+      {item, level} = ev.data,
+      u8arr = await blob2array(item.file),
       blob = doOptipng(u8arr, level);
 
-    self.postMessage({type: 'complete', data: {blob, index}});
+    self.postMessage({type: 'complete', data: {blob, item}});
   });
 
   self.postMessage({type: 'ready'});

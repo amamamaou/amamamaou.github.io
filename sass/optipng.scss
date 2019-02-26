@@ -65,6 +65,7 @@
     width: calc(25% - 20px);
     height: 140px;
     margin: 10px;
+    background: #fff;
     border-radius: 8px;
     box-sizing: border-box;
 
@@ -95,23 +96,15 @@
     }
 
     &.standby::after {
-      border: 6px solid rgba(#fff, .2);
-      border-radius: 50%;
+      background: url("/images/parts_standby.svg") no-repeat 50% 50% / 100%;
     }
 
     &.progress::after {
-      border: {
-        top: 6px solid rgba(#fff, .2);
-        right: 6px solid rgba(#fff, .2);
-        bottom: 6px solid rgba(#fff, .2);
-        left: 6px solid #fff;
-        radius: 50%;
-      }
-      animation: loading 1s infinite linear;
+      background: url("/images/parts_progress.svg") no-repeat 50% 50% / 100%;
     }
 
     &.failed::after {
-      background: url("/images/icon_cross.svg") no-repeat 50% 50% / 90% 90%;
+      background: url("/images/icon_cross.svg") no-repeat 50% 50% / 90%;
       opacity: .9;
     }
 
@@ -186,11 +179,6 @@
 
 .asideFooter {
   margin: 1.5em 0;
-}
-
-@keyframes loading {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
 }
 
 // @media screen and (max-width: 375px) {
