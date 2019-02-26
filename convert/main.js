@@ -1,4 +1,4 @@
-/*! Convert to JPEG | v1.0.5 | MIT License */
+/*! Convert to JPEG | v1.0.6 | MIT License */
 {
   // Web Worker
   const worker = new Worker('worker.js?v1.0.0');
@@ -167,7 +167,10 @@
     if (ev.clipboardData) {
       const {items} = ev.clipboardData;
       if (items) {
-        const files = Array.from(items).map(item => item.getAsFile());
+        const files = [];
+        for (const item of Array.from(items)) {
+          mime.test(item.type) && files.push(item.getAsFile());
+        }
         addFiles(files);
       }
     }
