@@ -1,12 +1,13 @@
-/*! Convert to JPEG | v1.5.0 | MIT License */
+/*! Convert to JPEG | v1.5.1 | MIT License */
 {
   // Web Worker
-  const worker = new Worker('worker.js?v1.5.0');
+  const worker = new Worker('worker.js?v1.5.1');
 
   const
     maxMB = 20,
     maxSize = maxMB * 1048576,
-    mime = /\/(?:bmp|gif|jpe?g|png)$/,
+    mime = /\/(?:bmp|gif|jpeg|png)$/,
+    pass = /\/(?:bmp|jpeg)$/,
     support = typeof OffscreenCanvas !== 'undefined';
 
   // calc bytes
@@ -156,7 +157,7 @@
 
     URL.revokeObjectURL(item.src);
 
-    if (!support && item.file.type !== 'image/jpeg') {
+    if (!support && !pass.test(item.file.type)) {
       item.file = await toJPEG(bitmap);
     }
 

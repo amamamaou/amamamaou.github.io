@@ -1,6 +1,8 @@
-/*! worker.js | v1.5.0 | MIT License */
+/*! worker.js | v1.5.1 | MIT License */
 {
   self.importScripts('https://cdn.jsdelivr.net/npm/js-mozjpeg/src/cjpeg.min.js');
+
+  const pass = /\/(?:bmp|jpeg)$/;
 
   // use mozjpeg
   const doEncode = (u8arr, quality) => {
@@ -24,7 +26,7 @@
     const {item, quality} = ev.data;
     let {file} = item;
 
-    if (file.type !== 'image/jpeg') {
+    if (!pass.test(file.type)) {
       file = await convertImage(file);
     }
 
