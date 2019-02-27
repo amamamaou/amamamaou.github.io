@@ -39,7 +39,7 @@
 
     <div id="dropArea" class="dropContent">
       <label for="fileInput"
-        :class="{over}"
+        :class="{over, wait}"
         @dragover.prevent="dragover"
         @dragleave="over = false"
         @drop.prevent="readFile">
@@ -81,12 +81,16 @@
       </ul>
     </div>
   </section>
+
+  <aside class="asideFooter">
+    <p>JPEGの処理は <a href="https://github.com/as-com/mozjpeg-js" target="_blank">mozjpeg-js</a> を使用しています。</p>
+  </aside>
 </main>
 <footer>
   <p>&copy; 2019 @amamamaou</p>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-<script src="main.js?1.1.1"></script>
+<script src="main.js?1.5.0"></script>
 </body>
 </html>

@@ -1,7 +1,7 @@
-/*! Convert to JPEG | v1.1.1 | MIT License */
+/*! Convert to JPEG | v1.5.0 | MIT License */
 {
   // Web Worker
-  const worker = new Worker('worker.js?v1.0.5');
+  const worker = new Worker('worker.js?v1.5.0');
 
   const
     maxMB = 20,
@@ -21,7 +21,7 @@
   // Vue instances
   const dropArea = new Vue({
     el: '#dropArea',
-    data: {over: false, maxMB},
+    data: {over: false, wait: true, maxMB},
     methods: {
       dragover(ev) {
         ev.dataTransfer.dropEffect = 'copy';
@@ -45,7 +45,7 @@
     el: '#control',
     data: {
       quality: localStorage.quality || '90',
-      wait: false,
+      wait: true,
     },
     watch: {
       quality() { localStorage.quality = this.quality; },
@@ -68,12 +68,12 @@
   });
 
   // canvas to blob
-  const toBlob = (source, quality) => new Promise(resolve => {
+  const toJPEG = source => new Promise(resolve => {
     const canvas = document.createElement('canvas');
     canvas.width = source.width;
     canvas.height = source.height;
     canvas.getContext('2d').drawImage(source, 0, 0);
-    canvas.toBlob(resolve, 'image/jpeg', quality);
+    canvas.toBlob(resolve, 'image/jpeg', 1);
   });
 
   // check status
@@ -143,6 +143,7 @@
     }
   };
 
+  // post to Worker
   const convertImage = async item => {
     item = Object.assign({}, item);
     item.status = 'progress';
@@ -153,23 +154,17 @@
 
     URL.revokeObjectURL(item.src);
 
-    if (support) {
-      worker.postMessage({item, quality: control.quality});
-    } else {
-      doCconvert(item, control.quality);
+    if (!support && item.file.type !== 'image/jpeg') {
+      const bitmap = await createImageBitmap(item.file);
+      item.file = await toJPEG(bitmap);
     }
+
+    worker.postMessage({item, quality: control.quality});
   };
 
-  const doCconvert = async (item, quality) => {
+  const complete = async data => {
     const
-      bitmap = await createImageBitmap(item.file),
-      blob = await toBlob(bitmap, quality / 100);
-    complete({data: {blob, item}});
-  };
-
-  const complete = async ev => {
-    const
-      {blob, item: {name, size, index}} = ev.data,
+      {blob, item: {name, size, index}} = data,
       src = URL.createObjectURL(blob);
 
     await loadImage(src);
@@ -200,5 +195,11 @@
   });
 
   // Web Worker
-  worker.addEventListener('message', complete);
+  worker.addEventListener('message', ({data}) => {
+    if (data === 'ready') {
+      control.wait = dropArea.wait = false;
+    } else {
+      complete(data);
+    }
+  });
 }
