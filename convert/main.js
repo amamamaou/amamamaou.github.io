@@ -1,4 +1,4 @@
-/*! Convert to JPEG | v1.1.0 | MIT License */
+/*! Convert to JPEG | v1.1.1 | MIT License */
 {
   // Web Worker
   const worker = new Worker('worker.js?v1.0.5');
@@ -127,6 +127,7 @@
         status: 'standby',
         index: items.length,
       };
+      items.push(item);
 
       if (support) {
         convertImage(item);
