@@ -1,10 +1,10 @@
 /*! worker.js | v1.5.0 | MIT License */
 {
-  self.importScripts('https://cdn.jsdelivr.net/npm/mozjpeg-js');
+  self.importScripts('https://cdn.jsdelivr.net/npm/js-mozjpeg/src/cjpeg.min.js');
 
   // use mozjpeg
   const doEncode = (u8arr, quality) => {
-    const {data} = mozjpeg.encode(u8arr, {quality});
+    const {data} = cjpeg(u8arr, {quality, optimize: true});
     return new Blob([data], {type: 'image/jpeg'});
   };
 

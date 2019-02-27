@@ -68,11 +68,13 @@
   });
 
   // canvas to blob
-  const toJPEG = source => new Promise(resolve => {
-    const canvas = document.createElement('canvas');
-    canvas.width = source.width;
-    canvas.height = source.height;
-    canvas.getContext('2d').drawImage(source, 0, 0);
+  const toJPEG = blob => new Promise(async resolve => {
+    const
+      bitmap = await createImageBitmap(blob),
+      canvas = document.createElement('canvas');
+    canvas.width = bitmap.width;
+    canvas.height = bitmap.height;
+    canvas.getContext('2d').drawImage(bitmap, 0, 0);
     canvas.toBlob(resolve, 'image/jpeg', 1);
   });
 
@@ -155,7 +157,6 @@
     URL.revokeObjectURL(item.src);
 
     if (!support && item.file.type !== 'image/jpeg') {
-      const bitmap = await createImageBitmap(item.file);
       item.file = await toJPEG(bitmap);
     }
 
