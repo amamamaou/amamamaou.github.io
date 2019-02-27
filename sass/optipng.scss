@@ -96,22 +96,28 @@
       }
     }
 
+    // &.standby::after {
+    //   border: 6px solid rgba(#fff, .25);
+    //   border-radius: 50%;
+    // }
+    //
+    // &.progress::after {
+    //   border: {
+    //     top: 6px solid rgba(#fff, .25);
+    //     right: 6px solid rgba(#fff, .25);
+    //     bottom: 6px solid rgba(#fff, .25);
+    //     left: 6px solid #fff;
+    //     radius: 50%;
+    //   }
+    //   animation: loading 1s infinite linear;
+    // }
+
     &.standby::after {
-      border: 6px solid rgba(#fff, .25);
-      border-radius: 50%;
+      background: url("/images/parts_standby.svg") no-repeat 50% 50% / 100%;
     }
-
     &.progress::after {
-      border: {
-        top: 6px solid rgba(#fff, .25);
-        right: 6px solid rgba(#fff, .25);
-        bottom: 6px solid rgba(#fff, .25);
-        left: 6px solid #fff;
-        radius: 50%;
-      }
-      animation: loading 1s infinite linear;
+      background: url("/images/parts_spinner.svg") no-repeat 50% 50% / 100%;
     }
-
     &.failed::after {
       background: url("/images/icon_cross.svg") no-repeat 50% 50% / 90%;
       opacity: .9;
