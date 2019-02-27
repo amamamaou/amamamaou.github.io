@@ -1,7 +1,7 @@
-/*! optipng main.js | v1.6.0 | MIT License */
+/*! optipng main.js | v1.6.5 | MIT License */
 {
   // Web Worker
-  const worker = new Worker('worker.js?v1.1.0');
+  const worker = new Worker('worker.js?v1.1.5');
 
   const
     maxMB = 10,
@@ -184,12 +184,11 @@
   });
 
   // Web Worker
-  worker.addEventListener('message', ev => {
-    const {type, data = null} = ev.data;
-    if (type === 'complete') {
-      complete(data);
-    } else {
+  worker.addEventListener('message', ({data}) => {
+    if (data === 'ready') {
       control.wait = dropArea.wait = false;
+    } else {
+      complete(data);
     }
   });
 }

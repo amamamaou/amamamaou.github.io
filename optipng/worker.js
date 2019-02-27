@@ -1,10 +1,10 @@
-/*! worker.js | v1.1.0 | MIT License */
+/*! worker.js | v1.1.5 | MIT License */
 {
   self.importScripts('https://cdn.jsdelivr.net/npm/optipng-js');
 
   // use Optiong.js
   const doOptipng = (u8arr, level) => {
-    const {data} = optipng(u8arr, ['-o' + level], console);
+    const {data} = optipng(u8arr, ['-o' + level]);
     return new Blob([data], {type: 'image/png'});
   };
 
@@ -18,8 +18,8 @@
       u8arr = await blob2array(item.file),
       blob = doOptipng(u8arr, level);
 
-    self.postMessage({type: 'complete', data: {blob, item}});
+    self.postMessage({blob, item});
   });
 
-  self.postMessage({type: 'ready'});
+  self.postMessage('ready');
 }
