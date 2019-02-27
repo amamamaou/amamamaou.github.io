@@ -1,7 +1,7 @@
-/*! Convert to JPEG | v1.0.7 | MIT License */
+/*! Convert to JPEG | v1.1.0 | MIT License */
 {
   // Web Worker
-  const worker = new Worker('worker.js?v1.0.1');
+  const worker = new Worker('worker.js?v1.0.5');
 
   const
     maxMB = 20,
@@ -91,7 +91,7 @@
     files = Array.from(files);
 
     const
-      indexList = [],
+      itemList = [],
       {items} = output;
 
     for (const file of files) {
@@ -105,10 +105,11 @@
         continue;
       }
 
-      const size = filesize(file.size);
+      const
+        src = URL.createObjectURL(file),
+        size = filesize(file.size);
 
       if (file.size > maxSize) {
-        const src = URL.createObjectURL(file);
         items.push({
           src,
           status: 'failed',
@@ -120,35 +121,32 @@
         continue;
       }
 
-      const index = items.length;
-
-      items.push({
-        index, file, size,
-        src: URL.createObjectURL(file),
+      const item = {
+        file, src, size,
         name: file.name,
         status: 'standby',
-      });
+        index: items.length,
+      };
 
       if (support) {
-        convertImage(index);
+        convertImage(item);
       } else {
-        indexList.push(index);
+        itemList.push(item);
       }
     }
 
-    if (indexList.length === 0) { checkStatus(); }
+    if (itemList.length === 0) { checkStatus(); }
 
     if (!support) {
-      for (const index of indexList) { convertImage(index); }
+      for (const item of itemList) { convertImage(item); }
     }
   };
 
-  const convertImage = async index => {
-    const item = Object.assign({}, output.items[index]);
-
+  const convertImage = async item => {
+    item = Object.assign({}, item);
     item.status = 'progress';
 
-    output.items.splice(index, 1, item);
+    output.items.splice(item.index, 1, item);
 
     await output.$nextTick();
 
@@ -161,17 +159,16 @@
     }
   };
 
-  const doCconvert = async ({index, file}, quality) => {
+  const doCconvert = async (item, quality) => {
     const
-      bitmap = await createImageBitmap(file),
+      bitmap = await createImageBitmap(item.file),
       blob = await toBlob(bitmap, quality / 100);
-    complete({data: {blob, index}});
+    complete({data: {blob, item}});
   };
 
   const complete = async ev => {
     const
-      {blob, index} = ev.data,
-      {name, size} = output.items[index],
+      {blob, item: {name, size, index}} = ev.data,
       src = URL.createObjectURL(blob);
 
     await loadImage(src);
