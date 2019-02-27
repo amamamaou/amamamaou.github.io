@@ -138,8 +138,8 @@
     item.status = 'progress';
 
     if (convertType.test(item.file.type)) {
-      const {target: image} = await loadImage(item.src);
-      item.file = await toBlob(image);
+      const bitmap = await createImageBitmap(item.file);
+      item.file = await toBlob(bitmap);
       item.name = item.name.replace(/\.\w+$/, '.png');
     }
 
