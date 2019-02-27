@@ -1,5 +1,8 @@
-/* data-uri | v1.0.2 | MIT License */
+/* data-uri | v1.1.0 | MIT License */
 {
+  // Web Worker
+  const worker = new Worker('worker.js?v1.0.0');
+
   // Vue instances
   const dropArea = new Vue({
     el: '#dropArea',
@@ -36,23 +39,21 @@
     return (exp === 0 ? size : size.toFixed(2)) + ' ' + unit;
   };
 
-  const readFile = file => new Promise(resolve => {
-    const reader = new FileReader;
-    reader.onload = () => resolve(reader.result);
-    reader.readAsDataURL(file);
-  });
-
-  const convert = async file => {
+  const convert = file => {
     if (!file || file.size === 0) {
       output.result = '';
       return;
     }
 
     dropArea.wait = true;
-
     output.fileInfo = `${file.name} (${filesize(file.size)})`;
-    output.result = await readFile(file);
 
-    dropArea.wait = false;
+    worker.postMessage(file);
   };
+
+  // Web Worker
+  worker.addEventListener('message', ev => {
+    output.result = ev.data;
+    dropArea.wait = false;
+  });
 }
