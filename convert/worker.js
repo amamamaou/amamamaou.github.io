@@ -31,7 +31,7 @@
     const {item, quality} = ev.data;
     let {file, data = null} = item;
 
-    if (!pass.test(file.type)) { data = await getImageData(file); }
+    if (!data && !pass.test(file.type)) { data = await getImageData(file); }
 
     const
       u8arr = data ? toBMP(data) : await blob2array(file),
