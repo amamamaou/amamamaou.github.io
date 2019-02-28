@@ -65,12 +65,14 @@
     image.src = src;
   });
 
-  // canvas to blob
-  const toBlob = source => new Promise(resolve => {
-    const canvas = document.createElement('canvas');
-    canvas.width = source.width;
-    canvas.height = source.height;
-    canvas.getContext('2d').drawImage(source, 0, 0);
+  // Blob to PNG Blob
+  const toPNG = blob => new Promise(async resolve => {
+    const
+      bitmap = await createImageBitmap(blob),
+      canvas = document.createElement('canvas');
+    canvas.width = bitmap.width;
+    canvas.height = bitmap.height;
+    canvas.getContext('2d').drawImage(bitmap, 0, 0);
     canvas.toBlob(resolve);
   });
 
@@ -139,8 +141,7 @@
     item.status = 'progress';
 
     if (convertType.test(item.file.type)) {
-      const bitmap = await createImageBitmap(item.file);
-      item.file = await toBlob(bitmap);
+      item.file = await toPNG(item.file);
       item.name = item.name.replace(/\.\w+$/, '.png');
     }
 
