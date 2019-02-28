@@ -23,7 +23,7 @@
 
   <section>
     <p>複数の画像を変換する場合、画質の設定は変換開始時の値が適用されます。ChromeとFirefoxに対応。<br>
-    画質が 100% かつ、画像形式がJPEGの場合は最適化（可逆圧縮）を行います。</p>
+    画質が 100% かつ、画像形式がJPEGの場合は最適化（軽量化）を行います。</p>
 
     <div id="control" class="control">
       <div class="options">
@@ -48,7 +48,7 @@
         <p v-cloak>
           複数の画像ファイルをここにドラッグ＆ドロップしてください<br>
           クリップボードの画像のペースト (Ctrl+V / ⌘V) や、クリックして画像ファイルを選択することもできます<br>
-          ひとつの画像の最大許容サイズは {{ maxMB }}MB (BMPは {{ maxMB * 2 }}MB) までです
+          ひとつの画像の最大許容サイズは {{ maxMB }}MB (BMP形式は {{ maxMB * 2 }}MB) までです
         </p>
       </label>
       <input type="file"
@@ -84,7 +84,8 @@
   </section>
 
   <aside class="asideFooter">
-    <p>GIFとPNGは一度BMP形式に変換してからJPEG変換を行うため、処理に時間がかかります。</p>
+    <p>GIFとPNGは一度BMP形式に変換してからJPEG変換を行うため、処理に時間がかかります。<br>
+    透過PNGの場合は背景が黒 <code>#000000</code> になります。</p>
     <p>JPEGの処理は <a href="https://github.com/LI-NA/mozjpeg.js" target="_blank">Mozjpeg.js</a> を使用しています。</p>
   </aside>
 </main>
