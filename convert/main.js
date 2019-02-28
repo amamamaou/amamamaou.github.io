@@ -1,7 +1,7 @@
-/*! Convert to JPEG | v1.5.1 | MIT License */
+/*! Convert to JPEG | v1.5.5 | MIT License */
 {
   // Web Worker
-  const worker = new Worker('worker.js?v1.5.1');
+  const worker = new Worker('worker.js?v1.5.5');
 
   const
     maxMB = 20,
@@ -68,16 +68,20 @@
     image.src = src;
   });
 
-  // canvas to blob
-  const toJPEG = blob => new Promise(async resolve => {
+  // Blob to ImageData
+  const getImageData = async blob => {
     const
       bitmap = await createImageBitmap(blob),
-      canvas = document.createElement('canvas');
-    canvas.width = bitmap.width;
-    canvas.height = bitmap.height;
-    canvas.getContext('2d').drawImage(bitmap, 0, 0);
-    canvas.toBlob(resolve, 'image/jpeg', 1);
-  });
+      {width, height} = bitmap,
+      canvas = document.createElement('canvas'),
+      ctx = canvas.getContext('2d');
+
+    canvas.width = width;
+    canvas.height = height;
+
+    ctx.drawImage(bitmap, 0, 0);
+    return ctx.getImageData(0, 0, width, height);
+  };
 
   // check status
   const checkStatus = async () => {
@@ -158,7 +162,7 @@
     URL.revokeObjectURL(item.src);
 
     if (!support && !pass.test(item.file.type)) {
-      item.file = await toJPEG(bitmap);
+      item.data = await getImageData(item.file);
     }
 
     worker.postMessage({item, quality: control.quality});
