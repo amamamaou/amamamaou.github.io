@@ -1,4 +1,4 @@
-/*! optipng main.js | v1.6.5 | MIT License */
+/*! optipng main.js | v1.6.6 | MIT License */
 {
   // Web Worker
   const worker = new Worker('worker.js?v1.1.5');
@@ -91,26 +91,29 @@
     files = Array.from(files);
 
     for (const file of files) {
-      if (file.type !== pngType && !convertType.test(file.type)) {
+      const {name, type, size} = file;
+
+      if (type !== pngType && !convertType.test(type)) {
         items.push({
           src: null,
           status: 'failed',
           reason: '対象外のファイルです',
-          name: file.name,
+          name,
         });
         continue;
       }
 
       const src = URL.createObjectURL(file);
+      let n = type === 'image/bmp' ? 2 : 1;
 
-      if (file.size > maxSize) {
-        const size = filesize(file.size);
+      if (size > maxSize * n) {
+        const sizeStr = filesize(size);
 
         items.push({
           src,
           status: 'failed',
-          reason: `${maxMB}MB を超えているため最適化は行われませんでした`,
-          name: `${file.name} (${size})`,
+          reason: `${maxMB * n}MB を超えているため最適化は行われませんでした`,
+          name: `${name} (${sizeStr})`,
         });
 
         await output.$nextTick();
@@ -119,9 +122,7 @@
       }
 
       const item = {
-        file, src,
-        name: file.name,
-        size: file.size,
+        file, src, name, size,
         status: 'standby',
         index: items.length,
       };

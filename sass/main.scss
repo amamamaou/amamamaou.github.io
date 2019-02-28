@@ -85,6 +85,11 @@ a {
   }
 }
 
+code {
+  @include monoFont;
+  font-size: inherit;
+}
+
 [v-cloak] {
   display: none;
 }

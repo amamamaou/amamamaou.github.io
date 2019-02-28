@@ -1,4 +1,4 @@
-/*! Convert to JPEG | v1.5.5 | MIT License */
+/*! Convert to JPEG | v1.5.6 | MIT License */
 {
   // Web Worker
   const worker = new Worker('worker.js?v1.5.5');
@@ -102,12 +102,14 @@
       {items} = output;
 
     for (const file of files) {
-      if (!mime.test(file.type)) {
+      const {name, type} = file;
+
+      if (!mime.test(type)) {
         items.push({
           src: null,
           status: 'failed',
           reason: '対象外のファイルです',
-          name: file.name,
+          name,
         });
         continue;
       }
@@ -116,12 +118,14 @@
         src = URL.createObjectURL(file),
         size = filesize(file.size);
 
-      if (file.size > maxSize) {
+      let n = type === 'image/bmp' ? 2 : 1;
+
+      if (file.size > maxSize * n) {
         items.push({
           src,
           status: 'failed',
-          reason: `${maxMB}MB を超えているため最適化は行われませんでした`,
-          name: `${file.name} (${size})`,
+          reason: `${maxMB * n}MB を超えているため最適化は行われませんでした`,
+          name: `${name} (${size})`,
         });
         await output.$nextTick();
         URL.revokeObjectURL(src);
@@ -129,8 +133,7 @@
       }
 
       const item = {
-        file, src, size,
-        name: file.name,
+        file, src, size, name,
         status: 'standby',
         index: items.length,
       };

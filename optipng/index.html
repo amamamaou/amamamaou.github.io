@@ -48,8 +48,6 @@
     <p>0 はメタ情報の最適化のみを行います。通常は 1 ～ 5 で指定してください。最適なレベルは 2 です。<br>
     レベルを高くしても画像によっては結果が変わらない場合があります。</p>
 
-    <p>PNG以外の形式 (BMP/GIF/JPEG) もPNGへ変換後に最適化を行いますが、特にJPEGは扱いにご注意ください。</p>
-
     <div id="control" class="control">
       <div class="options">
         <p class="heading">最適化レベル：<output for="levelRange" v-cloak>{{ level }}</output></p>
@@ -73,7 +71,7 @@
         <p v-cloak>
           複数の画像ファイルをここにドラッグ＆ドロップしてください<br>
           クリップボードの画像のペースト (Ctrl+V / ⌘V) や、クリックして画像ファイルを複数選択もできます<br>
-          ひとつの画像の最大許容サイズは {{ maxMB }}MB までです
+          ひとつの画像の最大許容サイズは {{ maxMB }}MB (BMPは {{ maxMB * 2 }}MB) までです
         </p>
       </label>
       <input type="file"
@@ -109,6 +107,8 @@
   </section>
 
   <aside class="asideFooter">
+    <p>PNG以外の形式 (BMP/GIF/JPEG) もPNGへ変換後に最適化を行いますが、特にJPEGはメモリを大量に消費する可能性があるので扱いにご注意ください。</p>
+    <p>Firefoxの場合は、アドレスバーに <code>about:config</code> と打ち、<code>gfx.offscreencanvas.enabled</code> を <code>true</code> にすると負荷が減ります。</p>
     <p>PNGの最適化処理には <a href="https://github.com/LI-NA/optipng.js" target="_blank">Optipng.js</a> を使用しています。</p>
   </aside>
 </main>
@@ -117,6 +117,6 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-<script src="main.js?v1.6.5"></script>
+<script src="main.js?v1.6.6"></script>
 </body>
 </html>
