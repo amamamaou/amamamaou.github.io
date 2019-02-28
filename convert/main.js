@@ -1,7 +1,7 @@
-/*! Convert to JPEG | v1.5.6 | MIT License */
+/*! Convert to JPEG | v1.5.7 | MIT License */
 {
   // Web Worker
-  const worker = new Worker('worker.js?v1.5.5');
+  const worker = new Worker('worker.js?v1.5.7');
 
   const
     maxMB = 20,
