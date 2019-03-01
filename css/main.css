@@ -92,9 +92,9 @@ section { margin: 1.5em 0; }
 
 .dropContent label:active, .dropContent label.over { filter: brightness(0.85); }
 
-.dropContent label.wait { pointer-events: none; opacity: .5; }
+.dropContent label.wait { pointer-events: none; opacity: .6; }
 
-.dropContent label.wait::after { display: block; position: absolute; top: 0; bottom: 0; left: 0; right: 0; background: url("/images/parts_spinner") no-repeat 50% 50%/48px; filter: invert(1); content: ""; }
+.dropContent label.wait::after { display: block; position: absolute; top: 0; bottom: 0; left: 0; right: 0; background: url("/images/parts_spinner.svg") no-repeat 50% 50%/48px; filter: invert(1); content: ""; }
 
 .dropContent figure { margin: 0; pointer-events: none; }
 

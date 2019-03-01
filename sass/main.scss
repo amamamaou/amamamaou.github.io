@@ -263,7 +263,7 @@ section {
 
     &.wait {
       pointer-events: none;
-      opacity: .5;
+      opacity: .6;
 
       &::after {
         display: block;
@@ -272,7 +272,7 @@ section {
         bottom: 0;
         left: 0;
         right: 0;
-        background: url("/images/parts_spinner") no-repeat 50% 50% / 48px;
+        background: url("/images/parts_spinner.svg") no-repeat 50% 50% / 48px;
         filter: invert(1);
         content: "";
       }
