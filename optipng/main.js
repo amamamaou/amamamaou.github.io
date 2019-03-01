@@ -59,11 +59,12 @@
   });
 
   // load image
-  const loadImage = src => new Promise(resolve => {
+  const loadImage = src => new Promise((resolve, reject) => {
     const image = new Image;
-    image.onload = resolve;
+    image.onload = () => resolve(true);
+    image.onerror = reject;
     image.src = src;
-  });
+  }).catch(() => false);
 
   // Blob to PNG Blob
   const toPNG = blob => new Promise(async (resolve, reject) => {
@@ -132,7 +133,13 @@
       };
 
       items.push(item);
-      otimizeImage(item);
+
+      if (await loadImage(src)) {
+        otimizeImage(item);
+      } else {
+        URL.revokeObjectURL(src);
+        failed({item});
+      }
     }
 
     checkStatus();

@@ -62,11 +62,12 @@
   });
 
   // load image
-  const loadImage = src => new Promise(resolve => {
+  const loadImage = src => new Promise((resolve, reject) => {
     const image = new Image;
-    image.onload = resolve;
+    image.onload = () => resolve(true);
+    image.onerror = reject;
     image.src = src;
-  });
+  }).catch(() => false);
 
   // Blob to ImageData
   const getImageData = async blob => {
@@ -140,7 +141,14 @@
         status: 'standby',
         index: items.length,
       };
+
       items.push(item);
+
+      if (!await loadImage(src)) {
+        URL.revokeObjectURL(src);
+        failed({item});
+        continue;
+      }
 
       if (support) {
         convertImage(item);
