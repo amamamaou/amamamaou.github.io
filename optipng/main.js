@@ -1,7 +1,7 @@
-/*! optipng main.js | v1.6.6 | MIT License */
+/*! optipng main.js | v1.6.7 | MIT License */
 {
   // Web Worker
-  const worker = new Worker('worker.js?v1.1.5');
+  const worker = new Worker('worker.js?v1.1.7');
 
   const
     maxMB = 10,
@@ -66,15 +66,17 @@
   });
 
   // Blob to PNG Blob
-  const toPNG = blob => new Promise(async resolve => {
-    const
-      bitmap = await createImageBitmap(blob),
-      canvas = document.createElement('canvas');
+  const toPNG = blob => new Promise(async (resolve, reject) => {
+    const bitmap = await createImageBitmap(blob).catch(() => null);
+
+    if (!bitmap) { return reject(); }
+
+    const canvas = document.createElement('canvas');
     canvas.width = bitmap.width;
     canvas.height = bitmap.height;
     canvas.getContext('2d').drawImage(bitmap, 0, 0);
     canvas.toBlob(resolve);
-  });
+  }).catch(() => null);
 
   // check status
   const checkStatus = async () => {
@@ -141,7 +143,9 @@
     item.status = 'progress';
 
     if (convertType.test(item.file.type)) {
-      item.file = await toPNG(item.file);
+      const file = await toPNG(item.file);
+      if (!file) { return failed({item}); }
+      item.file = file;
       item.name = item.name.replace(/\.\w+$/, '.png');
     }
 
@@ -171,6 +175,16 @@
     checkStatus();
   };
 
+  const failed = ({item}) => {
+    output.items.splice(item.index, 1, {
+      name: item.name,
+      src: null,
+      status: 'failed',
+      reason: '壊れているか不正なファイルのため変換できませんでした',
+    });
+    checkStatus();
+  };
+
   // paste image on clipbord
   document.addEventListener('paste', ev => {
     if (ev.clipboardData) {
@@ -189,6 +203,8 @@
   worker.addEventListener('message', ({data}) => {
     if (data === 'ready') {
       control.wait = dropArea.wait = false;
+    } else if (!data.blob) {
+      failed(data);
     } else {
       complete(data);
     }

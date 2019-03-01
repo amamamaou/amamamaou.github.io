@@ -1,11 +1,11 @@
-/*! worker.js | v1.1.5 | MIT License */
+/*! worker.js | v1.1.7 | MIT License */
 {
   self.importScripts('https://cdn.jsdelivr.net/npm/optipng-js');
 
   // use Optiong.js
   const doOptipng = (u8arr, level) => {
     const {data} = optipng(u8arr, ['-o' + level]);
-    return new Blob([data], {type: 'image/png'});
+    return data ? new Blob([data], {type: 'image/png'}) : null;
   };
 
   // Blob to Uint8Array

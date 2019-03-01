@@ -1,7 +1,7 @@
-/*! Convert to JPEG | v1.5.7 | MIT License */
+/*! Convert to JPEG | v1.5.8 | MIT License */
 {
   // Web Worker
-  const worker = new Worker('worker.js?v1.5.7');
+  const worker = new Worker('worker.js?v1.5.8');
 
   const
     maxMB = 20,
@@ -70,8 +70,11 @@
 
   // Blob to ImageData
   const getImageData = async blob => {
+    const bitmap = await createImageBitmap(blob).catch(() => null);
+
+    if (!bitmap) { return null; }
+
     const
-      bitmap = await createImageBitmap(blob),
       {width, height} = bitmap,
       canvas = document.createElement('canvas'),
       ctx = canvas.getContext('2d');
@@ -158,16 +161,16 @@
     item = Object.assign({}, item);
     item.status = 'progress';
 
+    if (!support && !pass.test(item.file.type)) {
+      item.data = await getImageData(item.file);
+      if (!item.data) { return failed({item}); }
+    }
+
     output.items.splice(item.index, 1, item);
 
     await output.$nextTick();
 
     URL.revokeObjectURL(item.src);
-
-    if (!support && !pass.test(item.file.type)) {
-      item.data = await getImageData(item.file);
-    }
-
     worker.postMessage({item, quality: control.quality});
   };
 
@@ -189,6 +192,16 @@
     checkStatus();
   };
 
+  const failed = ({item}) => {
+    output.items.splice(item.index, 1, {
+      name: item.name,
+      src: null,
+      status: 'failed',
+      reason: '壊れているか不正なファイルのため変換できませんでした',
+    });
+    checkStatus();
+  };
+
   // paste image on clipbord
   document.addEventListener('paste', ev => {
     if (ev.clipboardData) {
@@ -207,6 +220,8 @@
   worker.addEventListener('message', ({data}) => {
     if (data === 'ready') {
       control.wait = dropArea.wait = false;
+    } else if (!data.blob) {
+      failed(data);
     } else {
       complete(data);
     }
