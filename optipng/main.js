@@ -63,21 +63,21 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
   // load image
   const loadImage = src => new Promise((resolve, reject) => {
     const image = new Image;
-    image.onload = () => resolve(true);
+    image.onload = () => resolve(image);
     image.onerror = reject;
     image.src = src;
-  }).catch(() => false);
+  }).catch(() => null);
 
   // Blob to PNG Blob
-  const toPNG = blob => new Promise(async (resolve, reject) => {
-    const bitmap = await createImageBitmap(blob).catch(() => null);
+  const toPNG = src => new Promise(async (resolve, reject) => {
+    const iamge = await loadImage(src);
 
-    if (!bitmap) { return reject(); }
+    if (!iamge) { return reject(); }
 
     const canvas = document.createElement('canvas');
-    canvas.width = bitmap.width;
-    canvas.height = bitmap.height;
-    canvas.getContext('2d').drawImage(bitmap, 0, 0);
+    canvas.width = iamge.width;
+    canvas.height = iamge.height;
+    canvas.getContext('2d').drawImage(iamge, 0, 0);
     canvas.toBlob(resolve);
   }).catch(() => null);
 
@@ -152,7 +152,7 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
     item.status = 'progress';
 
     if (convertType.test(item.file.type)) {
-      const file = await toPNG(item.file);
+      const file = await toPNG(item.src);
       if (!file) { return failed({item}); }
       item.file = file;
       item.name = item.name.replace(/\.\w+$/, '.png');

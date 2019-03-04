@@ -66,26 +66,26 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
   // load image
   const loadImage = src => new Promise((resolve, reject) => {
     const image = new Image;
-    image.onload = () => resolve(true);
+    image.onload = () => resolve(image);
     image.onerror = reject;
     image.src = src;
-  }).catch(() => false);
+  }).catch(() => null);
 
   // Blob to ImageData
-  const getImageData = async blob => {
-    const bitmap = await createImageBitmap(blob).catch(() => null);
+  const getImageData = async src => {
+    const image = await loadImage(src);
 
-    if (!bitmap) { return null; }
+    if (!image) { return null; }
 
     const
-      {width, height} = bitmap,
+      {width, height} = image,
       canvas = document.createElement('canvas'),
       ctx = canvas.getContext('2d');
 
     canvas.width = width;
     canvas.height = height;
 
-    ctx.drawImage(bitmap, 0, 0);
+    ctx.drawImage(image, 0, 0);
     return ctx.getImageData(0, 0, width, height);
   };
 
@@ -172,7 +172,7 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
     item.status = 'progress';
 
     if (!support && !pass.test(item.file.type)) {
-      item.data = await getImageData(item.file);
+      item.data = await getImageData(item.src);
       if (!item.data) { return failed({item}); }
     }
 
