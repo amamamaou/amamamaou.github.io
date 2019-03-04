@@ -1,4 +1,6 @@
-/*! twitter_image | v1.2.10 | MIT License */
+/*! twitter_image | v1.3.0 | MIT License */
+import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
+
 {
   // Web Worker
   const worker = new Worker('worker.js?v1.0.6');

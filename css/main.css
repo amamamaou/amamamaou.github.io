@@ -32,7 +32,7 @@ a[href^="#"]:not([href="#"])::before { margin-left: .1em; content: "#"; }
 
 code { font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace, serif; font-size: inherit; }
 
-[v-cloak] { display: none; }
+[v-cloak] { display: none !important; }
 
 /* list */
 ul { margin: 0; padding: 0; list-style: none; }

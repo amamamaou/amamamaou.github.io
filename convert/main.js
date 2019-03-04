@@ -1,4 +1,6 @@
-/*! Convert to JPEG | v1.5.8 | MIT License */
+/*! Convert to JPEG | v1.6.0 | MIT License */
+import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
+
 {
   // Web Worker
   const worker = new Worker('worker.js?v1.5.8');

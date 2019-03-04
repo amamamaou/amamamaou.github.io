@@ -1,4 +1,6 @@
-/*! optipng main.js | v1.6.7 | MIT License */
+/*! optipng main.js | v1.7.0 | MIT License */
+import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
+
 {
   // Web Worker
   const worker = new Worker('worker.js?v1.1.7');
