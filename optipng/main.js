@@ -1,9 +1,9 @@
-/*! optipng main.js | v1.7.0 | MIT License */
+/*! optipng main.js | v1.7.2 | MIT License */
 import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
 
 {
   // Web Worker
-  const worker = new Worker('worker.js?v1.1.7');
+  const worker = new Worker('worker.js?v1.2.0');
 
   const
     maxMB = 10,
@@ -58,6 +58,9 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
   const output = new Vue({
     el: '#output',
     data: {items: []},
+    methods: {
+      replace(index, value) { this.items.splice(index, 1, value); },
+    },
   });
 
   // load image
@@ -129,7 +132,7 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
       }
 
       const item = {
-        file, src, name, size,
+        src, name, size,
         status: 'standby',
         index: items.length,
       };
@@ -137,7 +140,7 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
       items.push(item);
 
       if (await loadImage(src)) {
-        otimizeImage(item);
+        otimizeImage(item, file);
       } else {
         URL.revokeObjectURL(src);
         failed({item});
@@ -147,23 +150,21 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
     checkStatus();
   };
 
-  const otimizeImage = async item => {
+  const otimizeImage = async (item, file) => {
     item = Object.assign({}, item);
     item.status = 'progress';
 
-    if (convertType.test(item.file.type)) {
-      const file = await toPNG(item.src);
+    if (convertType.test(file.type)) {
+      file = await toPNG(item.src);
       if (!file) { return failed({item}); }
-      item.file = file;
       item.name = item.name.replace(/\.\w+$/, '.png');
     }
 
-    output.items.splice(item.index, 1, item);
-
+    output.replace(item.index, 1, item);
     await output.$nextTick();
-
     URL.revokeObjectURL(item.src);
-    worker.postMessage({item, level: control.level});
+
+    worker.postMessage({item, file, level: control.level});
   };
 
   const complete = async data => {
@@ -173,7 +174,7 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
 
     await loadImage(src);
 
-    output.items.splice(index, 1, {
+    output.replace(index, 1, {
       src, name,
       size: filesize(blob.size),
       orig: filesize(size),
@@ -185,7 +186,7 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
   };
 
   const failed = ({item}) => {
-    output.items.splice(item.index, 1, {
+    output.replace(item.index, 1, {
       name: item.name,
       src: null,
       status: 'failed',

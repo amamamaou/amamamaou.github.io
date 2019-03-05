@@ -1,9 +1,9 @@
-/*! Convert to JPEG | v1.6.0 | MIT License */
+/*! Convert to JPEG | v1.6.2 | MIT License */
 import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
 
 {
   // Web Worker
-  const worker = new Worker('worker.js?v1.5.8');
+  const worker = new Worker('worker.js?v1.6.0');
 
   const
     maxMB = 20,
@@ -43,6 +43,9 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
   const output = new Vue({
     el: '#output',
     data: {items: []},
+    methods: {
+      replace(index, value) { this.items.splice(index, 1, value); },
+    },
   });
   const control = new Vue({
     el: '#control',
@@ -139,7 +142,7 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
       }
 
       const item = {
-        file, src, size, name,
+        src, size, name,
         status: 'standby',
         index: items.length,
       };
@@ -153,35 +156,40 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
       }
 
       if (support) {
-        convertImage(item);
+        convertImage(item, file);
       } else {
-        itemList.push(item);
+        itemList.push({item, file});
       }
     }
 
     if (itemList.length === 0) { checkStatus(); }
 
     if (!support) {
-      for (const item of itemList) { convertImage(item); }
+      for (const {item, file} of itemList) { convertImage(item, file); }
     }
   };
 
   // post to Worker
-  const convertImage = async item => {
+  const convertImage = async (item, file) => {
+    let imgData = null;
+
     item = Object.assign({}, item);
     item.status = 'progress';
 
-    if (!support && !pass.test(item.file.type)) {
-      item.data = await getImageData(item.src);
-      if (!item.data) { return failed({item}); }
+    if (!support && !pass.test(file.type)) {
+      imgData = await getImageData(item.src);
+      if (!imgData) { return failed({item}); }
+      file = {type: file.type};
     }
 
-    output.items.splice(item.index, 1, item);
-
+    output.replace(item.index, item);
     await output.$nextTick();
-
     URL.revokeObjectURL(item.src);
-    worker.postMessage({item, quality: control.quality});
+
+    worker.postMessage({
+      item, file, imgData,
+      quality: control.quality,
+    });
   };
 
   const complete = async data => {
@@ -191,7 +199,7 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
 
     await loadImage(src);
 
-    output.items.splice(index, 1, {
+    output.replace(index, {
       src,
       name: name.replace(/\.\w+$/, '.jpg'),
       size: filesize(blob.size),
@@ -203,7 +211,7 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
   };
 
   const failed = ({item}) => {
-    output.items.splice(item.index, 1, {
+    output.replace(item.index, {
       name: item.name,
       src: null,
       status: 'failed',

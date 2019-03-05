@@ -1,4 +1,4 @@
-/*! worker.js | v1.5.8 | MIT License */
+/*! worker.js | v1.6.0 | MIT License */
 {
   self.importScripts(
     '/js/tobmp.min.js',
@@ -40,20 +40,18 @@
     return new Blob([data], {type});
   };
 
-  self.addEventListener('message', async ev => {
-    const {item, quality} = ev.data;
-    let {file, data = null} = item;
+  self.addEventListener('message', async ({data}) => {
+    const {item, file, quality} = data;
+    let {imgData} = data;
 
-    item.data = null;
-
-    if (!data && !pass.test(file.type)) {
-      data = await getImageData(file);
-      if (!data) { return self.postMessage({item}); }
+    if (!imgData && !pass.test(file.type)) {
+      imgData = await getImageData(file);
+      if (!imgData) { return self.postMessage({item}); }
     }
 
     const
       convert = file.type !== type || quality !== '100',
-      u8arr = data ? toBMP(data) : await blob2array(file),
+      u8arr = imgData ? toBMP(imgData) : await blob2array(file),
       blob = doMozjpeg(convert, u8arr, quality);
 
     self.postMessage({blob, item});
