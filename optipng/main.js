@@ -160,7 +160,7 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
       item.name = item.name.replace(/\.\w+$/, '.png');
     }
 
-    output.replace(item.index, 1, item);
+    output.replace(item.index, item);
     await output.$nextTick();
     URL.revokeObjectURL(item.src);
 
@@ -174,7 +174,7 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
 
     await loadImage(src);
 
-    output.replace(index, 1, {
+    output.replace(index, {
       src, name,
       size: filesize(blob.size),
       orig: filesize(size),
@@ -186,7 +186,7 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
   };
 
   const failed = ({item}) => {
-    output.replace(item.index, 1, {
+    output.replace(item.index, {
       name: item.name,
       src: null,
       status: 'failed',
