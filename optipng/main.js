@@ -68,7 +68,7 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
     image.src = src;
   }).catch(() => null);
 
-  // Blob to PNG Blob
+  // image to PNG Blob
   const toPNG = src => new Promise(async (resolve, reject) => {
     const iamge = await loadImage(src);
 

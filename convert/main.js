@@ -71,7 +71,7 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
     image.src = src;
   }).catch(() => null);
 
-  // Blob to ImageData
+  // image to ImageData
   const getImageData = async src => {
     const image = await loadImage(src);
 
