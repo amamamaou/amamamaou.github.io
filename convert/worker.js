@@ -1,9 +1,10 @@
-/*! worker.js | v1.6.0 | MIT License */
+/*! worker.js | v1.7.0 | MIT License */
 {
   self.importScripts(
     '/js/tobmp.min.js',
     'https://cdn.jsdelivr.net/npm/js-mozjpeg/src/jpegtran.min.js',
     'https://cdn.jsdelivr.net/npm/js-mozjpeg/src/cjpeg.min.js',
+    'https://cdn.jsdelivr.net/npm/jszip@3.2.0/dist/jszip.min.js',
   );
 
   const
@@ -28,6 +29,7 @@
     return ctx.getImageData(0, 0, width, height);
   };
 
+  // use Mozjpeg
   const doMozjpeg = (convert, u8arr, quality = null) => {
     if (!u8arr || u8arr.length === 0) { return null; }
 
@@ -40,13 +42,14 @@
     return new Blob([data], {type});
   };
 
-  self.addEventListener('message', async ({data}) => {
+  // convert image
+  const convert = async data => {
     const {item, file, quality} = data;
     let {imgData} = data;
 
     if (!imgData && !pass.test(file.type)) {
       imgData = await getImageData(file);
-      if (!imgData) { return self.postMessage({item}); }
+      if (!imgData) { return self.postMessage({type: 'failed', item}); }
     }
 
     const
@@ -54,8 +57,28 @@
       u8arr = imgData ? toBMP(imgData) : await blob2array(file),
       blob = doMozjpeg(convert, u8arr, quality);
 
-    self.postMessage({blob, item});
+    item.name = item.name.replace(/\.\w+$/, '.jpg');
+
+    self.postMessage({type: 'success', blob, item});
+  };
+
+  // zip file
+  const compress = async list => {
+    const zip = new JSZip;
+    for (const {name, blob} of list) { zip.file(name, blob); }
+
+    const blob = await zip.generateAsync({type: 'blob'});
+
+    self.postMessage({type: 'zip', blob});
+  };
+
+  self.addEventListener('message', ({data}) => {
+    if (data.type === 'convert') {
+      convert(data);
+    } else if (data.type === 'zip') {
+      compress(data.list);
+    }
   });
 
-  self.postMessage('ready');
+  self.postMessage({type: 'ready'});
 }

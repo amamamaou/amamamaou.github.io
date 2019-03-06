@@ -1,9 +1,9 @@
-/*! Convert to JPEG | v1.6.2 | MIT License */
+/*! Convert to JPEG | v1.7.0 | MIT License */
 import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
 
 {
   // Web Worker
-  const worker = new Worker('worker.js?v1.6.0');
+  const worker = new Worker('worker.js?v1.7.0');
 
   const
     maxMB = 20,
@@ -22,6 +22,25 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
   };
 
   // Vue instances
+  const control = new Vue({
+    el: '#control',
+    data: {
+      quality: localStorage.quality || '90',
+      wait: true,
+    },
+    watch: {
+      quality() { localStorage.quality = this.quality; },
+    },
+    methods: {
+      clear() {
+        for (const {status, src} of output.items) {
+          if (status === 'completed') { URL.revokeObjectURL(src); }
+        }
+        output.items = [];
+        download.list = [];
+      },
+    },
+  });
   const dropArea = new Vue({
     el: '#dropArea',
     data: {over: false, wait: true, maxMB},
@@ -40,29 +59,26 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
       },
     },
   });
+  const download = new Vue({
+    el: '#download',
+    data: {status: '', list: [], visibility: false},
+    methods: {
+      download() {
+        if (this.status === 'active') {
+          this.status = 'progress';
+          worker.postMessage({type: 'zip', list: this.list});
+        }
+      },
+    },
+  });
   const output = new Vue({
     el: '#output',
     data: {items: []},
+    watch: {
+      items() { download.visibility = this.items.length > 0; },
+    },
     methods: {
       replace(index, value) { this.items.splice(index, 1, value); },
-    },
-  });
-  const control = new Vue({
-    el: '#control',
-    data: {
-      quality: localStorage.quality || '90',
-      wait: true,
-    },
-    watch: {
-      quality() { localStorage.quality = this.quality; },
-    },
-    methods: {
-      clear() {
-        for (const {status, src} of output.items) {
-          if (status === 'completed') { URL.revokeObjectURL(src); }
-        }
-        output.items = [];
-      },
     },
   });
 
@@ -95,8 +111,9 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
   // check status
   const checkStatus = async () => {
     await output.$nextTick();
-    const completed = output.$el.querySelectorAll('.completed, .failed');
-    control.wait = completed.length < output.items.length;
+    const progress = output.$el.querySelectorAll('.completed,.failed').length < output.items.length;
+    control.wait = progress;
+    download.status = progress ? '' : 'active';
   };
 
   // read File object
@@ -104,6 +121,8 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
     if (!files || files.length === 0) { return; }
 
     control.wait = true;
+    download.status = '';
+
     files = Array.from(files);
 
     const
@@ -189,6 +208,7 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
     worker.postMessage({
       item, file, imgData,
       quality: control.quality,
+      type: 'convert',
     });
   };
 
@@ -200,12 +220,13 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
     await loadImage(src);
 
     output.replace(index, {
-      src,
-      name: name.replace(/\.\w+$/, '.jpg'),
+      src, name,
       size: filesize(blob.size),
       orig: size,
       status: 'completed',
     });
+
+    download.list.push({blob, name});
 
     checkStatus();
   };
@@ -218,6 +239,16 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
       reason: '壊れているか不正なファイルのため変換できませんでした',
     });
     checkStatus();
+  };
+
+  const zipDownload = blob => {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = '';
+    a.target = '_blank';
+    setTimeout(() => a.click(), 0);
+    setTimeout(() => URL.revokeObjectURL(a.href), 4E4);
+    download.status = 'active';
   };
 
   // paste image on clipbord
@@ -236,12 +267,11 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
 
   // Web Worker
   worker.addEventListener('message', ({data}) => {
-    if (data === 'ready') {
-      control.wait = dropArea.wait = false;
-    } else if (!data.blob) {
-      failed(data);
-    } else {
-      complete(data);
+    switch (data.type) {
+      case 'success': complete(data); break;
+      case 'failed': failed(data); break;
+      case 'zip': zipDownload(data.blob); break;
+      default: control.wait = dropArea.wait = false;
     }
   });
 }

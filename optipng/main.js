@@ -1,9 +1,9 @@
-/*! optipng main.js | v1.7.2 | MIT License */
+/*! optipng main.js | v1.8.0 | MIT License */
 import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
 
 {
   // Web Worker
-  const worker = new Worker('worker.js?v1.2.0');
+  const worker = new Worker('worker.js?v1.3.0');
 
   const
     maxMB = 10,
@@ -55,9 +55,24 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
       },
     },
   });
+  const download = new Vue({
+    el: '#download',
+    data: {status: '', list: [], visibility: false},
+    methods: {
+      download() {
+        if (this.status === 'active') {
+          this.status = 'progress';
+          worker.postMessage({type: 'zip', list: this.list});
+        }
+      },
+    },
+  });
   const output = new Vue({
     el: '#output',
     data: {items: []},
+    watch: {
+      items() { download.visibility = this.items.length > 0; },
+    },
     methods: {
       replace(index, value) { this.items.splice(index, 1, value); },
     },
@@ -87,8 +102,9 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
   // check status
   const checkStatus = async () => {
     await output.$nextTick();
-    const completed = output.$el.querySelectorAll('.completed, .failed');
-    control.wait = completed.length < output.items.length;
+    const progress = output.$el.querySelectorAll('.completed,.failed').length < output.items.length;
+    control.wait = progress;
+    download.status = progress ? '' : 'active';
   };
 
   // read File object
@@ -98,6 +114,8 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
     const {items} = output;
 
     control.wait = true;
+    download.status = '';
+
     files = Array.from(files);
 
     for (const file of files) {
@@ -164,7 +182,11 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
     await output.$nextTick();
     URL.revokeObjectURL(item.src);
 
-    worker.postMessage({item, file, level: control.level});
+    worker.postMessage({
+      item, file,
+      level: control.level,
+      type: 'optimize',
+    });
   };
 
   const complete = async data => {
@@ -182,6 +204,8 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
       status: 'completed',
     });
 
+    download.list.push({blob, name});
+
     checkStatus();
   };
 
@@ -193,6 +217,16 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
       reason: '壊れているか不正なファイルのため変換できませんでした',
     });
     checkStatus();
+  };
+
+  const zipDownload = blob => {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = '';
+    a.target = '_blank';
+    setTimeout(() => a.click(), 0);
+    setTimeout(() => URL.revokeObjectURL(a.href), 4E4);
+    download.status = 'active';
   };
 
   // paste image on clipbord
@@ -211,12 +245,11 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
 
   // Web Worker
   worker.addEventListener('message', ({data}) => {
-    if (data === 'ready') {
-      control.wait = dropArea.wait = false;
-    } else if (!data.blob) {
-      failed(data);
-    } else {
-      complete(data);
+    switch (data.type) {
+      case 'success': complete(data); break;
+      case 'failed': failed(data); break;
+      case 'zip': zipDownload(data.blob); break;
+      default: control.wait = dropArea.wait = false;
     }
   });
 }

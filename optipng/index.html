@@ -14,7 +14,7 @@
 <meta name="twitter:description" content="PNG画像をブラウザ上で最適化します">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="canonical" href="https://amamamaou.github.io/optipng/">
-<link rel="stylesheet" href="/css/main.css?2019030412">
+<link rel="stylesheet" href="/css/main.css?2019030611">
 <link rel="stylesheet" href="/css/optipng.css?20190227">
 </head>
 <body>
@@ -81,13 +81,19 @@
         multiple>
     </div>
 
+    <div id="download" class="dlSection" v-show="visibility" v-cloak>
+      <button @click="download" class="dlBtn" :class="status">一括ダウンロード (.zip)</button>
+      <small>画像の合計サイズによってはダウンロード開始まで時間がかかります。</small>
+    </div>
+
     <div id="output" class="outputContent">
       <ul v-if="items.length > 0" v-cloak>
         <li v-for="item in items" :class="item.status">
           <a v-if="item.status === 'completed'"
             :href="item.src"
             :download="item.name"
-            class="itemBody">
+            class="itemBody"
+            target="_blank">
             <img :src="item.src" :alt="item.name">
             <span class="tooltip">
               <span class="mainText">{{ item.orig }} → {{ item.size }}<br>({{ item.decrease }}% decrease)</span>
@@ -115,6 +121,6 @@
   <p>&copy; 2019 @amamamaou</p>
 </footer>
 
-<script src="main.js?v1.7.2" type="module"></script>
+<script src="main.js?v1.8.0" type="module"></script>
 </body>
 </html>

@@ -6,8 +6,8 @@
 <meta name="description" content="画像をブラウザ上でJPEGに変換します。">
 <meta name="author" content="幸乃ととめ">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<link href="/css/main.css?2019030412" rel="stylesheet">
-<link href="/css/convert2jpeg.css?20190227" rel="stylesheet">
+<link href="/css/main.css?2019030611" rel="stylesheet">
+<link href="/css/convert.css?2019030611" rel="stylesheet">
 </head>
 <body>
 <main>
@@ -58,13 +58,19 @@
         multiple>
     </div>
 
+    <div id="download" class="dlSection" v-show="visibility" v-cloak>
+      <button @click="download" class="dlBtn" :class="status">一括ダウンロード (.zip)</button>
+      <small>画像の合計サイズによってはダウンロード開始まで時間がかかります。</small>
+    </div>
+
     <div id="output" class="outputContent">
       <ul v-if="items.length > 0" v-cloak>
         <li v-for="item in items" :class="item.status">
           <a v-if="item.status === 'completed'"
             :href="item.src"
             :download="item.name"
-            class="itemBody">
+            class="itemBody"
+            target="_blank">
             <img :src="item.src" :alt="item.name">
             <span class="tooltip">
               <span class="mainText">{{ item.name }}</span>
