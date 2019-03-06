@@ -1,4 +1,4 @@
-/*! worker.js | v1.7.0 | MIT License */
+/*! worker.js | v1.7.1 | MIT License */
 {
   self.importScripts(
     '/js/tobmp.min.js',
@@ -64,8 +64,16 @@
 
   // zip file
   const compress = async list => {
-    const zip = new JSZip;
-    for (const {name, blob} of list) { zip.file(name, blob); }
+    const
+      zip = new JSZip,
+      nameList = [];
+
+    for (let {name, blob} of list) {
+      nameList.push(name);
+      const n = nameList.filter(v => v === name).length;
+      if (n > 1) { name = name.replace(/\.jpg$/, `(${n}).jpg`); }
+      zip.file(name, blob);
+    }
 
     const blob = await zip.generateAsync({type: 'blob'});
 

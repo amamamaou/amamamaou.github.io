@@ -3,7 +3,7 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
 
 {
   // Web Worker
-  const worker = new Worker('worker.js?v1.3.0');
+  const worker = new Worker('worker.js?v1.3.1');
 
   const
     maxMB = 10,
