@@ -1,4 +1,4 @@
-/*! Convert to JPEG | v1.7.0 | MIT License */
+/*! Convert to JPEG | v1.7.1 | MIT License */
 import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
 
 {
@@ -246,8 +246,9 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
     a.href = URL.createObjectURL(blob);
     a.download = '';
     a.target = '_blank';
-    setTimeout(() => a.click(), 0);
-    setTimeout(() => URL.revokeObjectURL(a.href), 4E4);
+    document.body.appendChild(a).click();
+    URL.revokeObjectURL(a.href);
+    a.remove();
     download.status = 'active';
   };
 
