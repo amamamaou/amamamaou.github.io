@@ -200,57 +200,46 @@
   100% { transform: rotate(360deg); }
 }
 
-// @media screen and (max-width: 375px) {
-//   .control {
-//     .optipng {
-//       small {
-//         display: block;
-//       }
-//     }
-//   }
-// }
-//
-// @media screen and (max-width: 1280px) {
-//   .dropContent {
-//     figure img {
-//       width: 20vw;
-//     }
-//
-//     label::after {
-//       display: block;
-//       margin-top: 1.2em;
-//       font-size: 1.4rem;
-//       content: "ここをタップして画像を選択してください";
-//     }
-//
-//     p {
-//       display: none;
-//     }
-//   }
-//
-//   .outputContent {
-//     &.reset {
-//       transition: none;
-//     }
-//
-//     .innerBody {
-//       padding: 1.2em;
-//     }
-//
-//     .message {
-//       font-size: 1.4rem;
-//     }
-//
-//     .dlBtn {
-//       margin-bottom: 1em;
-//
-//       a {
-//         transition: none;
-//
-//         &:hover {
-//           background: #fff;
-//         }
-//       }
-//     }
-//   }
-// }
+@media screen and (max-width: 1280px) {
+  .dropContent {
+    figure img {
+      width: 20vw;
+    }
+
+    label::after {
+      display: block;
+      margin-top: 1.2em;
+      font-size: 1.4rem;
+      content: "ここをタップして画像を選択してください";
+    }
+
+    p {
+      display: none;
+    }
+  }
+
+  .dlSection {
+    * {
+      display: none;
+    }
+
+    &::before {
+      font-size: 1.2rem;
+      content: "スマホでは画像長押しで保存してください";
+    }
+  }
+
+  .outputContent {
+    li {
+      width: calc(50% - 20px);
+    }
+
+    .itemBody {
+      pointer-events: none;
+    }
+
+    .completed img {
+      pointer-events: auto !important;
+    }
+  }
+}
