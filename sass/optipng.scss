@@ -233,13 +233,5 @@
     li {
       width: calc(50% - 20px);
     }
-
-    .itemBody {
-      pointer-events: none;
-    }
-
-    .completed img {
-      pointer-events: auto !important;
-    }
   }
 }

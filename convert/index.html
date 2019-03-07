@@ -66,17 +66,22 @@
     <div id="output" class="outputContent">
       <ul v-if="items.length > 0" v-cloak>
         <li v-for="item in items" :class="item.status">
-          <a v-if="item.status === 'completed'"
-            :href="item.src"
-            :download="item.name"
-            class="itemBody"
-            target="_blank">
-            <img :src="item.src" :alt="item.name">
-            <span class="tooltip">
-              <span class="mainText">{{ item.name }}</span>
-              <span>{{ item.orig }} → {{ item.size }}</span>
-            </span>
-          </a>
+          <template v-if="item.status === 'completed'">
+            <div v-if="sp" class="itemBody">
+              <img v-if="item.src" :src="item.src" :alt="item.name">
+            </div>
+            <a v-else
+              :href="item.src"
+              :download="item.name"
+              class="itemBody"
+              target="_blank">
+              <img :src="item.src" :alt="item.name">
+              <span class="tooltip">
+                <span class="mainText">{{ item.name }}</span>
+                <span>{{ item.orig }} → {{ item.size }}</span>
+              </span>
+            </a>
+          </template>
           <div v-else class="itemBody">
             <img v-if="item.src" :src="item.src" :alt="item.name">
             <span v-if="item.status === 'failed'" class="tooltip">
@@ -99,6 +104,6 @@
   <p>&copy; 2019 @amamamaou</p>
 </footer>
 
-<script src="main.js?1.7.2" type="module"></script>
+<script src="main.js?1.7.3" type="module"></script>
 </body>
 </html>

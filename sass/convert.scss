@@ -180,7 +180,7 @@
   100% { transform: rotate(360deg); }
 }
 
-@media screen and (max-width: 1280px) {
+@media screen and (max-width: 750px) {
   .dropContent {
     figure img {
       width: 20vw;
@@ -212,14 +212,6 @@
   .outputContent {
     li {
       width: calc(50% - 20px);
-    }
-
-    .itemBody {
-      pointer-events: none;
-    }
-
-    .completed img {
-      pointer-events: auto !important;
     }
   }
 }

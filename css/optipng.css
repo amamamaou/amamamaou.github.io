@@ -56,6 +56,4 @@
   .dropContent p { display: none; }
   .dlSection * { display: none; }
   .dlSection::before { font-size: 1.2rem; content: "スマホでは画像長押しで保存してください"; }
-  .outputContent li { width: calc(50% - 20px); }
-  .outputContent .itemBody { pointer-events: none; }
-  .outputContent .completed img { pointer-events: auto !important; } }
+  .outputContent li { width: calc(50% - 20px); } }

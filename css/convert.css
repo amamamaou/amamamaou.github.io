@@ -49,11 +49,9 @@
 @keyframes loading { 0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); } }
 
-@media screen and (max-width: 1280px) { .dropContent figure img { width: 20vw; }
+@media screen and (max-width: 750px) { .dropContent figure img { width: 20vw; }
   .dropContent label::after { display: block; margin-top: 1.2em; font-size: 1.4rem; content: "ここをタップして画像を選択してください"; }
   .dropContent p { display: none; }
   .dlSection * { display: none; }
   .dlSection::before { font-size: 1.2rem; content: "スマホでは画像長押しで保存してください"; }
-  .outputContent li { width: calc(50% - 20px); }
-  .outputContent .itemBody { pointer-events: none; }
-  .outputContent .completed img { pointer-events: auto !important; } }
+  .outputContent li { width: calc(50% - 20px); } }

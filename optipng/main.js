@@ -1,4 +1,4 @@
-/*! optipng main.js | v1.8.2 | MIT License */
+/*! optipng main.js | v1.8.3 | MIT License */
 import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
 import {fileSize, loadImage, saveAs} from '/js/utility.min.js';
 
@@ -61,7 +61,7 @@ const
   }),
   output = new Vue({
     el: '#output',
-    data: {items: []},
+    data: {items: [], sp: false},
     watch: {
       items() { download.visibility = this.items.length > 0; },
     },
@@ -69,6 +69,14 @@ const
       replace(index, value) { this.items.splice(index, 1, value); },
     },
   });
+
+// match media
+const
+  mql = window.matchMedia('(max-width: 750px)'),
+  checkBreak = mql => { output.sp = mql.matches; };
+
+mql.addListener(checkBreak);
+checkBreak(mql);
 
 // image to PNG Blob
 const toPNG = src => new Promise(async (resolve, reject) => {
