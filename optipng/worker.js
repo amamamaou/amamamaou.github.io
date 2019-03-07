@@ -1,55 +1,54 @@
-/*! worker.js | v1.3.1 | MIT License */
-{
-  self.importScripts(
-    'https://cdn.jsdelivr.net/npm/optipng-js',
-    'https://cdn.jsdelivr.net/npm/jszip@3.2.0/dist/jszip.min.js',
-  );
+/*! worker.js | v1.3.2 | MIT License */
 
-  // use Optiong.js
-  const doOptipng = (u8arr, level) => {
-    const {data} = optipng(u8arr, ['-o' + level]);
-    return data ? new Blob([data], {type: 'image/png'}) : null;
-  };
+self.importScripts(
+  'https://cdn.jsdelivr.net/npm/optipng-js',
+  'https://cdn.jsdelivr.net/npm/jszip@3.2.0/dist/jszip.min.js',
+);
 
-  // Blob to Uint8Array
-  const blob2array = async blob =>
-    new Uint8Array(await new Response(blob).arrayBuffer());
+// use Optiong.js
+const doOptipng = (u8arr, level) => {
+  const {data} = optipng(u8arr, ['-o' + level]);
+  return data ? new Blob([data], {type: 'image/png'}) : null;
+};
 
-  // optimize image
-  const optimize = async data => {
-    const
-      {item, file, level} = data,
-      u8arr = await blob2array(file),
-      blob = doOptipng(u8arr, level);
+// Blob to Uint8Array
+const blob2array = async blob =>
+  new Uint8Array(await new Response(blob).arrayBuffer());
 
-    self.postMessage({type: 'success', blob, item});
-  };
+// optimize image
+const optimize = async data => {
+  const
+    {item, file, level} = data,
+    u8arr = await blob2array(file),
+    blob = doOptipng(u8arr, level);
 
-  // zip file
-  const compress = async list => {
-    const
-      zip = new JSZip,
-      nameList = [];
+  self.postMessage({type: 'success', blob, item});
+};
 
-    for (let {name, blob} of list) {
-      nameList.push(name);
-      const n = nameList.filter(v => v === name).length;
-      if (n > 1) { name = name.replace(/\.jpg$/, `(${n}).jpg`); }
-      zip.file(name, blob);
-    }
+// zip file
+const compress = async list => {
+  const
+    zip = new JSZip,
+    nameList = [];
 
-    const blob = await zip.generateAsync({type: 'blob'});
+  for (let {name, blob} of list) {
+    nameList.push(name);
+    const n = nameList.filter(v => v === name).length;
+    if (n > 1) { name = name.replace(/\.jpg$/, `(${n}).jpg`); }
+    zip.file(name, blob);
+  }
 
-    self.postMessage({type: 'zip', blob});
-  };
+  const blob = await zip.generateAsync({type: 'blob'});
 
-  self.addEventListener('message', ({data}) => {
-    if (data.type === 'optimize') {
-      optimize(data);
-    } else if (data.type === 'zip') {
-      compress(data.list);
-    }
-  });
+  self.postMessage({type: 'zip', blob});
+};
 
-  self.postMessage({type: 'ready'});
-}
+self.addEventListener('message', ({data}) => {
+  if (data.type === 'optimize') {
+    optimize(data);
+  } else if (data.type === 'zip') {
+    compress(data.list);
+  }
+});
+
+self.postMessage({type: 'ready'});
