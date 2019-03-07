@@ -65,7 +65,10 @@ const
   }),
   output = new Vue({
     el: '#output',
-    data: {items: [], sp: false},
+    data: {
+      items: [],
+      sp: /iPhone|iPad|iPod|Android/i.test(navigator.userAgent),
+    },
     watch: {
       items() { download.visibility = this.items.length > 0; },
     },
@@ -73,14 +76,6 @@ const
       replace(index, value) { this.items.splice(index, 1, value); },
     },
   });
-
-// match media
-const
-  mql = window.matchMedia('(max-width: 750px)'),
-  checkBreak = mql => { output.sp = mql.matches; };
-
-mql.addListener(checkBreak);
-checkBreak(mql);
 
 // image to ImageData
 const getImageData = async src => {
