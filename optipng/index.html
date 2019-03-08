@@ -15,7 +15,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="canonical" href="https://amamamaou.github.io/optipng/">
 <link rel="stylesheet" href="/css/main.css?2019030611">
-<link rel="stylesheet" href="/css/optipng.css?2019030722">
+<link rel="stylesheet" href="/css/optipng.css?2019030819">
 </head>
 <body>
 <main>
@@ -82,8 +82,11 @@
     </div>
 
     <div id="download" class="dlSection" v-show="visibility" v-cloak>
-      <button @click="download" class="dlBtn" :class="status">一括ダウンロード (.zip)</button>
-      <small>画像の合計サイズによってはダウンロード開始まで時間がかかります。</small>
+      <small v-if="sp">スマホでは画像長押しで保存してください</small>
+      <template v-else>
+        <button @click="download" class="dlBtn" :class="status">一括ダウンロード (.zip)</button>
+        <small>画像の合計サイズによってはダウンロード開始まで時間がかかります。</small>
+      </template>
     </div>
 
     <div id="output" class="outputContent">
@@ -127,6 +130,6 @@
   <p>&copy; 2019 @amamamaou</p>
 </footer>
 
-<script src="main.js?v1.8.3" type="module"></script>
+<script src="main.js?v1.8.4" type="module"></script>
 </body>
 </html>

@@ -218,17 +218,6 @@
     }
   }
 
-  .dlSection {
-    * {
-      display: none;
-    }
-
-    &::before {
-      font-size: 1.2rem;
-      content: "スマホでは画像長押しで保存してください";
-    }
-  }
-
   .outputContent {
     li {
       width: calc(50% - 20px);

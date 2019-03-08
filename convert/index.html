@@ -7,7 +7,7 @@
 <meta name="author" content="幸乃ととめ">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link href="/css/main.css?2019030611" rel="stylesheet">
-<link href="/css/convert.css?2019030722" rel="stylesheet">
+<link href="/css/convert.css?2019030819" rel="stylesheet">
 </head>
 <body>
 <main>
@@ -59,8 +59,11 @@
     </div>
 
     <div id="download" class="dlSection" v-show="visibility" v-cloak>
-      <button @click="download" class="dlBtn" :class="status">一括ダウンロード (.zip)</button>
-      <small>画像の合計サイズによってはダウンロード開始まで時間がかかります。</small>
+      <small v-if="sp">スマホでは画像長押しで保存してください</small>
+      <template v-else>
+        <button @click="download" class="dlBtn" :class="status">一括ダウンロード (.zip)</button>
+        <small>画像の合計サイズによってはダウンロード開始まで時間がかかります。</small>
+      </template>
     </div>
 
     <div id="output" class="outputContent">
@@ -68,7 +71,7 @@
         <li v-for="item in items" :class="item.status">
           <template v-if="item.status === 'completed'">
             <div v-if="sp" class="itemBody">
-              <img v-if="item.src" :src="item.src" :alt="item.name">
+              <img ref="image" :src="item.src" :alt="item.name">
             </div>
             <a v-else
               :href="item.src"
@@ -104,6 +107,6 @@
   <p>&copy; 2019 @amamamaou</p>
 </footer>
 
-<script src="main.js?1.7.3" type="module"></script>
+<script src="main.js?1.7.4" type="module"></script>
 </body>
 </html>

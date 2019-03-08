@@ -343,10 +343,10 @@ section {
         content: "";
       }
     }
-  }
 
-  small {
-    margin-left: 1em;
+    + small {
+      margin-left: 1em;
+    }
   }
 }
 

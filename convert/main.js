@@ -1,4 +1,4 @@
-/*! Convert to JPEG | v1.7.3 | MIT License */
+/*! Convert to JPEG | v1.7.4 | MIT License */
 import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
 import {fileSize, loadImage, saveAs} from '/js/utility.min.js';
 
@@ -10,7 +10,8 @@ const
   maxSize = maxMB * 1048576,
   mime = /\/(?:bmp|gif|jpeg|png)$/,
   pass = /\/(?:bmp|jpeg)$/,
-  support = typeof OffscreenCanvas !== 'undefined';
+  support = typeof OffscreenCanvas !== 'undefined',
+  sp = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
 // Vue instances
 const
@@ -53,7 +54,7 @@ const
   }),
   download = new Vue({
     el: '#download',
-    data: {status: '', list: [], visibility: false},
+    data: {status: '', list: [], visibility: false, sp},
     methods: {
       download() {
         if (this.status === 'active') {
@@ -65,10 +66,7 @@ const
   }),
   output = new Vue({
     el: '#output',
-    data: {
-      items: [],
-      sp: /iPhone|iPad|iPod|Android/i.test(navigator.userAgent),
-    },
+    data: {items: [], sp},
     watch: {
       items() { download.visibility = this.items.length > 0; },
     },
@@ -105,7 +103,9 @@ const checkStatus = async () => {
 
 // read File object
 const addFiles = async files => {
-  if (!files || files.length === 0) { return; }
+  if (dropArea.wait || !files || files.length === 0) {
+    return;
+  }
 
   control.wait = true;
   download.status = '';

@@ -1,4 +1,4 @@
-/*! optipng main.js | v1.8.3 | MIT License */
+/*! optipng main.js | v1.8.4 | MIT License */
 import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
 import {fileSize, loadImage, saveAs} from '/js/utility.min.js';
 
@@ -9,7 +9,8 @@ const
   maxMB = 10,
   maxSize = maxMB * 1048576,
   pngType = 'image/png',
-  convertType = /\/(?:bmp|gif|jpeg)$/;
+  convertType = /\/(?:bmp|gif|jpeg)$/,
+  sp = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
 // Vue instances
 const
@@ -49,7 +50,7 @@ const
   }),
   download = new Vue({
     el: '#download',
-    data: {status: '', list: [], visibility: false},
+    data: {status: '', list: [], visibility: false, sp},
     methods: {
       download() {
         if (this.status === 'active') {
@@ -61,10 +62,7 @@ const
   }),
   output = new Vue({
     el: '#output',
-    data: {
-      items: [],
-      sp: /iPhone|iPad|iPod|Android/i.test(navigator.userAgent),
-    },
+    data: {items: [], sp},
     watch: {
       items() { download.visibility = this.items.length > 0; },
     },
