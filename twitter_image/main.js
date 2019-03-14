@@ -1,5 +1,6 @@
 /*! twitter_image | v1.3.0 | MIT License */
 import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
+import {fileSize, loadImage} from '/js/utility.min.js';
 
 {
   // Web Worker
@@ -12,15 +13,6 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
     maxWH = 1600,
     imageError = 'ブラウザが対応していない画像フォーマットです。';
 
-  // calc bytes
-  const filesize = bytes => {
-    const
-      exp = Math.log(bytes) / Math.log(1024) | 0,
-      size = bytes / 1024 ** exp,
-      unit = exp === 0 ? 'bytes' : 'KM'[exp - 1] + 'B';
-    return (exp === 0 ? size : size.toFixed(2)) + ' ' + unit;
-  };
-
   // canvas to blob
   const canvas2blob = async canvas => {
     let blob = null;
@@ -31,13 +23,6 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
     }
     return blob;
   };
-
-  // onload Promise
-  const onLoad = (image, src) => new Promise((resolve, reject) => {
-    image.onload = () => resolve(true);
-    image.onerror = reject;
-    image.src = src;
-  }).catch(() => false);
 
   // reset options
   const dropReset = () => {
@@ -113,10 +98,10 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
     if (size > mega * allowMB) { return showResult(`画像サイズが ${allowMB}MB を超えています！`); }
 
     const
-      image = new Image,
-      url = URL.createObjectURL(file);
+      url = URL.createObjectURL(file),
+      image = await loadImage(url);
 
-    if (await onLoad(image, url)) {
+    if (image) {
       URL.revokeObjectURL(url);
       optimizeImage(image);
       output.fileName = name ? name.replace(/\.\w+$/, '_tw.png') : 'clipbord.png';
@@ -129,10 +114,10 @@ import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
     const url = URL.createObjectURL(blob);
     let text;
 
-    await onLoad(new Image, url);
+    await loadImage(url);
 
     output.image = url;
-    output.size = filesize(blob.size);
+    output.size = fileSize(blob.size);
 
     if (blob.size > mega * 3) {
       text = '3MB を超えています。Twitterにアップロードできません。';
