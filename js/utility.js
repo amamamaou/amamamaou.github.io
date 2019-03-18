@@ -20,13 +20,13 @@ export function loadImage(src) {
 }
 
 // file saver
-export function saveAs(blob, name = '') {
+export function saveAs(blob, name = null) {
   const url = URL.createObjectURL(blob);
 
   if ('download' in HTMLAnchorElement.prototype) {
     const a = document.createElement('a');
     a.href = url;
-    a.download = name;
+    a.download = name || url.split('/').pop();
     document.body.appendChild(a).click();
     a.remove();
   } else {
