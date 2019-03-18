@@ -143,7 +143,7 @@ const addFiles = async files => {
     items.push(item);
 
     if (await loadImage(src)) {
-      otimizeImage(item, file);
+      otimizeImage({...item}, file);
     } else {
       URL.revokeObjectURL(src);
       failed({item});
@@ -154,7 +154,6 @@ const addFiles = async files => {
 };
 
 const otimizeImage = async (item, file) => {
-  item = Object.assign({}, item);
   item.status = 'progress';
 
   if (convertType.test(file.type)) {

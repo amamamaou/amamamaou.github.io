@@ -15,7 +15,7 @@ const blob2array = async blob => new Uint8Array(await new Response(blob).arrayBu
 
 // Blob to ImageData
 const getImageData = async blob => {
-  const bitmap = await self.createImageBitmap(blob).catch(() => false);
+  const bitmap = await self.createImageBitmap(blob).catch(() => null);
 
   if (!bitmap) { return null; }
 

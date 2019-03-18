@@ -27,7 +27,7 @@ const
     methods: {
       clear() {
         for (const {status, src} of output.items) {
-          if (status === 'completed') { URL.revokeObjectURL(src); }
+          status === 'completed' && URL.revokeObjectURL(src);
         }
         output.items = [];
         download.list = [];
@@ -162,7 +162,7 @@ const addFiles = async files => {
     }
 
     if (support) {
-      convertImage(item, file);
+      convertImage({...item}, file);
     } else {
       itemList.push({item, file});
     }
@@ -179,7 +179,6 @@ const addFiles = async files => {
 const convertImage = async (item, file) => {
   let imgData = null;
 
-  item = Object.assign({}, item);
   item.status = 'progress';
 
   if (!support && !pass.test(file.type)) {
@@ -235,7 +234,7 @@ document.addEventListener('paste', ev => {
     if (items) {
       const files = [];
       for (const item of Array.from(items)) {
-        if (mime.test(item.type)) { files.push(item.getAsFile()); }
+        mime.test(item.type) && files.push(item.getAsFile());
       }
       addFiles(files);
     }
