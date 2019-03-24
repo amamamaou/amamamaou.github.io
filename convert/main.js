@@ -1,4 +1,4 @@
-/*! Convert to JPEG | v1.7.5 | MIT License */
+/*! Convert to JPEG | v1.7.6 | MIT License */
 import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
 import {fileSize, loadImage, saveAs} from '/js/utility.min.js';
 
@@ -8,7 +8,7 @@ const worker = new Worker('worker.js?v1.7.2');
 const
   maxMB = 25,
   maxSize = maxMB * 1048576,
-  mime = /\/(?:bmp|gif|jpeg|png)$/,
+  mime = /\/(?:bmp|gif|jpeg|png|webp)$/,
   pass = /\/(?:bmp|jpeg)$/,
   support = typeof OffscreenCanvas !== 'undefined',
   sp = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
