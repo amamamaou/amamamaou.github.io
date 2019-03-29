@@ -73,14 +73,14 @@ const
 
 // image to PNG Blob
 const toPNG = src => new Promise(async (resolve, reject) => {
-  const iamge = await loadImage(src);
+  const image = await loadImage(src);
 
-  if (!iamge) { return reject(); }
+  if (!image) { return reject(); }
 
   const canvas = document.createElement('canvas');
-  canvas.width = iamge.width;
-  canvas.height = iamge.height;
-  canvas.getContext('2d').drawImage(iamge, 0, 0);
+  canvas.width = image.width;
+  canvas.height = image.height;
+  canvas.getContext('2d').drawImage(image, 0, 0);
   canvas.toBlob(resolve);
 }).catch(() => null);
 
