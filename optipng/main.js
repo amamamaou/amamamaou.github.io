@@ -1,9 +1,9 @@
-/*! optipng main.js | v1.8.5 | MIT License */
+/*! optipng main.js | v1.8.6 | MIT License */
 import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
 import {fileSize, loadImage, saveAs} from '/js/utility.min.js';
 
 // Web Worker
-const worker = new Worker('worker.js?v1.3.2');
+const worker = new Worker('worker.js?v1.3.3');
 
 const
   maxMB = 10,

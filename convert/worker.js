@@ -1,4 +1,4 @@
-/*! worker.js | v1.7.2 | MIT License */
+/*! worker.js | v1.7.3 | MIT License */
 self.importScripts(
   '/js/tobmp.min.js',
   'https://cdn.jsdelivr.net/npm/js-mozjpeg/src/jpegtran.min.js',
@@ -64,13 +64,14 @@ const convert = async data => {
 const compress = async list => {
   const
     zip = new JSZip,
+    offset = new Date().getTimezoneOffset() * 60000,
     nameList = [];
 
   for (let {name, blob} of list) {
     nameList.push(name);
     const n = nameList.filter(v => v === name).length;
     if (n > 1) { name = name.replace(/\.jpg$/, `(${n}).jpg`); }
-    zip.file(name, blob);
+    zip.file(name, blob, {date: new Date(Date.now() - offset)});
   }
 
   const blob = await zip.generateAsync({type: 'blob'});
