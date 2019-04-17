@@ -1,4 +1,3 @@
-// compileCompact: ../css/$1.css
 @charset "utf-8";
 
 @import "module";
@@ -9,7 +8,7 @@ html {
   font-size: 62.5%; /* 1em = 10px */
 }
 body {
-  font: 1.6em / 1.4 "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Helvetica Neue", "Hiragino Kaku Gothic ProN", "メイリオ" , "Meiryo", sans-serif;
+  font: 1.6em / 1.4 "-apple-system", BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, sans-serif;
   color: $fontColor;
   background: #eee;
   margin: 0;

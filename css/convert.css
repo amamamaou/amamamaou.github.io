@@ -36,7 +36,7 @@
 
 .outputContent li .tooltip { display: block; position: absolute; top: 0; left: -10%; z-index: 10; transform: translate3d(0, -95%, 0) scale(0.7); background: rgba(0, 0, 0, 0.75); border-radius: 4px; width: 120%; padding: 8px 10px; color: #fff; font-size: 1.35rem; line-height: 1.2; text-align: center; box-sizing: border-box; opacity: 0; transition: all .15s; pointer-events: none; }
 
-.outputContent li .tooltip::after { display: block; position: absolute; left: 0; right: 0; width: 0; bottom: -10px; height: 0; margin: 0 auto; border-top: 10px solid rgba(0, 0, 0, 0.75); border-left: 6px solid transparent; border-right: 6px solid transparent; content: ""; }
+.outputContent li .tooltip::after { display: block; position: absolute; left: 0; right: 0; width: 0; bottom: -10px; height: 0; margin: 0 auto; border-top: 10px solid rgba(0, 0, 0, 0.75); border-left: 6px solid rgba(0, 0, 0, 0); border-right: 6px solid rgba(0, 0, 0, 0); content: ""; }
 
 .outputContent li .tooltip .mainText { display: block; margin-bottom: .4em; font-size: 1.5rem; }
 

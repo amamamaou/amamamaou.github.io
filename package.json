@@ -1,0 +1,19 @@
+{
+  "name": "amamamaou.github.io",
+  "version": "1.0.0",
+  "description": "amamamaou's site",
+  "main": "index.js",
+  "scripts": {
+    "build-sass": "node-sass -w ./sass -o ./css --output-style compact"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amamamaou/amamamaou.github.io.git"
+  },
+  "author": "@amamamaou",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/amamamaou/amamamaou.github.io/issues"
+  },
+  "homepage": "https://amamamaou.github.io"
+}
