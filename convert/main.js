@@ -6,7 +6,7 @@ import {fileSize, loadImage, saveAs} from '/js/utility.min.js';
 const worker = new Worker('worker.js?v1.7.3');
 
 const
-  maxMB = 25,
+  maxMB = 30,
   maxSize = maxMB * 1048576,
   mime = /\/(?:bmp|gif|jpeg|png|webp)$/,
   pass = /\/(?:bmp|jpeg)$/,
