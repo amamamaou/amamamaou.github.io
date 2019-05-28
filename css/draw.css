@@ -1,0 +1,18 @@
+/* draw */
+#mainForm dt { margin-bottom: .4em; }
+
+#mainForm dd { margin-left: 1.5em; }
+
+#mainForm dd + dt { margin-top: 1em; }
+
+#mainForm dd p { margin: .8em 0; }
+
+#mainForm dd p.notice { margin: .4em 0; font-size: 1.35rem; }
+
+#mainForm dd label + label { margin-left: 1em; }
+
+#mainForm select, #mainForm input[type="number"] { height: 32px; font-size: 1.6rem; }
+
+#mainForm output { font-weight: bold; }
+
+#mainForm .pickr .pcr-button { width: 4em; }

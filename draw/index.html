@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Drawing Shapes</title>
+<meta name="description" content="Canvasで図形を操作するだけ">
+<meta name="author" content="幸乃ととめ">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="/css/main.css?2019030611" rel="stylesheet">
+<link href="/css/draw.css?2019052819" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.css" rel="stylesheet">
+</head>
+<body>
+<main>
+  <aside class="topicPath">
+    <ol>
+      <li><a href="/">ものおき</a></li>
+      <li>Drawing Shapes</li>
+    </ol>
+  </aside>
+
+  <h1>Drawing Shapes</h1>
+  <p class="description">Canvasで図形を操作するだけです。<br>
+  プレビューページのURLをそのままOBSの「ブラウザ」で設定すれば動く背景としても使えます。透明にもなります。</p>
+
+  <section>
+    <form id="mainForm" action="preview.html" method="get" target="_blank">
+      <dl>
+        <dt>図形の種類</dt>
+        <dd>
+          <select name="type">
+            <option value="circle">円形</option>
+            <option value="triangle">正三角形</option>
+            <option value="square">正方形</option>
+            <option value="pentagon">正五角形</option>
+            <option value="hexagon">正六角形</option>
+            <option value="star">五芒星（★）</option>
+            <option value="all" selected>すべてを含む</option>
+          </select>
+        </dd>
+
+        <dt>図形の数</dt>
+        <dd><input type="number" name="length" value="100" min="1" max="1000"></dd>
+
+        <dt>図形の半径</dt>
+        <dd>
+          <p class="notice">指定した範囲内の半径で図形がランダムに生成されます。<br>
+            円形以外の図形は、指定半径の円の円周上に頂点を持つ図形として描かれます。</p>
+          <p><label>最小値：<input type="number" name="minRadius" value="5" min="1" max="1000"></label>
+            <label>最大値：<input type="number" name="maxRadius" value="80" min="1" max="1000"></label></p>
+        </dd>
+
+        <dt>図形の透明度</dt>
+        <dd>
+          <p class="notice">指定した範囲内の透明度で図形がランダムに生成されます。</p>
+          <p>最小値：<output>0.3</output><br>
+            <input type="range" name="minOpacity" value="0.3" step="0.01" min="0" max="1"></p>
+          <p>最大値：<output>0.8</output><br>
+            <input type="range" name="maxOpacity" value="0.8" step="0.01" min="0" max="1"></p>
+        </dd>
+
+        <dt>速度</dt>
+        <dd>
+          <p class="notice">1フレーム毎の移動ピクセル数です。<br>
+            指定した範囲内の速度で図形が動きます。数値が大きいほど早くなります。</p>
+          <p>最小値：<output>0.5</output><br>
+            <input type="range" name="minSpeed" value="0.5" step="0.5" min="0.5" max="50"></p>
+          <p>最大値：<output>5</output><br>
+            <input type="range" name="maxSpeed" value="5" step="0.5" min="0.5" max="50"></p>
+        </dd>
+
+        <dt>背景色</dt>
+        <dd>
+          <p class="notice">全体の背景色です。透明度が指定できます。</p>
+          <div class="backgroundColor"></div>
+          <input type="hidden" name="bg" value="#51a0d1">
+        </dd>
+
+        <dt>図形の色</dt>
+        <dd>
+          <p class="notice">図形の色です。透明度は指定できません。</p>
+          <div class="fillColor"></div>
+          <input type="hidden" name="fill" value="#ebebff">
+        </dd>
+
+        <dt>その他</dt>
+        <dd>
+          方向：<select name="reverse"><option value="false" selected>上から下</option><option value="true">下から上</option></select><br>
+          <label>図形の回転：<input type="checkbox" name="rotate" value="true" checked></label><br>
+          <label>ぼかしを入れる：<input type="checkbox" name="blur" value="true"></label>
+        </dd>
+      </dl>
+      <div class="formButton">
+        <input type="submit" value="プレビュー">
+      </div>
+    </form>
+  </section>
+</main>
+<footer>
+  <p>&copy; 2019 @amamamaou</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+<script>
+{
+  const mainForm = document.getElementById('mainForm');
+
+  Pickr.create({
+    el: '.backgroundColor',
+    default: mainForm.bg.value,
+    components: {
+      preview: true,
+      opacity: true,
+      hue: true,
+      interaction: {
+        hex: true,
+        rgba: true,
+        hsva: true,
+        input: true,
+        clear: true,
+        save: true,
+      },
+    },
+  }).on('save', hsva => {
+    mainForm.bg.value = hsva.toRGBA().toString();
+  });
+
+  Pickr.create({
+    el: '.fillColor',
+    default: mainForm.fill.value,
+    components: {
+      preview: true,
+      hue: true,
+      interaction: {
+        hex: true,
+        rgba: true,
+        hsva: true,
+        input: true,
+        clear: true,
+        save: true,
+      },
+    },
+  }).on('save', hsva => {
+    mainForm.fill.value = hsva.toHEXA().toString();
+  });
+}
+</script>
+</body>
+</html>

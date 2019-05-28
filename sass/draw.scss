@@ -1,0 +1,45 @@
+@charset "utf-8";
+
+@import "module";
+
+/* draw */
+#mainForm {
+  dt {
+    margin-bottom: .4em;
+  }
+
+  dd {
+    margin-left: 1.5em;
+
+    + dt {
+      margin-top: 1em;
+    }
+
+    p {
+      margin: .8em 0;
+
+      &.notice {
+        margin: .4em 0;
+        font-size: 1.35rem;
+      }
+    }
+
+    label + label {
+      margin-left: 1em;
+    }
+  }
+
+  select,
+  input[type="number"] {
+    height: 32px;
+    font-size: 1.6rem;
+  }
+
+  output {
+    font-weight: bold;
+  }
+
+  .pickr .pcr-button {
+    width: 4em;
+  }
+}
