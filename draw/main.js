@@ -1,4 +1,4 @@
-/*! Draw Shapes | v1.0.0 | (c) @amamamaou */
+/*! Draw Shapes | v1.0.2 | (c) @amamamaou */
 {
   const util = {
     getRndArray(array) { return array[Math.floor(Math.random() * array.length)]; },
@@ -174,7 +174,7 @@
       fill: '#ebebff',
       reverse: false,
       blur: false,
-      rotate: true,
+      rotate: false,
     },
     shapes: {
       triangle: [0, 120, 240],
