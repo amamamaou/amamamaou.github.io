@@ -1,4 +1,22 @@
 /* draw */
+#mainForm { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: stretch; }
+
+#mainForm fieldset { min-width: 100%; margin: 0 0 1em; padding: .5em 1em .8em; border: 2px solid #ccc; border-radius: 8px; box-sizing: border-box; }
+
+#mainForm fieldset.half { min-width: 49%; }
+
+#mainForm fieldset legend { padding: 0 .5em; font-size: 1.5rem; font-weight: bold; }
+
+#mainForm fieldset p { margin: .8em 0; }
+
+#mainForm fieldset p.notice { margin: .4em 0; font-size: 1.35rem; }
+
+#mainForm fieldset p:first-of-type { margin-top: 0; }
+
+#mainForm fieldset p:last-child { margin-bottom: 0; }
+
+#mainForm fieldset select ~ label, #mainForm fieldset label ~ label { margin-left: 1em; }
+
 #mainForm dt { margin-bottom: .4em; }
 
 #mainForm dd { margin-left: 1.5em; }
@@ -9,10 +27,16 @@
 
 #mainForm dd p.notice { margin: .4em 0; font-size: 1.35rem; }
 
-#mainForm dd label + label { margin-left: 1em; }
+#mainForm dd select ~ label, #mainForm dd label ~ label { margin-left: 1em; }
 
-#mainForm select, #mainForm input[type="number"] { height: 32px; font-size: 1.6rem; }
+#mainForm select, #mainForm button, #mainForm input[type="number"] { height: 32px; font-size: 1.6rem; }
 
 #mainForm output { font-weight: bold; }
 
-#mainForm .pickr .pcr-button { width: 4em; }
+#mainForm .pickr { margin-top: .8em; text-align: center; }
+
+#mainForm .pickr .pcr-button { width: 6em; }
+
+#mainForm .formButton { flex: 1; margin-top: 1em; text-align: center; }
+
+#mainForm .formButton button { width: 150px; font-weight: bold; }

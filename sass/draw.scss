@@ -4,6 +4,52 @@
 
 /* draw */
 #mainForm {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: stretch;
+
+  fieldset {
+    min-width: 100%;
+    margin: 0 0 1em;
+    padding: .5em 1em .8em;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+
+    &.half {
+      min-width: 49%;
+    }
+
+    legend {
+      padding: 0 .5em;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    p {
+      margin: .8em 0;
+
+      &.notice {
+        margin: .4em 0;
+        font-size: 1.35rem;
+      }
+
+      &:first-of-type {
+        margin-top: 0;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    select ~ label,
+    label ~ label {
+      margin-left: 1em;
+    }
+  }
+
   dt {
     margin-bottom: .4em;
   }
@@ -24,12 +70,13 @@
       }
     }
 
-    label + label {
+    select ~ label,
+    label ~ label {
       margin-left: 1em;
     }
   }
 
-  select,
+  select, button,
   input[type="number"] {
     height: 32px;
     font-size: 1.6rem;
@@ -39,7 +86,23 @@
     font-weight: bold;
   }
 
-  .pickr .pcr-button {
-    width: 4em;
+  .pickr {
+    margin-top: .8em;
+    text-align: center;
+
+    .pcr-button {
+      width: 6em;
+    }
+  }
+
+  .formButton {
+    flex: 1;
+    margin-top: 1em;
+    text-align: center;
+
+    button {
+      width: 150px;
+      font-weight: bold;
+    }
   }
 }
