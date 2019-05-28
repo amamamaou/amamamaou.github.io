@@ -1,3 +1,4 @@
+/*! Draw Shapes | v1.0.0 | (c) @amamamaou */
 {
   const util = {
     getRndArray(array) { return array[Math.floor(Math.random() * array.length)]; },
@@ -70,13 +71,7 @@
         shapeData = [],
         {
           canvas, context,
-          options: {
-            type, length,
-            maxRadius, minRadius,
-            maxSpeed, minSpeed,
-            maxOpacity, minOpacity,
-            bg, fill, reverse, blur, rotate,
-          },
+          options: {length, bg, fill, reverse, blur, rotate},
         } = this;
 
       canvas.width = window.innerWidth;
