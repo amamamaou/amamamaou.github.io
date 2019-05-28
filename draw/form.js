@@ -43,10 +43,8 @@
   mainForm.addEventListener('input', event => {
     const range = event.target.closest('input[type="range"]');
     if (range) {
-      const
-        output = range.parentNode.querySelector('output'),
-        length = range.step.substr(2).length;
-      output.value = parseFloat(range.value).toFixed(length);
+      const output = range.parentNode.querySelector('output');
+      output.value = parseFloat(range.value).toFixed(2);
     }
   });
 }
