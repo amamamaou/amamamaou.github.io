@@ -35,7 +35,7 @@ const compress = async list => {
   for (let {name, blob} of list) {
     nameList.push(name);
     const n = nameList.filter(v => v === name).length;
-    if (n > 1) { name = name.replace(/\.jpg$/, `(${n}).jpg`); }
+    if (n > 1) { name = name.replace(/\.png$/, `(${n}).png`); }
     zip.file(name, blob, {date: new Date(Date.now() - offset)});
   }
 
