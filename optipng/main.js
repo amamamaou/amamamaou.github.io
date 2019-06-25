@@ -23,6 +23,7 @@ const
           status === 'completed' && URL.revokeObjectURL(src);
         }
         output.items = [];
+        download.list = [];
       },
     },
   }),
