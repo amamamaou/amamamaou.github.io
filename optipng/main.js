@@ -72,18 +72,19 @@ const
     },
   });
 
-// image to PNG Blob
-const toPNG = src => new Promise(async (resolve, reject) => {
+const toPNG = async src => {
   const image = await loadImage(src);
 
-  if (!image) { return reject(); }
+  if (!image) { return null; }
 
-  const canvas = document.createElement('canvas');
-  canvas.width = image.width;
-  canvas.height = image.height;
-  canvas.getContext('2d').drawImage(image, 0, 0);
-  canvas.toBlob(resolve);
-}).catch(() => null);
+  return new Promise(resolve => {
+    const canvas = document.createElement('canvas');
+    canvas.width = image.width;
+    canvas.height = image.height;
+    canvas.getContext('2d').drawImage(image, 0, 0);
+    canvas.toBlob(resolve);
+  });
+};
 
 // check status
 const checkStatus = async () => {
@@ -156,11 +157,11 @@ const addFiles = async files => {
 
 const otimizeImage = async (item, file) => {
   item.status = 'progress';
+  item.name = item.name.replace(/\.\w+$/, '.png');
 
   if (convertType.test(file.type)) {
     file = await toPNG(item.src);
     if (!file) { return failed({item}); }
-    item.name = item.name.replace(/\.\w+$/, '.png');
   }
 
   output.replace(item.index, item);
