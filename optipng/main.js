@@ -157,9 +157,9 @@ const addFiles = async files => {
 
 const otimizeImage = async (item, file) => {
   item.status = 'progress';
-  item.name = item.name.replace(/\.\w+$/, '.png');
-
+  
   if (convertType.test(file.type)) {
+    item.name = item.name.replace(/\.\w+$/, '.png');
     file = await toPNG(item.src);
     if (!file) { return failed({item}); }
   }

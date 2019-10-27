@@ -1,6 +1,7 @@
 /*! Draw Shapes | v1.0.2 | (c) @amamamaou */
 {
   const util = {
+    hasOwn(obj, key) { return Object.prototype.hasOwnProperty.call(obj, key); },
     getRndArray(array) { return array[Math.floor(Math.random() * array.length)]; },
     getRndNum(min, max) { return Math.random() * (max - min) + min; },
     getRGB(color) {
@@ -23,8 +24,7 @@
       this.context = canvas.getContext('2d');
       this.options = Object.assign({}, DrawShapes.defaluts, options);
       this.options.fill = util.getRGB(this.options.fill).join();
-      this.shape = DrawShapes.shapes.hasOwnProperty(this.options.type)
-        ? this.options.type : 'circle';
+      this.shape = util.hasOwn(DrawShapes.shapes, this.options.type) ? this.options.type : 'circle';
     }
 
     setShape(init = false) {
@@ -92,7 +92,7 @@
 
           context.beginPath();
 
-          if (DrawShapes.shapes.hasOwnProperty(shape)) {
+          if (util.hasOwn(DrawShapes.shapes, shape)) {
             this.drawShape(x, y, radius, shape, data.rotate);
           } else {
             context.arc(x, y, radius, 0, Math.PI * 2, true);
