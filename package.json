@@ -4,7 +4,7 @@
   "description": "amamamaou's site",
   "main": "index.js",
   "scripts": {
-    "build-sass": "node-sass -w ./sass -o ./css --output-style compact"
+    "build-sass": "node-sass -w ./assets/sass -o ./assets/css --output-style compact"
   },
   "repository": {
     "type": "git",
