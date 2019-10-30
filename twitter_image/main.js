@@ -1,6 +1,6 @@
 /*! twitter_image | v1.3.0 | MIT License */
 import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
-import {fileSize, loadImage} from '/js/utility.min.js';
+import {fileSize, loadImage} from '/assets/js/utility.min.js';
 
 {
   // Web Worker
@@ -133,7 +133,9 @@ import {fileSize, loadImage} from '/js/utility.min.js';
       ctx = canvas.getContext('2d'),
       scale = control.scale | 0 || 1;
 
-    let {naturalWidth: width = 0, naturalHeight: height = 0} = source;
+    let
+      {optipng} = control,
+      {naturalWidth: width = 0, naturalHeight: height = 0} = source;
 
     if (width === 0 || height === 0) { return showResult(imageError); }
 
@@ -165,13 +167,13 @@ import {fileSize, loadImage} from '/js/utility.min.js';
         return showResult(`最適化前の画像サイズが ${opMaxMB}MB 以上なので処理を中断しました。`);
       }
 
-      if (size > mega * 3) { control.optipng = true; }
+      if (size > mega * 3) { optipng = true; }
     } else {
       dataURL = canvas.toDataURL();
     }
 
-    if (dataURL || control.optipng) {
-      worker.postMessage({origBlob, dataURL, optipng: control.optipng});
+    if (dataURL || optipng) {
+      worker.postMessage({origBlob, dataURL, optipng});
     } else {
       drawImage(origBlob);
     }

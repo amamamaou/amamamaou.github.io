@@ -1,6 +1,6 @@
 /*! optipng main.js | v1.8.7 | MIT License */
 import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
-import {fileSize, loadImage, saveAs} from '/js/utility.min.js';
+import {fileSize, loadImage, saveAs} from '/assets/js/utility.min.js';
 
 // Web Worker
 const worker = new Worker('worker.js?v1.3.3');
@@ -157,7 +157,7 @@ const addFiles = async files => {
 
 const otimizeImage = async (item, file) => {
   item.status = 'progress';
-  
+
   if (convertType.test(file.type)) {
     item.name = item.name.replace(/\.\w+$/, '.png');
     file = await toPNG(item.src);

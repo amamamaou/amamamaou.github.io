@@ -75,7 +75,7 @@ a {
     height: .9em;
     width: 1em;
     margin-left: .2em;
-    background: url("/images/icon_blank.svg") no-repeat 50% 50% / contain;
+    background: url("/assets/images/icon_blank.svg") no-repeat 50% 50% / contain;
     content: "";
   }
   &[href^="#"]:not([href="#"])::before {
@@ -169,7 +169,7 @@ section {
         width: 1em;
         height: .8em;
         margin-right: .2em;
-        background: url("/images/parts_greater.svg") no-repeat 50% 50% / contain;
+        background: url("/assets/images/parts_greater.svg") no-repeat 50% 50% / contain;
         vertical-align: middle;
         content: "";
       }
@@ -271,7 +271,7 @@ section {
         bottom: 0;
         left: 0;
         right: 0;
-        background: url("/images/parts_spinner.svg") no-repeat 50% 50% / 48px;
+        background: url("/assets/images/parts_spinner.svg") no-repeat 50% 50% / 48px;
         filter: invert(1);
         content: "";
       }
@@ -319,7 +319,7 @@ section {
       width: 1.2em;
       margin: auto 0;
       margin-right: .2em;
-      background: url("/images/icon_download.svg") no-repeat 50% 50% / contain;
+      background: url("/assets/images/icon_download.svg") no-repeat 50% 50% / contain;
       content: "";
     }
 
@@ -338,7 +338,7 @@ section {
         left: 0;
         right: 0;
         z-index: 1;
-        background: url("/images/parts_progress.svg") rgba(255, 255, 255, .5) no-repeat 50% 50%;
+        background: url("/assets/images/parts_progress.svg") rgba(255, 255, 255, .5) no-repeat 50% 50%;
         content: "";
       }
     }
@@ -455,7 +455,7 @@ input:not([type="range"]) {
         width: 20px;
         height: 20px;
         margin: auto 0;
-        background: url("/images/parts_check.svg") no-repeat 50% 50% / 14px 14px;
+        background: url("/assets/images/parts_check.svg") no-repeat 50% 50% / 14px 14px;
         opacity: 0;
         transform: scale(1.5);
         content: "";

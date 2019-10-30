@@ -1,6 +1,6 @@
 /*! worker.js | v1.7.3 | MIT License */
 self.importScripts(
-  '/js/tobmp.min.js',
+  '/assets/js/tobmp.min.js',
   'https://cdn.jsdelivr.net/npm/js-mozjpeg/src/jpegtran.min.js',
   'https://cdn.jsdelivr.net/npm/js-mozjpeg/src/cjpeg.min.js',
   'https://cdn.jsdelivr.net/npm/jszip@3.2.0/dist/jszip.min.js',

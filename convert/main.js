@@ -1,6 +1,6 @@
 /*! Convert to JPEG | v1.7.8 | MIT License */
 import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
-import {fileSize, loadImage, saveAs} from '/js/utility.min.js';
+import {fileSize, loadImage, saveAs} from '/assets/js/utility.min.js';
 
 // Web Worker
 const worker = new Worker('worker.js?v1.7.3');
