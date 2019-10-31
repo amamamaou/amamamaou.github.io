@@ -1,0 +1,139 @@
+@charset "utf-8";
+
+@import "module";
+
+/* terser */
+
+main {
+  .CodeMirror {
+    @include monoFont;
+    height: 280px;
+
+    textarea {
+      opacity: 0;
+    }
+
+    &-wrap {
+      border: 2px solid rgba($themeColor, .8);
+      background: #fff;
+      color: $fontColor;
+      font-size: 1.3rem;
+      border-radius: 4px;
+      outline: none;
+      box-sizing: border-box;
+      transition: border-color .2s, box-shadow .2s;
+
+      &:hover {
+        border-color: $themeColor;
+      }
+    }
+
+    &-focused {
+      border-color: $themeColor;
+      box-shadow: 0 0 4px $themeColor;
+    }
+
+    &-wrap {
+      pre {
+        &.CodeMirror-line {
+          padding: 0 .6em;
+        }
+
+        &.CodeMirror-line-like {
+          padding: 0 .6em;
+          opacity: .8;
+        }
+      }
+    }
+  }
+}
+
+.beforeArea {
+  position: relative;
+  z-index: 0;
+  margin: 1em 0;
+
+  &::after {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+    opacity: 0;
+    transition: opacity .15s;
+    pointer-events: none;
+    background: rgba(0, 0, 0, .5);
+    color: #fff;
+    font-size: 2.5rem;
+    font-weight: bold;
+    content: "ここにファイルをドロップします";
+  }
+
+  &.over {
+    &::after {
+      opacity: 1;
+    }
+  }
+}
+
+.afterArea {
+  margin: 1em 0;
+}
+
+.controls {
+  margin: 1em 0;
+
+  .options {
+    margin: 1em 0;
+    padding: .5em 1em .75em;
+    border: 2px solid rgba($themeColor, .8);
+    border-radius: 4px;
+
+    legend {
+      padding: 0 .5em;
+    }
+
+    .checkbox {
+      display: flex;
+      flex-wrap: wrap;
+
+      label {
+        margin: 0 .5em .5em 0;
+      }
+    }
+
+    .select {
+      display: flex;
+      flex-wrap: wrap;
+      margin-bottom: -.5em;
+
+      label {
+        margin: 0 1em .5em 0;
+      }
+
+      select {
+        height: 32px;
+      }
+    }
+  }
+
+  .buttons {
+    display: flex;
+
+    button {
+      margin-right: .8em;
+      padding: 0 1.2em;
+      height: 32px;
+      font-size: 1.6rem;
+
+      &.action {
+        font-weight: bold;
+      }
+    }
+  }
+}

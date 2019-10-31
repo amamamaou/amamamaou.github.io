@@ -1,0 +1,45 @@
+@charset "UTF-8";
+/* terser */
+main .CodeMirror { font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace, serif; height: 280px; }
+
+main .CodeMirror textarea { opacity: 0; }
+
+main .CodeMirror-wrap { border: 2px solid rgba(101, 92, 152, 0.8); background: #fff; color: #333; font-size: 1.3rem; border-radius: 4px; outline: none; box-sizing: border-box; transition: border-color .2s, box-shadow .2s; }
+
+main .CodeMirror-wrap:hover { border-color: #655c98; }
+
+main .CodeMirror-focused { border-color: #655c98; box-shadow: 0 0 4px #655c98; }
+
+main .CodeMirror-wrap pre.CodeMirror-line { padding: 0 .6em; }
+
+main .CodeMirror-wrap pre.CodeMirror-line-like { padding: 0 .6em; opacity: .8; }
+
+.beforeArea { position: relative; z-index: 0; margin: 1em 0; }
+
+.beforeArea::after { display: flex; justify-content: center; align-items: center; position: absolute; top: 0; left: 0; z-index: 1000; width: 100%; height: 100%; border-radius: 4px; opacity: 0; transition: opacity .15s; pointer-events: none; background: rgba(0, 0, 0, 0.5); color: #fff; font-size: 2.5rem; font-weight: bold; content: "ここにファイルをドロップします"; }
+
+.beforeArea.over::after { opacity: 1; }
+
+.afterArea { margin: 1em 0; }
+
+.controls { margin: 1em 0; }
+
+.controls .options { margin: 1em 0; padding: .5em 1em .75em; border: 2px solid rgba(101, 92, 152, 0.8); border-radius: 4px; }
+
+.controls .options legend { padding: 0 .5em; }
+
+.controls .options .checkbox { display: flex; flex-wrap: wrap; }
+
+.controls .options .checkbox label { margin: 0 .5em .5em 0; }
+
+.controls .options .select { display: flex; flex-wrap: wrap; margin-bottom: -.5em; }
+
+.controls .options .select label { margin: 0 1em .5em 0; }
+
+.controls .options .select select { height: 32px; }
+
+.controls .buttons { display: flex; }
+
+.controls .buttons button { margin-right: .8em; padding: 0 1.2em; height: 32px; font-size: 1.6rem; }
+
+.controls .buttons button.action { font-weight: bold; }
