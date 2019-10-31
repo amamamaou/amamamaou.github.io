@@ -31,12 +31,11 @@ const beforeArea = new Vue({
       this.over = true;
     },
     async readFile(ev) {
-      this.over = false;
-
       const
-       {files: [file = null]} = ev.dataTransfer,
+        {files: [file = null]} = ev.dataTransfer,
         code = await loadJSFile(file);
 
+      this.over = false;
       this.cm.setValue(code);
       this.cm.save();
     },
@@ -54,6 +53,7 @@ const afterArea = new Vue({
     const
       textarea = document.getElementById('afterCode'),
       option = Object.assign({ readOnly: true }, cmOptions);
+
     this.cm = CodeMirror.fromTextArea(textarea, option);
     this.cm.on('focus', () => this.cm.execCommand('selectAll'));
   },
@@ -73,29 +73,22 @@ Vue.init({
   },
   methods: {
     action() {
-      const
-        original = beforeArea.cm.getValue(),
-        {code, error} = Terser.minify(original, {
-          mangle: {
-            keep_classnames: this.keep_classnames,
-            keep_fnames: this.keep_fnames,
-            module: this.module,
-          },
-          output: {
-            ascii_only: this.ascii_only,
-            braces: this.braces,
-            ecma: parseInt(this.ecma),
-            comments: this.comments === 'false' ? false : this.comments,
-            quote_style: parseInt(this.quote_style),
-          },
-        });
+      const {code, error} = Terser.minify(beforeArea.cm.getValue(), {
+        mangle: {
+          keep_classnames: this.keep_classnames,
+          keep_fnames: this.keep_fnames,
+          module: this.module,
+        },
+        output: {
+          ascii_only: this.ascii_only,
+          braces: this.braces,
+          ecma: parseInt(this.ecma),
+          comments: this.comments === 'false' ? false : this.comments,
+          quote_style: parseInt(this.quote_style),
+        },
+      });
 
-      if (error) {
-        afterArea.cm.setValue(`/* ${error} */`);
-      } else {
-        afterArea.cm.setValue(code);
-      }
-
+      afterArea.cm.setValue(error ? `/* ${error} */` : code);
       afterArea.cm.save();
     },
     clear() {
@@ -103,6 +96,6 @@ Vue.init({
       beforeArea.cm.save();
       afterArea.cm.setValue('');
       afterArea.cm.save();
-    }
+    },
   },
 });
