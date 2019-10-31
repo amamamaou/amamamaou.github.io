@@ -51,8 +51,11 @@ const afterArea = new Vue({
   el: '.afterArea',
   data: { cm: null },
   mounted() {
-    const textarea = document.getElementById('afterCode');
-    this.cm = CodeMirror.fromTextArea(textarea, cmOptions);
+    const
+      textarea = document.getElementById('afterCode'),
+      option = Object.assign({ readOnly: true }, cmOptions);
+    this.cm = CodeMirror.fromTextArea(textarea, option);
+    this.cm.on('focus', () => this.cm.execCommand('selectAll'));
   },
 });
 
