@@ -26,13 +26,12 @@
     <div class="beforeArea"
       :class="{over}"
       @dragover.prevent="dragover"
-      @dragleave="over = false"
-      @drop.prevent="readFile"
-      v-cloak>
+      @dragleave.prevent="over = false"
+      @drop.prevent="readFile">
       <textarea id="beforeCode" placeholder="// ここに直接入力またはファイルをドロップ"></textarea>
     </div>
 
-    <div class="controls" v-cloak>
+    <div class="controls">
       <fieldset class="options">
         <legend>Options</legend>
         <div class="checkbox">
@@ -80,7 +79,7 @@
       </div>
     </div>
 
-    <div class="afterArea" v-cloak>
+    <div class="afterArea">
       <textarea id="afterCode" placeholder="// 結果がここに表示されます" readonly></textarea>
     </div>
   </section>
