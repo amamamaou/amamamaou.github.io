@@ -85,6 +85,7 @@ Vue.init({
           ecma: parseInt(this.ecma),
           comments: this.comments === 'false' ? false : this.comments,
           quote_style: parseInt(this.quote_style),
+          wrap_func_args: false,
         },
       });
 
