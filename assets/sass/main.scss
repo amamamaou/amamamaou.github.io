@@ -89,6 +89,10 @@ code {
   font-size: inherit;
 }
 
+del {
+  opacity: .8;
+}
+
 [v-cloak] {
   display: none !important;
 }

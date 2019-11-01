@@ -32,6 +32,8 @@ a[href^="#"]:not([href="#"])::before { margin-left: .1em; content: "#"; }
 
 code { font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace, serif; font-size: inherit; }
 
+del { opacity: .8; }
+
 [v-cloak] { display: none !important; }
 
 /* list */
