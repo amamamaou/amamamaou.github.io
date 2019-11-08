@@ -9,7 +9,7 @@
 <link rel="canonical" href="https://amamamaou.github.io/terser/">
 <link rel="stylesheet" href="/assets/codemirror/lib/codemirror.css">
 <link rel="stylesheet" href="/assets/css/main.css?2019030611">
-<link rel="stylesheet" href="/assets/css/terser.css">
+<link rel="stylesheet" href="/assets/css/terser.css?20191105">
 </head>
 <body>
 <main>
@@ -23,7 +23,7 @@
   <h1>Terser Online - JavaScript 圧縮ツール</h1>
 
   <section>
-    <div class="beforeArea"
+    <div id="beforeArea"
       :class="{over}"
       @dragover.prevent="dragover"
       @dragleave.prevent="over = false"
@@ -32,7 +32,7 @@
     </div>
 
     <div class="controls">
-      <fieldset class="options">
+      <fieldset id="options" class="options">
         <legend>Options</legend>
         <div class="checkbox">
           <input type="checkbox" id="option-keep_classnames" v-model="keep_classnames">
@@ -73,13 +73,17 @@
           </label>
         </div>
       </fieldset>
-      <div class="buttons">
+      <div id="buttons" class="buttons">
         <button class="action" @click.prevent="action">Minify</button>
         <button class="clear" @click.prevent="clear">Clear</button>
       </div>
+      <div id="download" class="download" :class="{disabled}">
+        <input type="text" class="filename" v-model="filename" readonly>
+        <button class="action" @click.prevent="action">Download</button>
+      </div>
     </div>
 
-    <div class="afterArea">
+    <div id="afterArea">
       <textarea id="afterCode" placeholder="// 結果がここに表示されます" readonly></textarea>
     </div>
   </section>
@@ -97,6 +101,6 @@
 <script src="/assets/codemirror/lib/codemirror.js"></script>
 <script src="/assets/codemirror/mode/javascript/javascript.js"></script>
 <script src="/assets/codemirror/addon/display/placeholder.js"></script>
-<script src="main.js?v1.0.0" type="module"></script>
+<script src="main.js?v1.1.0" type="module"></script>
 </body>
 </html>

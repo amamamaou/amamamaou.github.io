@@ -1,5 +1,6 @@
-/*! terser main.js | v1.0.0 | MIT License */
+/*! terser main.js | v1.1.0 | MIT License */
 import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
+import {saveAs} from '/assets/js/utility.min.js';
 
 Vue.init = obj => new Vue(obj);
 
@@ -13,18 +14,18 @@ const loadJSFile = file => new Promise((resolve, reject) => {
   reader.onload = () => resolve(reader.result);
   reader.onerror = reject;
   reader.readAsText(file);
-}).catch(() => '// 対応していない形式です');
+}).catch(() => null);
 
 const cmOptions = {
-  mode: 'application/json',
+  mode: 'application/javascript',
   dragDrop: false,
   lineWrapping: true,
   lineNumbers: true,
 };
 
 const beforeArea = new Vue({
-  el: '.beforeArea',
-  data: { over: false, cm: null },
+  el: '#beforeArea',
+  data: { over: false, cm: null, filename: '' },
   methods: {
     dragover(ev) {
       ev.dataTransfer.dropEffect = 'copy';
@@ -36,8 +37,10 @@ const beforeArea = new Vue({
         code = await loadJSFile(file);
 
       this.over = false;
-      this.cm.setValue(code);
+      this.cm.setValue(code || '// 対応していない形式です');
       this.cm.save();
+
+      this.filename = code ? file.name : '';
     },
   },
   mounted() {
@@ -47,7 +50,7 @@ const beforeArea = new Vue({
 });
 
 const afterArea = new Vue({
-  el: '.afterArea',
+  el: '#afterArea',
   data: { cm: null },
   mounted() {
     const
@@ -59,8 +62,8 @@ const afterArea = new Vue({
   },
 });
 
-Vue.init({
-  el: '.controls',
+const options = new Vue({
+  el: '#options',
   data: {
     keep_classnames: false,
     keep_fnames: false,
@@ -71,32 +74,62 @@ Vue.init({
     comments: 'some',
     quote_style: 3,
   },
+});
+
+const download = new Vue({
+  el: '#download',
+  data: {
+    disabled: true,
+    filename: '',
+  },
   methods: {
     action() {
-      const {code, error} = Terser.minify(beforeArea.cm.getValue(), {
+      if (this.disabled || !this.filename) { return; }
+
+      const
+        code = afterArea.cm.getValue(),
+        blob = new Blob([code], {type: 'application/javascript; charset=utf-8'});
+
+      saveAs(blob, this.filename);
+    },
+  }
+});
+
+Vue.init({
+  el: '#buttons',
+  methods: {
+    action() {
+      const {code, error = null} = Terser.minify(beforeArea.cm.getValue(), {
         mangle: {
-          keep_classnames: this.keep_classnames,
-          keep_fnames: this.keep_fnames,
-          module: this.module,
+          keep_classnames: options.keep_classnames,
+          keep_fnames: options.keep_fnames,
+          module: options.module,
         },
         output: {
-          ascii_only: this.ascii_only,
-          braces: this.braces,
-          ecma: parseInt(this.ecma),
-          comments: this.comments === 'false' ? false : this.comments,
-          quote_style: parseInt(this.quote_style),
+          ascii_only: options.ascii_only,
+          braces: options.braces,
+          ecma: parseInt(options.ecma),
+          comments: options.comments === 'false' ? false : options.comments,
+          quote_style: parseInt(options.quote_style),
           wrap_func_args: false,
         },
       });
 
       afterArea.cm.setValue(error ? `/* ${error} */` : code);
       afterArea.cm.save();
+
+      download.disabled = !!error;
+      download.filename = error ? '' : beforeArea.filename.replace(/\.js$/, '.min.js');
     },
     clear() {
       beforeArea.cm.setValue('');
       beforeArea.cm.save();
       afterArea.cm.setValue('');
       afterArea.cm.save();
+
+      beforeArea.filename = '';
+      download.disabled = true;
+      download.filename = '';
     },
   },
 });

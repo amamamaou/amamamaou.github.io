@@ -8,7 +8,7 @@ html {
   font-size: 62.5%; /* 1em = 10px */
 }
 body {
-  font: 1.6em / 1.4 "-apple-system", BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, sans-serif;
+  font: 1.6em / 1.4 "-apple-system", BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Hiragino Kaku Gothic Pro", Meiryo, sans-serif;
   color: $fontColor;
   background: #eee;
   margin: 0;
@@ -367,16 +367,20 @@ footer {
 
 /* form */
 
-%inputDefault {
+%formDefault {
   padding: 0 .4em;
-  border: 2px solid rgba($themeColor, .8);
-  background: #fff;
-  color: $fontColor;
   font-size: 1em;
   border-radius: 4px;
   outline: none;
   box-sizing: border-box;
+  box-shadow: none;
   transition: all .2s;
+}
+%inputDefault {
+  @extend %formDefault;
+  border: 2px solid rgba($themeColor, .8);
+  background: #fff;
+  color: $fontColor;
 }
 %inputFont {
   @include monoFont;
@@ -497,13 +501,15 @@ textarea {
 }
 
 button {
-  @extend %inputDefault;
+  @extend %formDefault;
   @include userSelect;
+  border: none;
+  background: rgba($themeColor, .85);
+  color: #fff;
   cursor: pointer;
 
   &:hover {
-    @extend %inputHover;
-    background: rgba($themeColor, .1);
+    background: $themeColor;
   }
   &:focus {
     @extend %inputFocus;

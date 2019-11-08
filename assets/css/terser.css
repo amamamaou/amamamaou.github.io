@@ -14,17 +14,19 @@ main .CodeMirror-wrap pre.CodeMirror-line { padding: 0 .6em; }
 
 main .CodeMirror-wrap pre.CodeMirror-line-like { padding: 0 .6em; opacity: .8; }
 
-.beforeArea { position: relative; z-index: 0; margin: 1em 0; }
+#beforeArea { position: relative; z-index: 0; margin: 1em 0; }
 
-.beforeArea::after { display: flex; justify-content: center; align-items: center; position: absolute; top: 0; left: 0; z-index: 1000; width: 100%; height: 100%; border-radius: 4px; opacity: 0; transition: opacity .15s; pointer-events: none; background: rgba(0, 0, 0, 0.5); color: #fff; font-size: 2.5rem; font-weight: bold; content: "ここにファイルをドロップします"; }
+#beforeArea::after { display: flex; justify-content: center; align-items: center; position: absolute; top: 0; left: 0; z-index: 1000; width: 100%; height: 100%; border-radius: 4px; opacity: 0; transition: opacity .15s; pointer-events: none; background: rgba(0, 0, 0, 0.5); color: #fff; font-size: 2.5rem; font-weight: bold; content: "ここにファイルをドロップします"; }
 
-.beforeArea.over::after { opacity: 1; }
+#beforeArea.over::after { opacity: 1; }
 
-.afterArea { margin: 1em 0; }
+#afterArea { margin: 1em 0; }
 
-.beforeArea textarea, .afterArea textarea { display: block; width: 100%; height: 280px; padding: 4px .6em; font-size: 1.3rem; resize: none; }
+#beforeArea textarea, #afterArea textarea { display: block; width: 100%; height: 280px; padding: 4px .6em; font-size: 1.3rem; resize: none; }
 
 .controls { margin: 1em 0; }
+
+.controls::after { display: block; clear: both; content: ""; }
 
 .controls .options { margin: 1em 0; padding: .5em 1em .75em; border: 2px solid #aaa; border-radius: 4px; }
 
@@ -40,8 +42,16 @@ main .CodeMirror-wrap pre.CodeMirror-line-like { padding: 0 .6em; opacity: .8; }
 
 .controls .options .select select { height: 32px; }
 
-.controls .buttons { display: flex; }
+.controls .buttons { display: flex; float: left; }
 
 .controls .buttons button { margin-right: .8em; padding: 0 1.2em; height: 32px; font-size: 1.6rem; }
 
 .controls .buttons button.action { font-weight: bold; }
+
+.controls .download { float: right; display: flex; justify-content: flex-end; }
+
+.controls .download.disabled { opacity: .5; pointer-events: none; }
+
+.controls .download .filename { width: 200px; height: 32px; border-right: none; border-radius: 4px 0 0 4px; }
+
+.controls .download .action { padding: 0 1.2em; height: 32px; border-radius: 0 4px 4px 0; font-size: 1.6rem; font-weight: bold; }
