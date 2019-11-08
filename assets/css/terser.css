@@ -48,10 +48,10 @@ main .CodeMirror-wrap pre.CodeMirror-line-like { padding: 0 .6em; opacity: .8; }
 
 .controls .buttons button.action { font-weight: bold; }
 
-.controls .download { float: right; display: flex; justify-content: flex-end; }
+.controls .download { float: right; display: flex; justify-content: flex-end; transition: opacity .15s; }
 
 .controls .download.disabled { opacity: .5; pointer-events: none; }
 
-.controls .download .filename { width: 200px; height: 32px; border-right: none; border-radius: 4px 0 0 4px; }
+.controls .download .filename { width: 250px; height: 32px; border-right: none; border-radius: 4px 0 0 4px; font-size: 1.4rem; }
 
 .controls .download .action { padding: 0 1.2em; height: 32px; border-radius: 0 4px 4px 0; font-size: 1.6rem; font-weight: bold; }
