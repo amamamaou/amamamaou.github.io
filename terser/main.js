@@ -1,4 +1,4 @@
-/*! terser main.js | v1.1.0 | MIT License */
+/*! terser main.js | v1.1.1 | MIT License */
 import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
 import {saveAs} from '/assets/js/utility.min.js';
 
@@ -118,7 +118,7 @@ Vue.init({
       afterArea.cm.setValue(error ? `/* ${error} */` : code);
       afterArea.cm.save();
 
-      download.disabled = !!error;
+      download.disabled = !code;
       download.filename = error ? '' : beforeArea.filename.replace(/\.js$/, '.min.js');
     },
     clear() {
