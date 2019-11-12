@@ -177,11 +177,27 @@ main {
     }
 
     .action {
-      padding: 0 1.2em;
+      position: relative;
+      padding: 0 1.2em 0 3em;
       height: 32px;
       border-radius: 0 4px 4px 0;
       font-size: 1.6rem;
       font-weight: bold;
+
+      &::before {
+        display: block;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 1.2em;
+        z-index: 0;
+        height: 1.2em;
+        width: 1.2em;
+        margin: auto 0;
+        margin-right: .2em;
+        background: url("/assets/images/icon_download.svg") no-repeat 50% 50% / contain;
+        content: "";
+      }
     }
   }
 }
