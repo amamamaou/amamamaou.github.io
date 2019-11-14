@@ -16,6 +16,10 @@
     height: 32px;
     max-width: 100%;
     font-size: 1.4rem;
+
+    &::placeholder {
+      color: #bbb;
+    }
   }
 }
 

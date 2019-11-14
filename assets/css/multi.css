@@ -4,6 +4,8 @@
 
 .urlList input { width: 500px; height: 32px; max-width: 100%; font-size: 1.4rem; }
 
+.urlList input::placeholder { color: #bbb; }
+
 .formButton { display: flex; }
 
 .formButton button { margin-right: .8em; padding: 0 1.2em; width: 80px; height: 32px; font-size: 1.6rem; }
