@@ -1,0 +1,11 @@
+.urlList { margin: 1.5em 0; padding-left: 1.2em; }
+
+.urlList li { margin: .5em 0; padding-left: 6px; }
+
+.urlList input { width: 500px; height: 32px; max-width: 100%; font-size: 1.4rem; }
+
+.formButton { display: flex; }
+
+.formButton button { margin-right: .8em; padding: 0 1.2em; width: 80px; height: 32px; font-size: 1.6rem; }
+
+.formButton button.action { font-weight: bold; }

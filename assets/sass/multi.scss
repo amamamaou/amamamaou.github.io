@@ -1,0 +1,36 @@
+@charset "utf-8";
+
+@import "module";
+
+.urlList {
+  margin: 1.5em 0;
+  padding-left: 1.2em;
+
+  li {
+    margin: .5em 0;
+    padding-left: 6px;
+  }
+
+  input {
+    width: 500px;
+    height: 32px;
+    max-width: 100%;
+    font-size: 1.4rem;
+  }
+}
+
+.formButton {
+  display: flex;
+
+  button {
+    margin-right: .8em;
+    padding: 0 1.2em;
+    width: 80px;
+    height: 32px;
+    font-size: 1.6rem;
+
+    &.action {
+      font-weight: bold;
+    }
+  }
+}
