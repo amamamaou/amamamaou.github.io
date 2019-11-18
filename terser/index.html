@@ -42,12 +42,12 @@
       <fieldset id="options" class="options">
         <legend>Options</legend>
         <div class="checkbox">
+          <input type="checkbox" id="option-module" v-model="module">
+          <label for="option-module">module</label>
           <input type="checkbox" id="option-keep_classnames" v-model="keep_classnames">
           <label for="option-keep_classnames">keep_classnames</label>
           <input type="checkbox" id="option-keep_fnames" v-model="keep_fnames">
           <label for="option-keep_fnames">keep_fnames</label>
-          <input type="checkbox" id="option-module" v-model="module">
-          <label for="option-module">module</label>
           <input type="checkbox" id="option-ascii_only" v-model="ascii_only">
           <label for="option-ascii_only">ascii_only</label>
           <input type="checkbox" id="option-braces" v-model="braces">

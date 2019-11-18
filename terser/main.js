@@ -101,11 +101,10 @@ Vue.init({
   methods: {
     action() {
       const {code, error = null} = Terser.minify(beforeArea.cm.getValue(), {
-        mangle: {
-          keep_classnames: options.keep_classnames,
-          keep_fnames: options.keep_fnames,
-          module: options.module,
-        },
+        module: options.module,
+        keep_classnames: options.keep_classnames,
+        keep_fnames: options.keep_fnames,
+        compress: { ecma: parseInt(options.ecma) },
         output: {
           ascii_only: options.ascii_only,
           braces: options.braces,
