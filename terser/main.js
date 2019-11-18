@@ -37,6 +37,7 @@ const beforeArea = new Vue({
         code = await loadJSFile(file);
 
       this.over = false;
+      this.cm.display.scroller.scrollTop = 0;
       this.cm.setValue(code || '// 対応していない形式です');
       this.cm.save();
 
@@ -124,8 +125,11 @@ Vue.init({
     clear() {
       beforeArea.cm.setValue('');
       beforeArea.cm.save();
+      beforeArea.cm.display.scroller.scrollTop = 0;
+
       afterArea.cm.setValue('');
       afterArea.cm.save();
+      afterArea.cm.display.scroller.scrollTop = 0;
 
       beforeArea.filename = '';
       download.disabled = true;
