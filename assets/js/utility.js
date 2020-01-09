@@ -10,8 +10,8 @@ export function fileSize(bytes) {
 }
 
 // image loader
-export function loadImage(src) {
-  return new Promise((resolve, reject) => {
+export async function loadImage(src) {
+  return await new Promise((resolve, reject) => {
     const image = new Image;
     image.onload = () => resolve(image);
     image.onerror = reject;
