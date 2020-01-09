@@ -242,14 +242,13 @@ document.addEventListener('paste', ev => {
 });
 
 // Web Worker
-worker.addEventListener('message', ({data}) => {
-  switch (data.type) {
-    case 'success': complete(data); break;
-    case 'failed': failed(data); break;
-    case 'zip':
-      saveAs(data.blob);
-      download.status = 'active';
-      break;
-    default: control.wait = dropArea.wait = false;
-  }
-});
+const onMessage = {
+  success: complete,
+  failed,
+  zip(data) {
+    saveAs(data.blob);
+    download.status = 'active';
+  },
+  ready() { control.wait = dropArea.wait = false; },
+};
+worker.addEventListener('message', ({data}) => onMessage[data.type](data));
