@@ -20,7 +20,7 @@
 
 .outputContent ul { display: flex; flex-wrap: wrap; padding: 10px; }
 
-.outputContent li { position: relative; z-index: 1; width: calc(25% - 20px); height: 140px; margin: 10px; background: #fff; border-radius: 8px; box-sizing: border-box; }
+.outputContent li { position: relative; z-index: 1; width: calc(25% - 20px); height: 140px; margin: 10px; background: var(--main-bg); border-radius: 8px; box-sizing: border-box; }
 
 .outputContent li.standby::before, .outputContent li.standby::after, .outputContent li.progress::before, .outputContent li.progress::after, .outputContent li.failed::before, .outputContent li.failed::after { display: block; position: absolute; top: 0; bottom: 0; left: 0; right: 0; pointer-events: none; box-sizing: border-box; content: ""; }
 
@@ -45,6 +45,9 @@
 .outputContent li .itemBody:hover .tooltip { opacity: 1; transform: translate3d(0, calc(-100% - 12px), 0) scale(1); }
 
 .outputContent li img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
+
+@media (prefers-color-scheme: dark) { .outputContent li .tooltip { background: rgba(102, 102, 102, 0.75); }
+  .outputContent li .tooltip::after { border-top-color: rgba(102, 102, 102, 0.75); border-left-color: rgba(102, 102, 102, 0); border-right-color: rgba(102, 102, 102, 0); } }
 
 .asideFooter { margin: 1.5em 0; }
 

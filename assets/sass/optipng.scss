@@ -64,7 +64,7 @@
     width: calc(25% - 20px);
     height: 140px;
     margin: 10px;
-    background: #fff;
+    background: var(--main-bg);
     border-radius: 8px;
     box-sizing: border-box;
 
@@ -187,6 +187,24 @@
       height: 100%;
       object-fit: cover;
       border-radius: 8px;
+    }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .outputContent {
+    li {
+      .tooltip {
+        background: rgba(#666, .75);
+
+        &::after {
+          border: {
+            top-color: rgba(#666, .75);
+            left-color: rgba(#666, 0);
+            right-color: rgba(#666, 0);
+          }
+        }
+      }
     }
   }
 }

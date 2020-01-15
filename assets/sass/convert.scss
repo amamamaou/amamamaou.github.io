@@ -125,6 +125,7 @@
       opacity: 0;
       transition: all .15s;
       pointer-events: none;
+      word-break: break-all;
 
       &::after {
         display: block;
@@ -170,6 +171,24 @@
       height: 100%;
       object-fit: cover;
       border-radius: 8px;
+    }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .outputContent {
+    li {
+      .tooltip {
+        background: rgba(#666, .75);
+
+        &::after {
+          border: {
+            top-color: rgba(#666, .75);
+            left-color: rgba(#666, 0);
+            right-color: rgba(#666, 0);
+          }
+        }
+      }
     }
   }
 }
