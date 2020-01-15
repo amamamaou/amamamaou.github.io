@@ -4,11 +4,11 @@ main .CodeMirror { font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", 
 
 main .CodeMirror textarea { border: none; opacity: 0; }
 
-main .CodeMirror-wrap { border: 2px solid rgba(101, 92, 152, 0.8); background: #fff; color: #333; font-size: 1.3rem; border-radius: 4px; outline: none; box-sizing: border-box; transition: border-color .2s, box-shadow .2s; }
+main .CodeMirror-wrap { border: 2px solid var(--input-border); background: var(--input-bg); color: var(--font-color); font-size: 1.3rem; border-radius: 4px; outline: none; box-sizing: border-box; transition: border-color .2s, box-shadow .2s; }
 
-main .CodeMirror-wrap:hover { border-color: #655c98; }
+main .CodeMirror-wrap:hover { border-color: var(--theme-color); }
 
-main .CodeMirror-focused { border-color: #655c98; box-shadow: 0 0 4px #655c98; }
+main .CodeMirror-focused { border-color: var(--theme-color); box-shadow: 0 0 4px var(--theme-color); }
 
 main .CodeMirror-wrap pre.CodeMirror-line { padding: 0 .6em; }
 
@@ -28,7 +28,7 @@ main .CodeMirror-wrap pre.CodeMirror-line-like { padding: 0 .6em; opacity: .8; }
 
 .controls::after { display: block; clear: both; content: ""; }
 
-.controls .options { margin: 1em 0; padding: .5em 1em .75em; border: 2px solid #aaa; border-radius: 4px; }
+.controls .options { margin: 1em 0; padding: .5em 1em .75em; border: 2px solid var(--line-color); border-radius: 4px; }
 
 .controls .options legend { padding: 0 .5em; }
 

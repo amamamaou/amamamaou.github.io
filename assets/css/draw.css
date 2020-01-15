@@ -1,7 +1,7 @@
 /* draw */
 #mainForm { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: stretch; }
 
-#mainForm fieldset { min-width: 100%; margin: 0 0 1em; padding: .5em 1em .8em; border: 2px solid #ccc; border-radius: 8px; box-sizing: border-box; }
+#mainForm fieldset { min-width: 100%; margin: 0 0 1em; padding: .5em 1em .8em; border: 2px solid var(--line-color); border-radius: 8px; box-sizing: border-box; }
 
 #mainForm fieldset.half { min-width: 49%; }
 

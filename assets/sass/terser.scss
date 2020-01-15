@@ -15,9 +15,9 @@ main {
     }
 
     &-wrap {
-      border: 2px solid rgba($themeColor, .8);
-      background: #fff;
-      color: $fontColor;
+      border: 2px solid var(--input-border);
+      background: var(--input-bg);
+      color: var(--font-color);
       font-size: 1.3rem;
       border-radius: 4px;
       outline: none;
@@ -25,13 +25,13 @@ main {
       transition: border-color .2s, box-shadow .2s;
 
       &:hover {
-        border-color: $themeColor;
+        border-color: var(--theme-color);
       }
     }
 
     &-focused {
-      border-color: $themeColor;
-      box-shadow: 0 0 4px $themeColor;
+      border-color: var(--theme-color);
+      box-shadow: 0 0 4px var(--theme-color);
     }
 
     &-wrap {
@@ -110,7 +110,7 @@ main {
   .options {
     margin: 1em 0;
     padding: .5em 1em .75em;
-    border: 2px solid #aaa;
+    border: 2px solid var(--line-color);
     border-radius: 4px;
 
     legend {

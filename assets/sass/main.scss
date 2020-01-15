@@ -2,6 +2,38 @@
 
 @import "module";
 
+:root {
+  --body-bg: #eee;
+  --main-bg: #fff;
+  --font-color: #333;
+  --theme-color: #{$themeColor};
+  --point-color: #{$pointColor};
+  --line-color: #ccc;
+  --button-bg: #{rgba($themeColor, .85)};
+  --input-bg: #fff;
+  --input-border: #{rgba($themeColor, .8)};
+  --input-hover: #{rgba($themeColor, .1)};
+  --input-ff: #{rgba($themeColor, .45)};
+  --range-bg: #aaa;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --body-bg: #000;
+    --main-bg: #333;
+    --font-color: #e0e0e0;
+    --theme-color: #{$themeColorDark};
+    --point-color: #{$pointColorDark};
+    --line-color: #666;
+    --button-bg: #{rgba($themeColorDark, .85)};
+    --input-bg: #444;
+    --input-border: #{rgba($themeColorDark, .8)};
+    --input-hover: #{rgba($themeColorDark, .1)};
+    --input-ff: #{rgba($themeColorDark, .45)};
+    --range-bg: #777;
+  }
+}
+
 /* base */
 
 html {
@@ -9,8 +41,8 @@ html {
 }
 body {
   font: 1.6em / 1.4 "-apple-system", BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Hiragino Kaku Gothic Pro", Meiryo, sans-serif;
-  color: $fontColor;
-  background: #eee;
+  color: var(--font-color);
+  background: var(--body-bg);
   margin: 0;
   padding: 1.5em 1em;
 }
@@ -20,7 +52,7 @@ main {
   max-width: $contentWidth;
   margin: 0 auto;
   padding: 0 40px 10px;
-  background: #fff;
+  background: var(--main-bg);
   border-radius: 15px;
   box-sizing: border-box;
   box-shadow: 0 2px 6px 0 rgba(#000, .15);
@@ -28,10 +60,16 @@ main {
 }
 
 ::selection {
-  background: $pointColor;
+  background: var(--point-color);
 }
 ::-moz-selection {
-  background: $pointColor;
+  background: var(--point-color);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--font-color);
+  opacity: .6;
 }
 
 h1 {
@@ -42,7 +80,7 @@ h2 {
   font-size: 2.2rem;
   margin-bottom: .7em;
   padding: 0 0 .1em;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid var(--line-color);
 
   &:first-of-type ~ h2 {
     margin-top: 1.5em;
@@ -62,7 +100,7 @@ a {
   text-decoration: none;
 
   &:link, &:visited {
-    color: $themeColor;
+    color: var(--theme-color);
   }
   &:hover {
     text-decoration: underline;
@@ -81,6 +119,12 @@ a {
   &[href^="#"]:not([href="#"])::before {
     margin-left: .1em;
     content: "#";
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  a[target="_blank"]:not([download])::after {
+    filter: brightness(150%);
   }
 }
 
@@ -181,6 +225,18 @@ section {
   }
 }
 
+@media (prefers-color-scheme: dark) {
+  .topicPath {
+    ol {
+      color: #999;
+
+      li:first-child ~ li::before {
+        filter: brightness(150%);
+      }
+    }
+  }
+}
+
 .description {
   margin: 1em 0;
 }
@@ -225,8 +281,21 @@ section {
 
   p {
     margin: 0;
-    color: $fontColor;
+    color: var(--font-color);
     font-size: 1.5rem;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .flexList {
+    a {
+      background: rgba(#fff, .03);
+      border: 1px solid rgba(#fff, .06);
+
+      &:hover {
+        background: rgba($themeColorDark, .12);
+      }
+    }
   }
 }
 
@@ -251,9 +320,9 @@ section {
     display: block;
     position: relative;
     padding: 20px;
-    background: $pointColor;
+    background: var(--point-color);
     border-radius: 4px;
-    border: 4px $themeColor dashed;
+    border: 4px var(--theme-color) dashed;
     text-align: center;
     cursor: pointer;
     @include userSelect;
@@ -296,6 +365,24 @@ section {
     margin: 15px 0 0;
     font-size: 1.3rem;
     pointer-events: none;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .dropContent {
+    label {
+      &.wait {
+        &::after {
+          filter: none;
+        }
+      }
+    }
+
+    figure {
+      img {
+        filter: brightness(150%);
+      }
+    }
   }
 }
 
@@ -378,19 +465,19 @@ footer {
 }
 %inputDefault {
   @extend %formDefault;
-  border: 2px solid rgba($themeColor, .8);
-  background: #fff;
-  color: $fontColor;
+  border: 2px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--font-color);
 }
 %inputFont {
   @include monoFont;
 }
 %inputHover {
-  border-color: $themeColor;
+  border-color: var(--theme-color);
 }
 %inputFocus {
-  border-color: $themeColor;
-  box-shadow: 0 0 4px $themeColor;
+  border-color: var(--theme-color);
+  box-shadow: 0 0 4px var(--theme-color);
 }
 %inputActive {
   box-shadow: 0 0 3px #aaa inset;
@@ -413,7 +500,7 @@ input:not([type="range"]) {
     cursor: pointer;
 
     &:hover {
-      background: rgba($themeColor, .1);
+      background: var(--input-hover);
     }
     &:active {
       @extend %inputActive;
@@ -434,7 +521,7 @@ input:not([type="range"]) {
 
       &:hover {
         @extend %inputHover;
-        background: rgba($themeColor, .1);
+        background: var(--input-hover);
       }
       &:focus {
         @extend %inputFocus;
@@ -449,7 +536,7 @@ input:not([type="range"]) {
         width: 20px;
         height: 20px;
         margin: auto 0;
-        background: rgba($themeColor, .45);
+        background: var(--input-ff);
         border-radius: 2px;
         content: "";
         transition: all .2s;
@@ -474,7 +561,7 @@ input:not([type="range"]) {
     &:checked {
       + label {
         &::before {
-          background: rgba($themeColor, .8);
+          background: var(--input-border);
         }
         &::after {
           opacity: 1;
@@ -504,12 +591,12 @@ button {
   @extend %formDefault;
   @include userSelect;
   border: none;
-  background: rgba($themeColor, .85);
+  background: var(--button-bg);
   color: #fff;
   cursor: pointer;
 
   &:hover {
-    background: $themeColor;
+    background: var(--theme-color);
   }
   &:focus {
     @extend %inputFocus;
@@ -526,7 +613,7 @@ button {
   height: 3px;
   border: none;
   border-radius: 6px;
-  background: #aaa;
+  background: var(--range-bg);
 }
 @mixin rangeThumb {
   @include formStyleReset;
@@ -534,7 +621,7 @@ button {
   height: 15px;
   border: none;
   border-radius: 50%;
-  background: $themeColor;
+  background: var(--theme-color);
   cursor: pointer;
 }
 
@@ -546,6 +633,7 @@ input[type="range"] {
   outline: none;
   border: none;
   box-shadow: none;
+  background: none;
 
   &::-webkit-slider-runnable-track {
     @include rangeTrack;
@@ -576,7 +664,7 @@ input[type="range"] {
 
   &::-ms-fill-lower,
   &::-ms-fill-upper {
-    background: #999;
+    background: var(--range-bg);
   }
 }
 
@@ -625,7 +713,6 @@ input[type="range"] {
     transform: rotate(2160deg);
   }
 }
-
 
 /* for sp */
 

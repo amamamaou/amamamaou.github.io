@@ -15,7 +15,7 @@
 .scaleBlock {
   margin: 0;
   padding: .5em 1em 1em;
-  border: 2px solid #aaa;
+  border: 2px solid var(--line-color);
   border-radius: 4px;
   font-size: 1.4rem;
 
@@ -133,7 +133,7 @@
   }
   height: 0;
   margin-top: 30px;
-  background: #eee;
+  background: var(--body-bg);
   border-radius: 4px;
   text-align: center;
   transition: height .3s;
