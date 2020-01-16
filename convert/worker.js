@@ -6,10 +6,6 @@ self.importScripts(
   'https://cdn.jsdelivr.net/npm/jszip@3.2.0/dist/jszip.min.js',
 );
 
-const
-  pass = /\/(?:bmp|jpeg)$/,
-  type = 'image/jpeg';
-
 // Blob to Uint8Array
 const blob2array = async blob => new Uint8Array(await new Response(blob).arrayBuffer());
 
@@ -37,7 +33,7 @@ const doMozjpeg = (tran, u8arr, quality = null) => {
 
   if (!data || data.length === 0) { return null; }
 
-  return new Blob([data], { type });
+  return new Blob([data], { type: 'image/jpeg' });
 };
 
 // convert image
@@ -45,13 +41,13 @@ const convert = async data => {
   const { item, file, quality } = data;
   let { imgData } = data;
 
-  if (!imgData && !pass.test(file.type)) {
+  if (!imgData && !/\/(?:bmp|jpeg)$/.test(file.type)) {
     imgData = await getImageData(file);
     if (!imgData) { return self.postMessage({ type: 'failed', item }); }
   }
 
   const
-    tran = file.type === type && quality === '100',
+    tran = file.type === 'image/jpeg' && quality === '100',
     u8arr = imgData ? toBMP(imgData) : await blob2array(file),
     blob = doMozjpeg(tran, u8arr, quality);
 
