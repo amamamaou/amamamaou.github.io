@@ -20,7 +20,7 @@ const getImageData = async blob => {
   if (!bitmap) { return null; }
 
   const
-    {width, height} = bitmap,
+    { width, height } = bitmap,
     ctx = new OffscreenCanvas(width, height).getContext('2d');
 
   ctx.drawImage(bitmap, 0, 0);
@@ -31,23 +31,23 @@ const getImageData = async blob => {
 const doMozjpeg = (tran, u8arr, quality = null) => {
   if (!u8arr || u8arr.length === 0) { return null; }
 
-  const {data} = tran ?
-    jpegtran(u8arr, {optimize: true, copy: 'none'}) :
-    cjpeg(u8arr, {quality, optimize: true});
+  const { data } = tran ?
+    jpegtran(u8arr, { optimize: true, copy: 'none' }) :
+    cjpeg(u8arr, { quality, optimize: true });
 
   if (!data || data.length === 0) { return null; }
 
-  return new Blob([data], {type});
+  return new Blob([data], { type });
 };
 
 // convert image
 const convert = async data => {
-  const {item, file, quality} = data;
-  let {imgData} = data;
+  const { item, file, quality } = data;
+  let { imgData } = data;
 
   if (!imgData && !pass.test(file.type)) {
     imgData = await getImageData(file);
-    if (!imgData) { return self.postMessage({type: 'failed', item}); }
+    if (!imgData) { return self.postMessage({ type: 'failed', item }); }
   }
 
   const
@@ -57,7 +57,7 @@ const convert = async data => {
 
   item.name = item.name.replace(/\.\w+$/, '.jpg');
 
-  self.postMessage({type: 'success', blob, item});
+  self.postMessage({ type: 'success', blob, item });
 };
 
 // zip file
@@ -67,19 +67,18 @@ const compress = async list => {
     offset = new Date().getTimezoneOffset() * 60000,
     nameList = [];
 
-  for (let {name, blob} of list) {
+  for (let { name, blob } of list) {
     nameList.push(name);
     const n = nameList.filter(v => v === name).length;
     if (n > 1) { name = name.replace(/\.jpg$/, `(${n}).jpg`); }
-    zip.file(name, blob, {date: new Date(Date.now() - offset)});
+    zip.file(name, blob, { date: new Date(Date.now() - offset) });
   }
 
-  const blob = await zip.generateAsync({type: 'blob'});
-
-  self.postMessage({type: 'zip', blob});
+  const blob = await zip.generateAsync({ type: 'blob' });
+  self.postMessage({ type: 'zip', blob });
 };
 
-self.addEventListener('message', ({data}) => {
+self.addEventListener('message', ({ data }) => {
   if (data.type === 'convert') {
     convert(data);
   } else if (data.type === 'zip') {
@@ -87,4 +86,4 @@ self.addEventListener('message', ({data}) => {
   }
 });
 
-self.postMessage({type: 'ready'});
+self.postMessage({ type: 'ready' });

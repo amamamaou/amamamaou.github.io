@@ -1,6 +1,6 @@
 /*! optipng main.js | v1.8.7 | MIT License */
 import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
-import {fileSize, loadImage, saveAs} from '/assets/js/utility.min.js';
+import { fileSize, loadImage, saveAs } from '/assets/js/utility.min.js';
 
 // Web Worker
 const worker = new Worker('worker.js?v1.3.3');
@@ -16,10 +16,10 @@ const
 const
   control = new Vue({
     el: '#control',
-    data: {level: '2', wait: true},
+    data: { level: '2', wait: true },
     methods: {
       clear() {
-        for (const {status, src} of output.items) {
+        for (const { status, src } of output.items) {
           status === 'completed' && URL.revokeObjectURL(src);
         }
         output.items = [];
@@ -29,11 +29,7 @@ const
   }),
   dropArea = new Vue({
     el: '#dropArea',
-    data: {
-      maxMB,
-      over: false,
-      wait: true,
-    },
+    data: { maxMB, over: false, wait: true },
     methods: {
       dragover(ev) {
         ev.dataTransfer.dropEffect = 'copy';
@@ -43,7 +39,7 @@ const
         this.over = false;
         addFiles(ev.dataTransfer.files);
       },
-      change({target}) {
+      change({ target }) {
         addFiles(target.files);
         target.value = '';
       },
@@ -51,25 +47,21 @@ const
   }),
   download = new Vue({
     el: '#download',
-    data: {status: '', list: [], visibility: false, sp},
+    data: { status: '', list: [], visibility: false, sp },
     methods: {
       download() {
         if (this.status === 'active') {
           this.status = 'progress';
-          worker.postMessage({type: 'zip', list: this.list});
+          worker.postMessage({ type: 'zip', list: this.list });
         }
       },
     },
   }),
   output = new Vue({
     el: '#output',
-    data: {items: [], sp},
-    watch: {
-      items() { download.visibility = this.items.length > 0; },
-    },
-    methods: {
-      replace(index, value) { this.items.splice(index, 1, value); },
-    },
+    data: { items: [], sp },
+    watch: { items() { download.visibility = this.items.length > 0; } },
+    methods: { replace(index, value) { this.items.splice(index, 1, value); } },
   });
 
 const toPNG = async src => {
@@ -98,15 +90,13 @@ const checkStatus = async () => {
 const addFiles = async files => {
   if (!files || files.length === 0) { return; }
 
-  const {items} = output;
+  const { items } = output;
 
   control.wait = true;
   download.status = '';
 
-  files = Array.from(files);
-
-  for (const file of files) {
-    const {name, type, size} = file;
+  for (const file of Array.from(files)) {
+    const { name, type, size } = file;
 
     if (type !== pngType && !convertType.test(type)) {
       items.push({
@@ -145,10 +135,10 @@ const addFiles = async files => {
     items.push(item);
 
     if (await loadImage(src)) {
-      otimizeImage({...item}, file);
+      otimizeImage({ ...item }, file);
     } else {
       URL.revokeObjectURL(src);
-      failed({item});
+      failed({ item });
     }
   }
 
@@ -161,7 +151,7 @@ const otimizeImage = async (item, file) => {
   if (convertType.test(file.type)) {
     item.name = item.name.replace(/\.\w+$/, '.png');
     file = await toPNG(item.src);
-    if (!file) { return failed({item}); }
+    if (!file) { return failed({ item }); }
   }
 
   output.replace(item.index, item);
@@ -177,7 +167,7 @@ const otimizeImage = async (item, file) => {
 
 const complete = async data => {
   const
-    {blob, item: {name, size, index}} = data,
+    { blob, item: { name, size, index } } = data,
     src = URL.createObjectURL(blob);
 
   await loadImage(src);
@@ -190,12 +180,12 @@ const complete = async data => {
     status: 'completed',
   });
 
-  download.list.push({blob, name});
+  download.list.push({ blob, name });
 
   checkStatus();
 };
 
-const failed = ({item}) => {
+const failed = ({ item }) => {
   output.replace(item.index, {
     name: item.name,
     src: null,
@@ -208,7 +198,7 @@ const failed = ({item}) => {
 // paste image on clipbord
 document.addEventListener('paste', ev => {
   if (ev.clipboardData) {
-    const {items} = ev.clipboardData;
+    const { items } = ev.clipboardData;
     if (items) {
       const files = [];
       for (const item of Array.from(items)) {
@@ -229,4 +219,4 @@ const onMessage = {
   },
   ready() { control.wait = dropArea.wait = false; },
 };
-worker.addEventListener('message', ({data}) => onMessage[data.type](data));
+worker.addEventListener('message', ({ data }) => onMessage[data.type](data));

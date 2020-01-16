@@ -7,22 +7,21 @@ self.importScripts(
 
 // use Optiong.js
 const doOptipng = (u8arr, level) => {
-  const {data} = optipng(u8arr, ['-o' + level]);
-  return data ? new Blob([data], {type: 'image/png'}) : null;
+  const { data } = optipng(u8arr, ['-o' + level]);
+  return data ? new Blob([data], { type: 'image/png' }) : null;
 };
 
 // Blob to Uint8Array
-const blob2array = async blob =>
-  new Uint8Array(await new Response(blob).arrayBuffer());
+const blob2array = async blob => new Uint8Array(await new Response(blob).arrayBuffer());
 
 // optimize image
 const optimize = async data => {
   const
-    {item, file, level} = data,
+    { item, file, level } = data,
     u8arr = await blob2array(file),
     blob = doOptipng(u8arr, level);
 
-  self.postMessage({type: 'success', blob, item});
+  self.postMessage({ type: 'success', blob, item });
 };
 
 // zip file
@@ -32,19 +31,18 @@ const compress = async list => {
     offset = new Date().getTimezoneOffset() * 60000,
     nameList = [];
 
-  for (let {name, blob} of list) {
+  for (let { name, blob } of list) {
     nameList.push(name);
     const n = nameList.filter(v => v === name).length;
     if (n > 1) { name = name.replace(/\.png$/, `(${n}).png`); }
-    zip.file(name, blob, {date: new Date(Date.now() - offset)});
+    zip.file(name, blob, { date: new Date(Date.now() - offset) });
   }
 
   const blob = await zip.generateAsync({type: 'blob'});
-
-  self.postMessage({type: 'zip', blob});
+  self.postMessage({ type: 'zip', blob });
 };
 
-self.addEventListener('message', ({data}) => {
+self.addEventListener('message', ({ data }) => {
   if (data.type === 'optimize') {
     optimize(data);
   } else if (data.type === 'zip') {
@@ -52,4 +50,4 @@ self.addEventListener('message', ({data}) => {
   }
 });
 
-self.postMessage({type: 'ready'});
+self.postMessage({ type: 'ready' });
