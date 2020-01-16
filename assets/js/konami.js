@@ -25,10 +25,11 @@
 
         body.addEventListener('animationend', () => {
           standby = true;
-          html.style.cssText = body.style.cssText = body.className = '';
+          html.style.cssText = body.style.cssText = '';
+          body.classList.remove('rotate');
         }, { once: true });
 
-        body.className = 'rotate';
+        body.classList.add('rotate');
       } else {
         timer = setTimeout(() => { index = 0; }, 2000);
       }
