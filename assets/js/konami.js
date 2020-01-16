@@ -2,17 +2,17 @@
 {
   const
     command = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65],
-    {documentElement: html, body} = document;
+    { documentElement: html, body } = document;
 
   let
     standby = true,
     index = 0,
     timer = null;
 
-  document.addEventListener('keydown', ev => {
+  document.addEventListener('keydown', event => {
     clearTimeout(timer);
 
-    if (standby && ev.keyCode === command[index++]) {
+    if (standby && event.keyCode === command[index++]) {
       if (index >= command.length) {
         const center = window.pageYOffset + window.innerHeight / 2;
 
@@ -26,7 +26,7 @@
         body.addEventListener('animationend', () => {
           standby = true;
           html.style.cssText = body.style.cssText = body.className = '';
-        }, {once: true});
+        }, { once: true });
 
         body.className = 'rotate';
       } else {
@@ -35,5 +35,5 @@
     } else {
       index = 0;
     }
-  });
+  }, { passive: true });
 }
