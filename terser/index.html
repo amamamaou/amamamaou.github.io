@@ -16,7 +16,7 @@
 <link rel="canonical" href="https://amamamaou.github.io/terser/">
 <link rel="stylesheet" href="/assets/codemirror/lib/codemirror.css">
 <link rel="stylesheet" href="/assets/css/main.css?20200115">
-<link rel="stylesheet" href="/assets/css/terser.css?20200115">
+<link rel="stylesheet" href="/assets/css/terser.css?20200116">
 </head>
 <body>
 <main>
@@ -84,9 +84,9 @@
         <button class="action" @click.prevent="action">Minify</button>
         <button class="clear" @click.prevent="clear">Clear</button>
       </div>
-      <div id="download" class="download" :class="{disabled}">
-        <input type="text" class="filename" v-model="filename">
-        <button class="action" @click.prevent="action">Download</button>
+      <div id="download" class="download">
+        <input type="text" class="filename" v-model="filename" :disabled="textDisabled">
+        <button class="action" :disabled="disabled" @click.prevent="action">Download</button>
       </div>
     </div>
 
@@ -108,6 +108,6 @@
 <script src="/assets/codemirror/lib/codemirror.js"></script>
 <script src="/assets/codemirror/mode/javascript/javascript.js"></script>
 <script src="/assets/codemirror/addon/display/placeholder.js"></script>
-<script src="main.js?v1.1.2" type="module"></script>
+<script src="main.js?v1.2.0" type="module"></script>
 </body>
 </html>

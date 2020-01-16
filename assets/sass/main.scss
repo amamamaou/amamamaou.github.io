@@ -20,12 +20,12 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --body-bg: #000;
-    --main-bg: #333;
+    --main-bg: #2a2a2a;
     --font-color: #e0e0e0;
     --theme-color: #{$themeColorDark};
     --point-color: #{$pointColorDark};
     --line-color: #666;
-    --button-bg: #{rgba($themeColorDark, .85)};
+    --button-bg: #{rgba($themeColorDark, .75)};
     --input-bg: #444;
     --input-border: #{rgba($themeColorDark, .8)};
     --input-hover: #{rgba($themeColorDark, .1)};

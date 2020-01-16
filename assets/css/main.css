@@ -1,6 +1,6 @@
 :root { --body-bg: #eee; --main-bg: #fff; --font-color: #333; --theme-color: #655c98; --point-color: #e7e6ef; --line-color: #ccc; --button-bg: rgba(101, 92, 152, 0.85); --input-bg: #fff; --input-border: rgba(101, 92, 152, 0.8); --input-hover: rgba(101, 92, 152, 0.1); --input-ff: rgba(101, 92, 152, 0.45); --range-bg: #aaa; }
 
-@media (prefers-color-scheme: dark) { :root { --body-bg: #000; --main-bg: #333; --font-color: #e0e0e0; --theme-color: #9d92df; --point-color: #454257; --line-color: #666; --button-bg: rgba(157, 146, 223, 0.85); --input-bg: #444; --input-border: rgba(157, 146, 223, 0.8); --input-hover: rgba(157, 146, 223, 0.1); --input-ff: rgba(157, 146, 223, 0.45); --range-bg: #777; } }
+@media (prefers-color-scheme: dark) { :root { --body-bg: #000; --main-bg: #2a2a2a; --font-color: #e0e0e0; --theme-color: #9d92df; --point-color: #454257; --line-color: #666; --button-bg: rgba(157, 146, 223, 0.75); --input-bg: #444; --input-border: rgba(157, 146, 223, 0.8); --input-hover: rgba(157, 146, 223, 0.1); --input-ff: rgba(157, 146, 223, 0.45); --range-bg: #777; } }
 
 /* base */
 html { font-size: 62.5%; /* 1em = 10px */ }

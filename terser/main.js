@@ -1,6 +1,6 @@
-/*! terser main.js | v1.1.1 | MIT License */
+/*! terser main.js | v1.2.0 | MIT License */
 import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
-import {saveAs} from '/assets/js/utility.min.js';
+import { saveAs } from '/assets/js/utility.min.js';
 
 Vue.init = obj => new Vue(obj);
 
@@ -33,7 +33,7 @@ const beforeArea = new Vue({
     },
     async readFile(ev) {
       const
-        {files: [file = null]} = ev.dataTransfer,
+        { files: [file = null] } = ev.dataTransfer,
         code = await loadJSFile(file);
 
       this.over = false;
@@ -79,28 +79,28 @@ const options = new Vue({
 
 const download = new Vue({
   el: '#download',
-  data: {
-    disabled: true,
-    filename: '',
-  },
+  data: { textDisabled: true, disabled: true, filename: '' },
   methods: {
     action() {
       if (this.disabled || !this.filename) { return; }
 
       const
         code = afterArea.cm.getValue(),
-        blob = new Blob([code], {type: 'application/javascript; charset=utf-8'});
+        blob = new Blob([code], { type: 'application/javascript;charset=UTF-8' });
+
+      if (!/\.js$/.test(this.filename)) { this.filename += '.js'; }
 
       saveAs(blob, this.filename);
     },
-  }
+  },
+  watch: { filename(value) { this.disabled = !value; } },
 });
 
 Vue.init({
   el: '#buttons',
   methods: {
     action() {
-      const {code, error = null} = Terser.minify(beforeArea.cm.getValue(), {
+      const { code, error = null } = Terser.minify(beforeArea.cm.getValue(), {
         module: options.module,
         keep_classnames: options.keep_classnames,
         keep_fnames: options.keep_fnames,
@@ -118,7 +118,7 @@ Vue.init({
       afterArea.cm.setValue(error ? `/* ${error} */` : code);
       afterArea.cm.save();
 
-      download.disabled = !code;
+      download.textDisabled = !code;
       download.filename = error ? '' : beforeArea.filename.replace(/\.js$/, '.min.js');
     },
     clear() {
@@ -131,7 +131,7 @@ Vue.init({
       afterArea.cm.display.scroller.scrollTop = 0;
 
       beforeArea.filename = '';
-      download.disabled = true;
+      download.textDisabled = true;
       download.filename = '';
     },
   },
