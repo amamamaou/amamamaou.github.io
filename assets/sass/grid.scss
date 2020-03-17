@@ -772,3 +772,7 @@ body {
   box-shadow: 0 0 0 1px rgba(255, 255, 255, .5);
   border-radius: 10px;
 }
+
+[v-cloak] {
+  display: none !important;
+}
