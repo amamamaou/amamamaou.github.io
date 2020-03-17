@@ -377,23 +377,27 @@ body {
     margin: 0 5px;
   }
 
-  button {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
+  a, button {
     width: 40px;
     height: 40px;
     background-color: #373737;
     border: 1px solid rgba(255, 255, 255, .25);
     border-radius: 4px;
-    outline: none;
-    box-shadow: none;
-    cursor: pointer;
     transition: background-color .2s;
 
     &:hover {
       background-color: #555;
     }
+  }
+
+  button {
+    display: block;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    outline: none;
+    box-shadow: none;
+    cursor: pointer;
 
     img {
       width: 70%;
@@ -402,6 +406,16 @@ body {
 
     &.play img {
       width: 60%;
+    }
+  }
+
+  a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      width: 100%;
     }
   }
 }

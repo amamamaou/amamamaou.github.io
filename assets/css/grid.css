@@ -136,13 +136,19 @@ body { font: 1.6em / 1.4 "-apple-system", BlinkMacSystemFont, "Segoe UI", "Helve
 
 .controller li { margin: 0 5px; }
 
-.controller button { -webkit-appearance: none; -moz-appearance: none; appearance: none; width: 40px; height: 40px; background-color: #373737; border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 4px; outline: none; box-shadow: none; cursor: pointer; transition: background-color .2s; }
+.controller a, .controller button { width: 40px; height: 40px; background-color: #373737; border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 4px; transition: background-color .2s; }
 
-.controller button:hover { background-color: #555; }
+.controller a:hover, .controller button:hover { background-color: #555; }
+
+.controller button { display: block; -webkit-appearance: none; -moz-appearance: none; appearance: none; outline: none; box-shadow: none; cursor: pointer; }
 
 .controller button img { width: 70%; vertical-align: bottom; }
 
 .controller button.play img { width: 60%; }
+
+.controller a { display: flex; justify-content: center; align-items: center; }
+
+.controller a img { width: 100%; }
 
 .tips { display: flex; justify-content: center; position: absolute; top: 60px; left: 0; right: 0; padding-top: 8px; pointer-events: none; animation: fadeOut .3s 2.4s forwards; }
 
