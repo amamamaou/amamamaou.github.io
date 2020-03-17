@@ -150,7 +150,7 @@ body { font: 1.6em / 1.4 "-apple-system", BlinkMacSystemFont, "Segoe UI", "Helve
 
 .controller a img { width: 100%; }
 
-.tips { display: flex; justify-content: center; position: absolute; top: 60px; left: 0; right: 0; padding-top: 8px; pointer-events: none; animation: fadeOut .3s 2.4s forwards; }
+.tips { display: flex; justify-content: center; position: absolute; top: 60px; left: 0; right: 0; z-index: 10000; padding-top: 8px; pointer-events: none; animation: fadeOut .3s 2.4s forwards; }
 
 .tips p { padding: 4px 10px; background: rgba(255, 255, 255, 0.35); border-radius: 4px; color: #fff; text-align: center; }
 
