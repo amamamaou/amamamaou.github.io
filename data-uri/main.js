@@ -1,59 +1,59 @@
 /* data-uri | v1.1.0 | MIT License */
-{
-  // Web Worker
-  const worker = new Worker('worker.js?v1.0.0');
+import Vue from 'https://cdn.jsdelivr.net/npm/vue/dist/vue.esm.browser.min.js';
 
-  // Vue instances
-  const dropArea = new Vue({
-    el: '#dropArea',
-    data: {over: false, wait: false},
-    methods: {
-      dragover(ev) {
-        ev.dataTransfer.dropEffect = 'copy';
-        this.over = true;
-      },
-      readFile(ev) {
-        this.over = false;
-        convert(ev.dataTransfer.files[0]);
-      },
-      change({target}) {
-        convert(target.files[0]);
-        target.value = '';
-      },
+// Web Worker
+const worker = new Worker('worker.js?v1.0.0');
+
+// Vue instances
+const dropArea = new Vue({
+  el: '#dropArea',
+  data: {over: false, wait: false},
+  methods: {
+    dragover(ev) {
+      ev.dataTransfer.dropEffect = 'copy';
+      this.over = true;
     },
-  });
-
-  const output = new Vue({
-    el: '#output',
-    data: {fileInfo: '', result: ''},
-    methods: {
-      clear() { this.fileInfo = this.result = ''; },
+    readFile(ev) {
+      this.over = false;
+      convert(ev.dataTransfer.files[0]);
     },
-  });
+    change({target}) {
+      convert(target.files[0]);
+      target.value = '';
+    },
+  },
+});
 
-  const filesize = bytes => {
-    const
-      exp = Math.log(bytes) / Math.log(1024) | 0,
-      size = bytes / 1024 ** exp,
-      unit = exp === 0 ? 'bytes' : 'KMGT'[exp - 1] + 'B';
-    return (exp === 0 ? size : size.toFixed(2)) + ' ' + unit;
-  };
+const output = new Vue({
+  el: '#output',
+  data: {fileInfo: '', result: ''},
+  methods: {
+    clear() { this.fileInfo = this.result = ''; },
+  },
+});
 
-  const convert = file => {
-    if (!file || file.size === 0) {
-      output.result = '';
-      return;
-    }
+const filesize = bytes => {
+  const
+    exp = Math.log(bytes) / Math.log(1024) | 0,
+    size = bytes / 1024 ** exp,
+    unit = exp === 0 ? 'bytes' : 'KMGT'[exp - 1] + 'B';
+  return (exp === 0 ? size : size.toFixed(2)) + ' ' + unit;
+};
 
-    dropArea.wait = true;
-    output.fileInfo = `${file.name} (${filesize(file.size)})`;
+const convert = file => {
+  if (!file || file.size === 0) {
+    output.result = '';
+    return;
+  }
 
-    worker.postMessage(file);
-  };
+  dropArea.wait = true;
+  output.fileInfo = `${file.name} (${filesize(file.size)})`;
 
-  // Web Worker
-  worker.addEventListener('message', ev => {
-    output.result = ev.data;
-    dropArea.wait = false;
-  });
-}
+  worker.postMessage(file);
+};
+
+// Web Worker
+worker.addEventListener('message', ev => {
+  output.result = ev.data;
+  dropArea.wait = false;
+});
