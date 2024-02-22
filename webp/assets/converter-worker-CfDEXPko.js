@@ -1,0 +1,1 @@
+(function(){"use strict";self.addEventListener("message",async a=>{const{id:s,file:n,quality:c}=a.data,t=await self.createImageBitmap(n),e=new OffscreenCanvas(t.width,t.height);e.getContext("2d").drawImage(t,0,0);const i=await e.convertToBlob({type:"image/webp",quality:c/100});self.postMessage({id:s,blob:i})})})();
